@@ -6,13 +6,17 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --social-link-color: #1a202c;
+  --social-link-hover-color: #f29705;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-end-rgb: 10,38,75;
+    --social-link-color: #e5dfd3;
+    --social-link-hover-color: #ffde5b;
   }
 }
 
