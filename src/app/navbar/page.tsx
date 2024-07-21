@@ -17,8 +17,7 @@ export default function NavBar() {
         </div>
       </div>
       <div className="flex items-center items-end gap-x-4">
-        <a href="/login">Login</a>
-        <a href="/signup">Sign Up</a>
+        <button type="button" className="text-[#0A264B] border-2 border-[#0A264B] bg-[#FBDB5A] hover:bg-[#fdcf1d] font-medium rounded-lg px-5 py-1 mt-2 focus:outline-none">Hire Me</button>
       </div>
     </nav>
   );
