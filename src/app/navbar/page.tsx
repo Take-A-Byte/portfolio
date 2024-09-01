@@ -1,12 +1,13 @@
-import Link from "next/link";
-import { IntegratedIdentitiesIcon } from "../components/icons/integrated-identities";
+import Link from 'next/link'
+
+import { IntegratedIdentitiesIcon } from '../components/icons/integrated-identities'
 
 export default function NavBar() {
   return (
-    <nav className="flex w-full justify-between my-2 sticky px-4">
+    <nav className="fixed sticky top-0 mb-2 flex w-full justify-between bg-[#ffffff] px-4 shadow-md dark:bg-black">
       <div className="flex items-center gap-x-4">
         <Link href="/">
-          <div className="rounded-lg m-1">
+          <div className="m-1 rounded-lg">
             <IntegratedIdentitiesIcon size={30} />
           </div>
         </Link>
@@ -16,9 +17,14 @@ export default function NavBar() {
           <a href="/contact">Contact</a>
         </div>
       </div>
-      <div className="flex items-center items-end gap-x-4">
-        <button type="button" className="text-[#0A264B] border-2 border-[#0A264B] bg-[#FBDB5A] hover:bg-[#fdcf1d] font-medium rounded-lg px-5 py-1 mt-2 focus:outline-none">Hire Me</button>
+      <div className="flex items-end items-center gap-x-4">
+        <button
+          type="button"
+          className="my-2 rounded-lg border-2 border-[#0A264B] bg-[#FBDB5A] px-5 py-1 font-medium text-[#0A264B] hover:bg-[#fdcf1d] focus:outline-none"
+        >
+          Hire Me
+        </button>
       </div>
     </nav>
-  );
+  )
 }
