@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { IntegratedIdentitiesIcon } from '../components/icons/integrated-identities'
+import { IntegratedIdentitiesIcon } from './icons/integrated-identities'
 
 export default function NavBar() {
   return (

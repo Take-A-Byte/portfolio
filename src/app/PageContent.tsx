@@ -1,10 +1,8 @@
 'use client'
 
-import SocialMediaConnect from '@app/social-media-connect/page'
+import SocialMediaConnect from '@app/components/SocialMediaConnect'
 import { TypeAnimation } from 'react-type-animation'
 import Image from 'next/image'
-
-import { SampleIllustration } from './components/icons/illustrations/sample'
 
 export default function Home() {
   return (
