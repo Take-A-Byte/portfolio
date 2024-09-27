@@ -4,7 +4,7 @@ import SocialMediaConnect from '@app/components/SocialMediaConnect'
 import { TypeAnimation } from 'react-type-animation'
 import Image from 'next/image'
 
-export default function Home() {
+export default function PageContent() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex h-screen flex-col items-center p-24 pt-48">
