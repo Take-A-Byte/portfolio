@@ -1,7 +1,8 @@
-export type CardProps = {
+export type CompanyCardProps = {
   title: string
   description: string
-  url: string
+  companyWebsite: string
+  knowMoreUrl: string
   image: React.ReactNode
   team: string
   location: string

@@ -1,14 +1,15 @@
 'use client'
 
-import Card from '../components/Card'
+import CompanyCard from '../components/CompanyCard'
 import Image from 'next/image'
 
 export default function PageContent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="flex flex-wrap justify-center gap-6">
-        <Card
-          url="https://pspdfkit.com/"
+        <CompanyCard
+          companyWebsite="https://pspdfkit.com/"
+          knowMoreUrl="collaboration/pspdfkit"
           title="PSPDFKit"
           description="PSPDFKit is a collection of SDKs for adding PDF features like creation, viewing, and editing to your applications. It works on various platforms and frameworks, including web, Windows, and iOS."
           image={
@@ -19,8 +20,9 @@ export default function PageContent() {
           location="Remote"
         />
 
-        <Card
-          url="https://www.shapr3d.com/"
+        <CompanyCard
+          companyWebsite="https://www.shapr3d.com/"
+          knowMoreUrl="collaboration/shapr3d"
           title="Shapr3D"
           description="Shapr3D is a user-friendly CAD software designed to modernize the industry. It works on various devices, making it easier and faster to create designs."
           image={
@@ -32,8 +34,9 @@ export default function PageContent() {
           location="Budapest, Hungary"
         />
 
-        <Card
-          url="https://www.renishaw.com/"
+        <CompanyCard
+          companyWebsite="https://www.renishaw.com/"
+          knowMoreUrl="collaboration/renishaw"
           title="Renishaw"
           description="Renishaw is one of the world's leading engineering and scientific technology companies, with expertise in precision measurement and healthcare."
           image={
