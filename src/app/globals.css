@@ -43,6 +43,33 @@ body {
 }
 
 .type-writter-container {
-  font-size: 5rem;
   font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', 'sans-serif';
+    /* Adjust the height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Small screens */
+@media (max-width: 640px) {
+  .type-writter-container {
+    font-size: 1.5rem;
+    /* Adjust as needed */
+  }
+}
+
+/* Medium screens */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .type-writter-container {
+    font-size: 3rem;
+    /* Adjust as needed */
+  }
+}
+
+/* Large screens */
+@media (min-width: 1025px) {
+  .type-writter-container {
+    font-size: 4rem;
+    /* Adjust as needed */
+  }
 }
