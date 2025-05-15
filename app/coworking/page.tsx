@@ -126,10 +126,10 @@ export default function CoworkingPage() {
 
       <main className="flex-1 w-full">
         {/* Hero Section */}
-        <section className="py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground w-full">
+        <section className="bg-primary text-primary-foreground w-full">
           <div className="container px-4 md:px-6 mx-auto">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_450px]">
-              <div className="flex flex-col justify-center space-y-4">
+            <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:gap-12 xl:grid-cols-[1fr_1fr]">
+              <div className="py-12 md:py-24 lg:py-32 flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                     <span className="text-secondary">Co-working</span> Space <br />
@@ -153,10 +153,10 @@ export default function CoworkingPage() {
                   </Button>
                 </div>
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center py-8 w-full">
                 <Image
-                  src="/placeholder.svg?height=400&width=400"
-                  width={400}
+                  src="/co-working-hero.svg"
+                  width={1600}
                   height={400}
                   alt="Integrated Identities Co-working Space"
                   className="rounded-lg object-cover"
@@ -261,31 +261,31 @@ export default function CoworkingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="aspect-square relative rounded-lg overflow-hidden">
                 <Image
-                  src="/placeholder.svg?height=400&width=400"
+                  src="/images/office-1.jpeg?height=400&width=400"
                   alt="Open workspace area"
                   fill
                   className="object-cover"
                 />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/placeholder.svg?height=400&width=400" alt="Meeting room" fill className="object-cover" />
+                <Image src="/images/office-2.jpeg?height=400&width=400" alt="Meeting room" fill className="object-cover" />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/placeholder.svg?height=400&width=400" alt="Lounge area" fill className="object-cover" />
+                <Image src="/images/office-3.jpeg?height=400&width=400" alt="Lounge area" fill className="object-cover" />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/placeholder.svg?height=400&width=400" alt="Private office" fill className="object-cover" />
+                <Image src="/images/office-4.jpeg?height=400&width=400" alt="Private office" fill className="object-cover" />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
                 <Image
-                  src="/placeholder.svg?height=400&width=400"
+                  src="/images/office-5.jpeg?height=400&width=400"
                   alt="Kitchen and refreshment area"
                   fill
                   className="object-cover"
                 />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/placeholder.svg?height=400&width=400" alt="Phone booth" fill className="object-cover" />
+                <Image src="/images/office-6.jpeg?height=400&width=400" alt="Phone booth" fill className="object-cover" />
               </div>
             </div>
           </div>
