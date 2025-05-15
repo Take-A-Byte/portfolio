@@ -58,11 +58,12 @@ export function ServicesMegaMenu() {
             <div className="mt-2 pl-[52px]">
               <div className="relative h-32 w-full overflow-hidden rounded-md">
                 <Image
-                  src="/placeholder.svg?height=200&width=400"
+                  src="/images/office-1.jpeg?height=200&width=400"
                   alt="Co-working space"
                   fill
                   className="object-cover"
                 />
+                <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-3">
                   <div className="flex justify-between items-end">
                     <div>

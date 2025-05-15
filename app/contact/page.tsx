@@ -60,26 +60,43 @@ export default function ContactPage() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     if (!validateForm()) {
-      return
+      return;
     }
 
-    setFormStatus("submitting")
+    setFormStatus("submitting");
 
-    // Simulate form submission
-    setTimeout(() => {
-      setFormStatus("success")
-      setFormState({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      })
-    }, 1500)
-  }
+    try {
+      const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: "contactus@integratedidentities.in", // or any recipient
+          subject: formState.subject || "Contact Form Submission",
+          text: `Name: ${formState.name}\nEmail: ${formState.email}\n\n${formState.message}`,
+        }),
+      });
+
+      if (response.ok) {
+        setFormStatus("success");
+        setFormState({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        setFormStatus("error");
+      }
+    } catch (error) {
+      setFormStatus("error");
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen w-full">
