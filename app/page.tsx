@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Code, Globe, Laptop, Smartphone, Terminal } from "lucide-react"
+import { ArrowRight, Code, Globe, Laptop, Smartphone, Terminal, Database } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
 
@@ -45,7 +45,7 @@ export default function HomePage() {
               </div>
               <div className="flex justify-center">
                 <Image
-                  src="/placeholder.svg?height=400&width=400"
+                  src="/hero.svg"
                   width={400}
                   height={400}
                   alt="Integrated Identities - Software Solutions"
@@ -132,38 +132,42 @@ export default function HomePage() {
                     <Globe className="h-5 w-5 text-secondary" />
                     <span className="font-medium">Web Applications</span>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Database className="h-5 w-5 text-secondary" />
+                    <span className="font-medium">Backend Systems</span>
+                  </div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-4">
                   <Image
-                    src="/placeholder.svg?height=240&width=180"
+                    src="/desktop.svg"
                     width={180}
                     height={240}
                     alt="Desktop Application"
                     className="rounded-lg object-cover h-auto"
                   />
-                  <Image
-                    src="/placeholder.svg?height=180&width=240"
-                    width={240}
-                    height={180}
-                    alt="Web Application"
+                   <Image
+                    src="/tablet.svg"
+                    width={300}
+                    height={280}
+                    alt="Backend System"
                     className="rounded-lg object-cover h-auto"
                   />
                 </div>
                 <div className="grid gap-4">
                   <Image
-                    src="/placeholder.svg?height=180&width=240"
-                    width={240}
-                    height={180}
+                    src="/mobile.svg"
+                    width={300}
+                    height={280}
                     alt="Mobile Application"
                     className="rounded-lg object-cover h-auto"
                   />
-                  <Image
-                    src="/placeholder.svg?height=240&width=180"
-                    width={180}
+                 <Image
+                    src="/website.svg"
+                    width={200}
                     height={240}
-                    alt="Backend System"
+                    alt="Web Application"
                     className="rounded-lg object-cover h-auto"
                   />
                 </div>
