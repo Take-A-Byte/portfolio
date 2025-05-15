@@ -28,11 +28,7 @@ export default function PrivacyPage() {
         <section className="py-12 md:py-16 w-full">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="max-w-3xl mx-auto prose prose-headings:font-bold prose-headings:text-primary">
-              <div className="mb-10">
-                <p className="text-muted-foreground">Last Updated: May 16, 2025</p>
-              </div>
-
-              <div className="space-y-8">
+              <div>
                 <div>
                   <h2 className="text-2xl mb-4">Introduction</h2>
                   <p>
@@ -47,8 +43,8 @@ export default function PrivacyPage() {
                   </p>
                 </div>
 
-                <div>
-                  <h2 className="text-2xl mb-4">Information We Collect</h2>
+                <div className="pt-8">
+                  <h2 className="text-2xl mb-2">Information We Collect</h2>
                   <p>We may collect information about you in a variety of ways:</p>
 
                   <h3 className="text-xl mt-6 mb-3">Personal Data</h3>
@@ -82,7 +78,7 @@ export default function PrivacyPage() {
                   </ul>
                 </div>
 
-                <div>
+                <div className="pt-8">
                   <h2 className="text-2xl mb-4">How We Use Your Information</h2>
                   <p>We may use the information we collect about you for various purposes, including to:</p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -98,7 +94,7 @@ export default function PrivacyPage() {
                   </ul>
                 </div>
 
-                <div>
+                <div className="pt-8">
                   <h2 className="text-2xl mb-4">Disclosure of Your Information</h2>
                   <p>
                     We may share information we have collected about you in certain situations. Your information may be
@@ -121,7 +117,7 @@ export default function PrivacyPage() {
                   </p>
                 </div>
 
-                <div>
+                <div className="pt-8">
                   <h2 className="text-2xl mb-4">Security of Your Information</h2>
                   <p>
                     We use administrative, technical, and physical security measures to help protect your personal
@@ -131,7 +127,7 @@ export default function PrivacyPage() {
                   </p>
                 </div>
 
-                <div>
+                <div className="pt-8">
                   <h2 className="text-2xl mb-4">Cookies and Web Beacons</h2>
                   <p>
                     We may use cookies, web beacons, tracking pixels, and other tracking technologies on our website to
@@ -142,7 +138,7 @@ export default function PrivacyPage() {
                   </p>
                 </div>
 
-                <div>
+                <div className="pt-8">
                   <h2 className="text-2xl mb-4">Your Rights Regarding Your Information</h2>
                   <h3 className="text-xl mt-6 mb-3">Access, Correction, and Deletion</h3>
                   <p>
@@ -152,7 +148,7 @@ export default function PrivacyPage() {
                   </p>
                 </div>
 
-                <div>
+                <div className="pt-8">
                   <h2 className="text-2xl mb-4">Changes to This Privacy Policy</h2>
                   <p>
                     We may update this Privacy Policy from time to time. The updated version will be indicated by an
@@ -162,7 +158,7 @@ export default function PrivacyPage() {
                   </p>
                 </div>
 
-                <div>
+                <div className="pt-8">
                   <h2 className="text-2xl mb-4">Contact Us</h2>
                   <p>If you have questions or comments about this Privacy Policy, please contact us at:</p>
                   <div className="mt-4">
