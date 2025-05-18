@@ -7,7 +7,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    // This is required for the Next.js Image component to work with external URLs
+    // unoptimized: true,
   },
 }
 
