@@ -16,19 +16,24 @@ export default function ProjectsPage() {
 
   const projects = [
     {
-      title: "PSPDFKit for Windows",
+      title: "Workflow Automation Mobile App",
       description:
-        "SDK offering developers powerful APIs for quickly adding document functionalities to a windows application.",
-    },
-    {
-      title: "PSPDFKit for MAUI",
-      description:
-        "One SDK to deploy document functionalities on cross-platform apps on iOS, MacOS, Android, and Windows.",
+        "Mobile companion app for Nutrient's Workflow platform to view and approve your requests on the go.",
     },
     {
       title: "Avelyn",
       description:
-        "Elevate your document workflow with conversational interactions. Ask questions, make requests, and simplify your document handling.",
+        "A genAI tool which allows user to interact with their document with conversational interactions. Ask questions, make requests, and simplify your document handling.",
+    },
+    {
+      title: "Nutrient MAUI SDK",
+      description:
+        "One SDK to deploy document functionalities on cross-platform apps on iOS, MacOS, Android, and Windows.",
+    },
+    {
+      title: "Nutrient Windows SDK",
+      description:
+        "SDK offering developers powerful APIs for quickly adding document functionalities to a windows application.",
     },
     {
       title: "Shapr3D for Windows",

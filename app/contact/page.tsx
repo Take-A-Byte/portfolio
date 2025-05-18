@@ -13,6 +13,7 @@ import { AlertCircle, CheckCircle2, Linkedin, Mail, MapPin, Phone } from "lucide
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
+import ReCAPTCHA from "react-google-recaptcha"
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -24,6 +25,7 @@ export default function ContactPage() {
 
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle")
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -67,6 +69,14 @@ export default function ContactPage() {
       return;
     }
 
+    if (!recaptchaToken) {
+      setErrors((prev) => ({
+        ...prev,
+        recaptcha: "Please complete the reCAPTCHA",
+      }));
+      return;
+    }
+
     setFormStatus("submitting");
 
     try {
@@ -76,9 +86,10 @@ export default function ContactPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          to: "contactus@integratedidentities.in", // or any recipient
+          to: "contactus@integratedidentities.in",
           subject: formState.subject || "Contact Form Submission",
           text: `Name: ${formState.name}\nEmail: ${formState.email}\n\n${formState.message}`,
+          recaptchaToken,
         }),
       });
 
@@ -90,6 +101,7 @@ export default function ContactPage() {
           subject: "",
           message: "",
         });
+        setRecaptchaToken(null);
       } else {
         setFormStatus("error");
       }
@@ -208,6 +220,18 @@ export default function ContactPage() {
                           {errors.message && (
                             <p className="text-red-500 text-sm flex items-center gap-1">
                               <AlertCircle className="h-3 w-3" /> {errors.message}
+                            </p>
+                          )}
+                        </div>
+
+                        <div>
+                          <ReCAPTCHA
+                            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                            onChange={setRecaptchaToken}
+                          />
+                          {errors.recaptcha && (
+                            <p className="text-red-500 text-sm flex items-center gap-1">
+                              <AlertCircle className="h-3 w-3" /> {errors.recaptcha}
                             </p>
                           )}
                         </div>

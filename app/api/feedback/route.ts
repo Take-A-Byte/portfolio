@@ -1,7 +1,22 @@
 import nodemailer from 'nodemailer';
 
 export async function POST(request: Request) {
-  const { to, subject, text } = await request.json();
+  const { to, subject, text, recaptchaToken } = await request.json();
+
+  // Verify reCAPTCHA
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  const verifyRes = await fetch(
+    `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${recaptchaToken}`,
+    { method: "POST" }
+  );
+  const verifyData = await verifyRes.json();
+
+  if (!verifyData.success) {
+    return new Response(JSON.stringify({ message: 'reCAPTCHA verification failed' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   try {
     const transporter = nodemailer.createTransport({
