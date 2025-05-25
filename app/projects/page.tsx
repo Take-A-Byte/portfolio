@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
+import { Project } from "@/lib/types/project"
 
 export default function ProjectsPage() {
   const [isHovered, setIsHovered] = useState(false)
@@ -14,50 +15,101 @@ export default function ProjectsPage() {
     setIsEvenProjectHovered(isEvenHovered)
   }
 
-  const projects = [
+  const projects : Project[] = [
     {
       title: "Workflow Automation Mobile App",
       description:
         "Mobile companion app for Nutrient's Workflow platform to view and approve your requests on the go.",
+      links: [
+        { 
+          title: "iOS app",
+          link: "https://apps.apple.com/pl/app/nutrient-workflow-automation/id6742332469"
+        },
+        { 
+          title: "Android app",
+          link: "https://play.google.com/store/apps/details?id=io.nutrient.workflow"
+        }
+      ],
     },
     {
       title: "Avelyn",
       description:
         "A genAI tool which allows user to interact with their document with conversational interactions. Ask questions, make requests, and simplify your document handling.",
+      links: [
+        { 
+          title: "avelyn.ai",
+          link: "https://avelyn.ai"
+        },
+      ],
     },
     {
       title: "Nutrient MAUI SDK",
       description:
         "One SDK to deploy document functionalities on cross-platform apps on iOS, MacOS, Android, and Windows.",
+      links: [
+        { 
+          title: "SDK",
+          link: "https://www.nuget.org/packages/Nutrient.MAUI.SDK"
+        },
+        { 
+          title: "Documentation",
+          link: "https://www.nutrient.io/guides/maui/"
+        }
+      ],
     },
     {
-      title: "Nutrient Windows SDK",
+      title: "PSPDFKit Windows SDK",
       description:
         "SDK offering developers powerful APIs for quickly adding document functionalities to a windows application.",
+      links: [
+        { 
+          title: "SDK",
+          link: "https://www.nuget.org/packages/PSPDFKitUWP"
+        },
+        { 
+          title: "Documentation",
+          link: "https://www.nutrient.io/guides/windows/"
+        },
+      ],
     },
     {
       title: "Shapr3D for Windows",
       description:
         "Design your 3D models on Windows machine - be it on a desktop, laptop, or tablet; with mouse, touch or pen.",
+      links: [
+        { 
+          title: "Windows store",
+          link: "https://apps.microsoft.com/detail/9n4k9qfv4xfc?referrer=appbadge&source=www.shapr3d.com"
+        },
+      ],
     },
     {
       title: "Linton",
       description:
         "Seamlessly navigate and interact with millions of points from Renishaw scanner data, presented in a visually appealing 3D environment.",
+      links: [
+        {
+          title: "LiDAR Scanning Software",
+          link: "https://www.renishaw.com/en/optical-encoders-and-lidar-scanning--39244?srsltid=AfmBOoorPZVompTqQZj4slmuqp4qi8yLOSnjsCF7gWCtHzvEcKowmPkK"
+        },
+      ],
     },
     {
       title: "Micro Installation Wizard",
       description:
         "An XML based language developed to allow engineers to create a customizable installer with increased reusability and reduced efforts.",
+      links: null,
     },
     {
       title: "DMIS Parser",
       description:
         "A parser that helps application engineers to visualize, convert and rectify CMM programs to Renishaw format.",
+      links: null,
     },
     {
       title: "Utility Hub",
       description: "A dev-ex hub for Renishaw developers to access tools, utilities, and resources centrally.",
+      links: null,
     },
   ]
 
@@ -106,6 +158,33 @@ export default function ProjectsPage() {
                   >
                     <h3 className="text-lg font-bold text-primary">{project.title}</h3>
                     <p className="text-sm text-gray-600">{project.description}</p>
+                    
+                    {project.links && (
+                      <div
+                        className={`mt-2 flex flex-wrap gap-2 ${
+                          index % 2 === 0
+                            ? 'justify-end md:justify-end'
+                            : 'justify-start md:justify-start'
+                        }`}
+                      >
+                        {project.links.map((link, linkIdx) => (
+                          <>
+                            <Link
+                              key={linkIdx}
+                              href={link.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-block text-sm underline transition-colors text-primary hover:text-yellow-400"
+                            >
+                              {link.title}
+                            </Link>
+                            {project.links && linkIdx < project.links.length - 1 && (
+                              <span className="text-sm text-gray-400" aria-hidden="true">,</span>
+                            )}
+                          </>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   
                   {/* Circle Connector */}
