@@ -20,9 +20,6 @@ export function Footer() {
           <Link href="/privacy" className="text-sm text-foreground/70 underline-offset-4 hover:underline">
             Privacy Policy
           </Link>
-          <Link href="/terms" className="text-sm text-foreground/70 underline-offset-4 hover:underline">
-            Terms of Service
-          </Link>
         </div>
       </div>
     </footer>

@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /fonts/
+Disallow: *.woff
+Disallow: *.woff2
+Disallow: *.ttf
+Disallow: *.otf
+Disallow: *.eot
