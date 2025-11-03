@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, Plane, Bus, Car, Backpack, Sparkles, Palmtree, Waves, Castle } from "lucide-react"
+import { Heart, Plane, Bus, Car, Backpack, Sparkles } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
@@ -429,11 +429,11 @@ export default function WeddingInvitation() {
 
             {/* Timeline items */}
             <div className={`relative mb-8 ${bodoniModa.className}`}>
-              {/* Vertical line */}
-              <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2" style={{ backgroundColor: 'var(--text-secondary)' }}></div>
+              {/* Vertical line - thicker */}
+              <div className="absolute left-1/2 top-0 bottom-0 w-1 -translate-x-1/2" style={{ backgroundColor: 'var(--text-secondary)' }}></div>
 
               <div className="space-y-12">
-                {timeline.map((event) => {
+                {timeline.map((event, index) => {
                   // Check for both " at " and "\n" splits
                   const hasNewline = event.title.includes('\n')
                   const hasAtSplit = event.title.includes(' at ')
@@ -444,38 +444,37 @@ export default function WeddingInvitation() {
                       : [event.title]
                   const hasLineBreak = titleLines.length > 1
 
-                  // Get dot color based on date
-                  const getDotColor = () => {
-                    if (event.date.includes('12th')) return '#dbeafe' // blue-100
-                    if (event.date.includes('13th')) return '#fef3c7' // amber-100
-                    if (event.date.includes('15th')) return '#ede9fe' // violet-100
-                    if (event.date.includes('21st')) return '#fce7f3' // pink-100
-                    return '#64748b' // slate-500
+                  // Color based on location with muted theme colors
+                  const getLocationStyles = () => {
+                    // Different colors for each place
+                    if (event.location.includes('Thodupuzha')) {
+                      return {
+                        dateClass: "text-xs mb-1 border-b-2 border-emerald-200 pb-0.5 inline-block font-bold text-emerald-200",
+                        locationClass: "text-xs mt-1 border-l-4 border-emerald-200 pl-2 font-semibold text-emerald-200"
+                      }
+                    }
+                    if (event.location.includes('Thiruvananthapuram')) {
+                      return {
+                        dateClass: "text-xs mb-1 border-b-2 border-cyan-200 pb-0.5 inline-block font-bold text-cyan-200",
+                        locationClass: "text-xs mt-1 border-l-4 border-cyan-200 pl-2 font-semibold text-cyan-200"
+                      }
+                    }
+                    if (event.location.includes('Pune')) {
+                      return {
+                        dateClass: "text-xs mb-1 border-b-2 border-amber-200 pb-0.5 inline-block font-bold text-amber-200",
+                        locationClass: "text-xs mt-1 border-l-4 border-amber-200 pl-2 font-semibold text-amber-200"
+                      }
+                    }
+                    return {
+                      dateClass: "text-xs mb-1 border-b-2 border-slate-200 pb-0.5 inline-block font-bold text-slate-200",
+                      locationClass: "text-xs mt-1 border-l-4 border-slate-200 pl-2 font-semibold"
+                    }
                   }
 
-                  // Get icon based on location
-                  const getLocationIcon = () => {
-                    if (event.location.includes('Thodupuzha')) {
-                      return <Palmtree className="w-3 h-3 text-slate-900" />
-                    } else if (event.location.includes('Thiruvananthapuram')) {
-                      return <Waves className="w-3 h-3 text-slate-900" />
-                    } else if (event.location.includes('Pune')) {
-                      return <Castle className="w-3 h-3 text-slate-900" />
-                    }
-                    return <Palmtree className="w-3 h-3 text-slate-900" />
-                  }
+                  const styles = getLocationStyles()
 
                   return (
                     <div key={event.id} className="grid grid-cols-2 gap-12 relative">
-                      {/* Timeline dot */}
-                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                        <div
-                          className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center"
-                          style={{ backgroundColor: getDotColor() }}
-                        >
-                          {getLocationIcon()}
-                        </div>
-                      </div>
 
                       <div className="flex flex-col items-end justify-center pr-6">
                         <div className={`text-base text-right ${hasLineBreak ? 'leading-tight' : ''}`} style={{ color: 'var(--text-muted)' }}>
@@ -489,11 +488,11 @@ export default function WeddingInvitation() {
                         </div>
                       </div>
                       <div className="flex flex-col items-start justify-center pl-6">
-                        <div className="text-xs mb-1" style={{ color: 'var(--text-light)' }}>
+                        <div className={styles.dateClass}>
                           {event.date}
                         </div>
                         <div className="text-5xl font-normal text-primary tracking-tight leading-tight">{event.time}</div>
-                        <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                        <div className={styles.locationClass}>
                           {event.location}
                         </div>
                       </div>

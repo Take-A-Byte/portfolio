@@ -16,28 +16,28 @@ export const weddingData: WeddingDetails = {
       title: "Haldi",
       time: "18:00",
       date: "12th Dec",
-      location: "Thodupuzha, Kerala"
+      location: "Thodupuzha"
     },
     {
       id: "sangeet",
-      title: "Sangeet Sandhya",
+      title: "Sangeet",
       time: "18:00",
       date: "12th Dec",
-      location: "Thodupuzha, Kerala"
+      location: "Thodupuzha"
     },
     {
       id: "vidhi",
       title: "Vidhi",
       time: "10:00",
       date: "13th Dec",
-      location: "Thodupuzha, Kerala"
+      location: "Thodupuzha"
     },
     {
       id: "meetup-dinner",
       title: "Meetup Dinner",
       time: "19:00",
       date: "13th Dec",
-      location: "Thodupuzha, Kerala"
+      location: "Thodupuzha"
     },
     {
       id: "party-dinner",
