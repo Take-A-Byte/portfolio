@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
 import { weddingData } from "./data"
+import "./page.css"
 
 const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
@@ -22,10 +23,10 @@ export default function WeddingInvitation() {
   const { brideName, groomName, weddingDate, venue, timeline, importantDates } = weddingData
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-8 px-4">
-      <div className="max-w-md mx-auto space-y-10 bg-slate-900 p-6 rounded-3xl">
+    <div className="min-h-screen py-8 px-4" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+      <div className="max-w-md mx-auto space-y-10 bg-primary p-6 rounded-3xl">
         {/* Boarding Pass / Ticket */}
-        <Card className="relative bg-white shadow-2xl overflow-visible border-0 rounded-xl">
+        <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl">
           <div className="flex flex-col">
           {/* Perforated top edge with semicircle cutouts */}
           <div className="h-8">
@@ -43,15 +44,15 @@ export default function WeddingInvitation() {
           <div className="flex items-center w-full">
             {/* Left semicircle */}
             <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-slate-900 -ml-6"></div>
+              <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
             </div>
 
             {/* Dashed line that fills remaining width */}
-            <div className="flex-1 border-t-4 border-dashed border-slate-900"></div>
+            <div className="flex-1 border-t-4 border-dashed border-primary"></div>
 
             {/* Right semicircle */}
             <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-slate-900 -mr-6"></div>
+              <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
             </div>
           </div>
 
@@ -113,23 +114,23 @@ export default function WeddingInvitation() {
 
               {/* Stamp Overlay */}
               <div className={`absolute -right-4 top-[85%] -translate-y-1/2 ${dmSerifDisplay.className}`}>
-                <div className="w-24 h-24 rounded-full border-[3px] border-slate-900 flex items-center justify-center bg-transparent transform rotate-12 relative shadow-lg">
-                  <div className="absolute inset-0 rounded-full border-[1.5px] border-slate-900" style={{ margin: '3px' }}></div>
+                <div className="w-24 h-24 rounded-full border-[3px] border-primary flex items-center justify-center bg-transparent transform rotate-12 relative shadow-lg">
+                  <div className="absolute inset-0 rounded-full border-[1.5px] border-primary" style={{ margin: '3px' }}></div>
                   <div className="text-center flex flex-col items-center gap-0">
-                    <Plane className="w-3.5 h-3.5 text-slate-900 mb-0.5" />
-                    <p className={`text-[7px] font-bold text-slate-900 leading-none ${bodoniModa.className}`}>
+                    <Plane className="w-3.5 h-3.5 mb-0.5" style={{ color: 'var(--text-primary)' }} />
+                    <p className={`text-[7px] font-bold leading-none ${bodoniModa.className}`} style={{ color: 'var(--text-primary)' }}>
                       21.06
                     </p>
-                    <div className="border-t border-slate-900 w-8 my-0.5"></div>
-                    <p className="text-[8px] font-bold text-slate-900 leading-none tracking-tight">
+                    <div className="border-t border-primary w-8 my-0.5"></div>
+                    <p className="text-[8px] font-bold leading-none tracking-tight" style={{ color: 'var(--text-primary)' }}>
                       WEDDING
                     </p>
-                    <div className="border-t border-slate-900 w-8 my-0.5"></div>
-                    <p className="text-[8px] font-bold text-slate-900 leading-none tracking-tight">
+                    <div className="border-t border-primary w-8 my-0.5"></div>
+                    <p className="text-[8px] font-bold leading-none tracking-tight" style={{ color: 'var(--text-primary)' }}>
                       TICKET
                     </p>
-                    <div className="border-t border-slate-900 w-8 my-0.5"></div>
-                    <Heart className="w-2.5 h-2.5 fill-red-400 text-slate-900 mt-0.5" />
+                    <div className="border-t border-primary w-8 my-0.5"></div>
+                    <Heart className="w-2.5 h-2.5 mt-0.5" style={{ fill: 'var(--accent-background)', color: 'var(--text-primary)' }} />
                   </div>
                 </div>
               </div>
@@ -141,15 +142,15 @@ export default function WeddingInvitation() {
           <div className="flex items-center w-full h-8">
             {/* Left semicircle */}
             <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-slate-900 -ml-6"></div>
+              <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
             </div>
 
             {/* Dashed line that fills remaining width */}
-            <div className="flex-1 border-t-4 border-dashed border-slate-900"></div>
+            <div className="flex-1 border-t-4 border-dashed border-primary"></div>
 
             {/* Right semicircle */}
             <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-slate-900 -mr-6"></div>
+              <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
             </div>
           </div>
 
@@ -168,7 +169,7 @@ export default function WeddingInvitation() {
         </Card>
 
         {/* Dear Friends & Calendar Section - Combined */}
-        <Card className="bg-slate-900 text-white p-8 rounded-xl shadow-xl border-[1px] border-white">
+        <Card className="bg-primary text-primary p-8 rounded-xl shadow-xl border-[1px] border-secondary">
           {/* Dear Friends Section */}
           <h2 className="text-3xl font-serif text-center mb-6 leading-tight">
             DEAR OUR<br />FRIENDS AND FAMILY!
@@ -193,8 +194,8 @@ export default function WeddingInvitation() {
               alt="Decorative line"
               className="w-full"
             />
-            <div className="absolute top-1/2 left-[2rem] -translate-y-[calc(50%-4px)] bg-slate-900 px-2">
-              <Plane className="w-8 h-8 text-white fill-transparent rotate-[45deg]" strokeWidth={1} />
+            <div className="absolute top-1/2 left-[2rem] -translate-y-[calc(50%-4px)] bg-primary px-2">
+              <Plane className="w-8 h-8 text-primary fill-transparent rotate-[45deg]" strokeWidth={1} />
             </div>
           </div>
 
@@ -202,7 +203,7 @@ export default function WeddingInvitation() {
           <h3 className="text-2xl font-serif text-center mb-6">
             WE ARE WAITING FOR YOU
           </h3>
-          <p className="text-sm text-slate-400 text-center mb-8">
+          <p className="text-sm text-center mb-8" style={{ color: 'var(--text-muted)' }}>
             At the first celebration of our family
           </p>
 
@@ -215,17 +216,17 @@ export default function WeddingInvitation() {
                 defaultMonth={new Date(2025, 11, 21)}
                 disableNavigation
                 disabled={true}
-                className="rounded-lg pointer-events-none"
+                className="wedding-calendar rounded-lg pointer-events-none"
                 classNames={{
                   month: "space-y-4",
                   caption: "flex justify-center pt-1 relative items-center",
                   caption_label: "text-sm font-medium text-slate-800",
                   table: "w-full border-collapse space-y-1",
                   head_row: "flex",
-                  head_cell: "text-slate-500 w-9 font-normal text-[0.8rem]",
+                  head_cell: "w-9 font-normal text-[0.8rem] text-slate-500",
                   row: "flex w-full mt-2",
                   cell: "text-center text-sm p-0",
-                  day_selected: "bg-slate-900 text-white hover:bg-slate-900 hover:text-white focus:bg-slate-900",
+                  day_selected: "bg-slate-900 text-white",
                   day_outside: "hidden",
                   day_hidden: "invisible",
                   day: "h-9 w-9 p-0 font-normal text-slate-800 aria-selected:opacity-100 rounded-md",
@@ -234,13 +235,13 @@ export default function WeddingInvitation() {
             </div>
           </div>
 
-          <div className={`text-center mt-8 pt-6 border-t border-slate-700 ${bodoniModa.className}`}>
-            <h4 className="text-3xl font-serif text-white mb-2">21.12.2025</h4>
+          <div className={`text-center mt-8 pt-6 ${bodoniModa.className}`} style={{ borderTop: '1px solid var(--text-muted)' }}>
+            <h4 className="text-3xl font-serif text-primary mb-2">21.12.2025</h4>
           </div>
         </Card>
 
         {/* Venue Section */}
-        <Card className="bg-white shadow-xl overflow-visible border-0 relative rounded-2xl">
+        <Card className="bg-secondary shadow-xl overflow-visible border-0 relative rounded-2xl">
           {/* Perforated top edge with semicircle cutouts */}
           <div className="h-8">
             <img src="/perforated-top.svg" alt="" />
@@ -258,7 +259,7 @@ export default function WeddingInvitation() {
 
             {/* How to get there button */}
             <div className="flex justify-center mb-6">
-              <button className="bg-slate-900 text-white px-8 py-3 rounded-lg text-sm font-medium tracking-wider hover:bg-slate-800 transition-colors">
+              <button className="bg-primary text-primary px-8 py-3 rounded-lg text-sm font-medium tracking-wider transition-colors" style={{ backgroundColor: 'var(--primary-background)', color: 'var(--primary-foreground)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-hover)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-background)'}>
                 HOW TO GET THERE
               </button>
             </div>
@@ -305,7 +306,7 @@ export default function WeddingInvitation() {
         </Card>
 
         {/* Timeline Section */}
-        <Card className="bg-slate-900 text-white shadow-xl border-[1px] border-white rounded-2xl">
+        <Card className="bg-primary text-primary shadow-xl border-[1px] border-secondary rounded-2xl">
           <div className="p-8">
             <h3 className="text-3xl font-serif text-center mb-8 tracking-wider">
               TIMELINE
@@ -314,7 +315,7 @@ export default function WeddingInvitation() {
             {/* Timeline items */}
             <div className={`relative mb-8 ${bodoniModa.className}`}>
               {/* Vertical line */}
-              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-600 -translate-x-1/2"></div>
+              <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2" style={{ backgroundColor: 'var(--text-secondary)' }}></div>
 
               <div className="space-y-12">
                 {timeline.map((event) => {
@@ -331,7 +332,7 @@ export default function WeddingInvitation() {
                   return (
                     <div key={event.id} className="grid grid-cols-2 gap-12">
                       <div className="flex items-center justify-end pr-6">
-                        <div className={`text-base text-slate-400 text-right ${hasLineBreak ? 'leading-tight' : ''}`}>
+                        <div className={`text-base text-right ${hasLineBreak ? 'leading-tight' : ''}`} style={{ color: 'var(--text-muted)' }}>
                           {hasLineBreak ? (
                             <>
                               {titleLines[0]}{hasAtSplit ? ' at' : ''}<br />{titleLines[1]}
@@ -342,7 +343,7 @@ export default function WeddingInvitation() {
                         </div>
                       </div>
                       <div className="flex items-center pl-6">
-                        <div className="text-5xl font-normal text-white tracking-tight">{event.time}</div>
+                        <div className="text-5xl font-normal text-primary tracking-tight">{event.time}</div>
                       </div>
                     </div>
                   )
@@ -351,11 +352,11 @@ export default function WeddingInvitation() {
             </div>
 
             {/* Decorative flight path */}
-            <div className="mt-8 pt-6 border-t border-slate-700 relative">
+            <div className="mt-8 pt-6 relative" style={{ borderTop: '1px solid var(--text-muted)' }}>
               <img src="/flight-path-2.svg" alt="" className="w-full h-16" />
               {/* Plane icon */}
               <div className="absolute right-2 top-[calc(50%+0.5rem)] -translate-y-1/2">
-                <Plane className="w-6 h-6 text-slate-400 fill-slate-400 rotate-[20deg]" strokeWidth={1.5} />
+                <Plane className="w-6 h-6 rotate-[20deg]" style={{ color: 'var(--text-muted)', fill: 'var(--text-muted)' }} strokeWidth={1.5} />
               </div>
             </div>
           </div>
