@@ -4,6 +4,7 @@ import { Heart, Plane } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
+import { weddingData } from "./data"
 
 const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
@@ -17,17 +18,8 @@ const dmSerifDisplay = DM_Serif_Display({
   style: ["normal", "italic"]
 })
 
-const brideName = "MURALEEMAYOORA"
-const groomName = "SHANTANU"
-const weddingDate = "13.12.2025"
-
 export default function WeddingInvitation() {
-  const date = [
-    new Date(2025, 11, 12),
-    new Date(2025, 11, 13),
-    new Date(2025, 11, 15),
-    new Date(2025, 11, 21)
-  ]
+  const { brideName, groomName, weddingDate, venue, timeline, importantDates } = weddingData
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-8 px-4">
@@ -223,7 +215,7 @@ export default function WeddingInvitation() {
             <div className="bg-white rounded-2xl p-6">
               <Calendar
                 mode="multiple"
-                selected={date}
+                selected={importantDates}
                 defaultMonth={new Date(2025, 11, 21)}
                 disableNavigation
                 disabled={true}
@@ -272,8 +264,8 @@ export default function WeddingInvitation() {
             </h3>
 
             <div className="text-center text-slate-600 mb-4">
-              <p className="text-sm mb-1">Palace of Marriages No. 2</p>
-              <p className="text-xs text-slate-500">St. Petersburg, Furshtatskaya St. 52</p>
+              <p className="text-sm mb-1">{venue.name}</p>
+              <p className="text-xs text-slate-500">{venue.address}</p>
             </div>
 
             {/* How to get there button */}
@@ -337,45 +329,36 @@ export default function WeddingInvitation() {
               <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-600 -translate-x-1/2"></div>
 
               <div className="space-y-12">
-                {/* Guest gathering */}
-                <div className="grid grid-cols-2 gap-12">
-                  <div className="flex items-center justify-end pr-6">
-                    <div className="text-base text-slate-400 text-right">Guest gathering</div>
-                  </div>
-                  <div className="flex items-center pl-6">
-                    <div className="text-5xl font-normal text-white tracking-tight">12:00</div>
-                  </div>
-                </div>
+                {timeline.map((event) => {
+                  // Check for both " at " and "\n" splits
+                  const hasNewline = event.title.includes('\n')
+                  const hasAtSplit = event.title.includes(' at ')
+                  const titleLines = hasNewline
+                    ? event.title.split('\n')
+                    : hasAtSplit
+                      ? event.title.split(' at ')
+                      : [event.title]
+                  const hasLineBreak = titleLines.length > 1
 
-                {/* Registration ceremony */}
-                <div className="grid grid-cols-2 gap-12">
-                  <div className="flex items-center justify-end pr-6">
-                    <div className="text-base text-slate-400 text-right leading-tight">Registration<br />ceremony</div>
-                  </div>
-                  <div className="flex items-center pl-6">
-                    <div className="text-5xl font-normal text-white tracking-tight">12:30</div>
-                  </div>
-                </div>
-
-                {/* Banquet */}
-                <div className="grid grid-cols-2 gap-12">
-                  <div className="flex items-center justify-end pr-6">
-                    <div className="text-base text-slate-400 text-right leading-tight">Banquet at<br />Putilov Mansion</div>
-                  </div>
-                  <div className="flex items-center pl-6">
-                    <div className="text-5xl font-normal text-white tracking-tight">13:30</div>
-                  </div>
-                </div>
-
-                {/* End of evening */}
-                <div className="grid grid-cols-2 gap-12">
-                  <div className="flex items-center justify-end pr-6">
-                    <div className="text-base text-slate-400 text-right">End of evening</div>
-                  </div>
-                  <div className="flex items-center pl-6">
-                    <div className="text-5xl font-normal text-white tracking-tight">23:00</div>
-                  </div>
-                </div>
+                  return (
+                    <div key={event.id} className="grid grid-cols-2 gap-12">
+                      <div className="flex items-center justify-end pr-6">
+                        <div className={`text-base text-slate-400 text-right ${hasLineBreak ? 'leading-tight' : ''}`}>
+                          {hasLineBreak ? (
+                            <>
+                              {titleLines[0]}{hasAtSplit ? ' at' : ''}<br />{titleLines[1]}
+                            </>
+                          ) : (
+                            event.title
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center pl-6">
+                        <div className="text-5xl font-normal text-white tracking-tight">{event.time}</div>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
