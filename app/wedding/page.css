@@ -1,0 +1,108 @@
+:root {
+  /* Primary - Dark Theme (slate-900) */
+  --primary-background: #0f172a; /* slate-900 */
+  --primary-foreground: #ffffff; /* white text on dark bg */
+  --primary-hover: #1e293b; /* slate-800 */
+
+  /* Secondary - Light Theme (white) */
+  --secondary-background: #ffffff; /* white */
+  --secondary-foreground: #0f172a; /* slate-900 text on light bg */
+
+  /* Muted - Soft grays */
+  --muted-background: #f8fafc; /* slate-50 */
+  --muted-foreground: #64748b; /* slate-500 */
+
+  /* Accent - Heart/Love */
+  --accent-background: #f87171; /* red-400 */
+  --accent-foreground: #0f172a; /* slate-900 */
+
+  /* Border colors */
+  --border: #0f172a; /* slate-900 */
+  --border-light: #cbd5e1; /* slate-300 */
+
+  /* Text variations */
+  --text-primary: #0f172a; /* slate-900 */
+  --text-secondary: #475569; /* slate-600 */
+  --text-muted: #94a3b8; /* slate-400 */
+  --text-light: #cbd5e1; /* slate-300 */
+
+  /* Specific UI elements */
+  --card-background: #ffffff;
+  --card-dark-background: #0f172a; /* slate-900 */
+
+  /* Gradients */
+  --gradient-start: #f8fafc; /* slate-50 */
+  --gradient-end: #f1f5f9; /* slate-100 */
+}
+
+/* Utility classes */
+.bg-primary {
+  background-color: var(--primary-background);
+}
+
+.bg-secondary {
+  background-color: var(--secondary-background);
+}
+
+.bg-muted {
+  background-color: var(--muted-background);
+}
+
+.text-primary {
+  color: var(--primary-foreground);
+}
+
+.text-secondary {
+  color: var(--secondary-foreground);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.border-primary {
+  border-color: var(--border);
+}
+
+.border-secondary {
+  border-color: var(--secondary-background);
+}
+
+.border-light {
+  border-color: var(--border-light);
+}
+
+/* Calendar customizations */
+.wedding-calendar .rdp-day_selected {
+  background-color: var(--primary-background) !important;
+  color: var(--primary-foreground) !important;
+}
+
+.wedding-calendar .rdp-caption_label {
+  color: var(--text-primary) !important;
+}
+
+.wedding-calendar .rdp-head_cell {
+  color: var(--muted-foreground) !important;
+}
+
+.wedding-calendar .rdp-day {
+  color: var(--text-primary) !important;
+}
+
+/* Heart beat animation */
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(1.1);
+  }
+  20%, 40% {
+    transform: scale(1);
+  }
+}
+
+.heart-pump {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
