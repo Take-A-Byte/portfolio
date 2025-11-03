@@ -1,0 +1,11 @@
+<svg viewBox="0 0 300 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dashed curved path -->
+  <path
+    d="M 20 30 Q 100 10, 180 30 Q 220 40, 280 30"
+    stroke="#cbd5e1"
+    stroke-width="2"
+    stroke-dasharray="6 6"
+    stroke-linecap="round"
+    fill="none"
+  />
+</svg>
