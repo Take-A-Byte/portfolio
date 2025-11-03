@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, Plane } from "lucide-react"
+import { Heart, Plane, Bus, Car, Backpack, Sparkles } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
@@ -252,16 +252,9 @@ export default function WeddingInvitation() {
               VENUE
             </h3>
 
-            <div className="text-center text-slate-600 mb-4">
+            <div className="text-center text-slate-600 mb-6">
               <p className="text-sm mb-1">{venue.name}</p>
               <p className="text-xs text-slate-500">{venue.address}</p>
-            </div>
-
-            {/* How to get there button */}
-            <div className="flex justify-center mb-6">
-              <button className="bg-primary text-primary px-8 py-3 rounded-lg text-sm font-medium tracking-wider transition-colors" style={{ backgroundColor: 'var(--primary-background)', color: 'var(--primary-foreground)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-hover)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-background)'}>
-                HOW TO GET THERE
-              </button>
             </div>
 
             {/* Venue image placeholder */}
@@ -273,6 +266,120 @@ export default function WeddingInvitation() {
             </div>
           </div>
 
+            {/* Dashed separator */}
+            <div className="flex items-center w-full my-8">
+              {/* Left semicircle */}
+              <div className="w-6 h-12 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
+              </div>
+
+              {/* Dashed line that fills remaining width */}
+              <div className="flex-1 border-t-4 border-dashed border-primary"></div>
+
+              {/* Right semicircle */}
+              <div className="w-6 h-12 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
+              </div>
+            </div>
+
+            {/* How to get there instructions */}
+            <div className="px-8">
+              <h4 className="text-lg font-serif text-slate-800 mb-2 text-center tracking-wider">
+                YOUR JOURNEY TO HAPPINESS
+              </h4>
+              <p className="text-xs text-slate-500 text-center mb-6 italic">Boarding Pass Instructions</p>
+
+              <div className="space-y-4 mb-6">
+                {/* Step 1 */}
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center">
+                    <Plane className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex-1 pt-0.5">
+                    <p className="text-sm font-medium text-slate-800 mb-1">First Stop: Gateway to God's Own Country</p>
+                    <p className="text-xs text-slate-600">
+                      Board your flight to Kochi International Airport, Kerala - where palm trees sway and love is in the air!
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center">
+                    <Bus className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex-1 pt-0.5">
+                    <p className="text-sm font-medium text-slate-800 mb-2">Next Stop: Where the Party Begins!</p>
+                    <p className="text-xs text-slate-600 mb-3">Choose your adventure from Kochi to our venue:</p>
+
+                    <div className="space-y-3 ml-2">
+                      <div className="bg-gradient-to-r from-slate-50 to-transparent border-l-2 border-slate-900 pl-3 py-2">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Sparkles className="w-3 h-3 text-slate-900" />
+                          <p className="text-xs font-semibold text-slate-800">VIP Love Express (Recommended!)</p>
+                        </div>
+                        <p className="text-xs text-slate-600">
+                          Early birds arriving by 7:00 AM on 12th Dec get the royal treatment! Our special wedding bus will whisk you directly to the venue. No stops, just love and laughter!
+                        </p>
+                      </div>
+
+                      <div className="bg-gradient-to-r from-slate-50 to-transparent border-l-2 border-slate-400 pl-3 py-2">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Car className="w-3 h-3 text-slate-700" />
+                          <p className="text-xs font-semibold text-slate-800">Private Chariot</p>
+                        </div>
+                        <p className="text-xs text-slate-600">
+                          Book your own cab and cruise through Kerala's scenic routes at your own pace. Perfect for families or those who love a road trip!
+                        </p>
+                      </div>
+
+                      <div className="bg-gradient-to-r from-slate-50 to-transparent border-l-2 border-slate-300 pl-3 py-2">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Backpack className="w-3 h-3 text-slate-600" />
+                          <p className="text-xs font-semibold text-slate-800">The Adventurer's Route</p>
+                        </div>
+                        <p className="text-xs text-slate-600">
+                          Take a public bus to Thodupuzha town, then hop into a local cab. Experience Kerala like a local explorer!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Dashed separator */}
+            <div className="flex items-center w-full">
+              {/* Left semicircle */}
+              <div className="w-6 h-12 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
+              </div>
+
+              {/* Dashed line that fills remaining width */}
+              <div className="flex-1 border-t-4 border-dashed border-primary"></div>
+
+              {/* Right semicircle */}
+              <div className="w-6 h-12 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
+              </div>
+            </div>
+
+              {/* Transport note */}
+              <div className="mx-8 mb-8 text-center">
+                <div className="inline-block mb-3">
+                  <Heart className="w-10 h-10 text-red-400 fill-red-400 heart-pump" />
+                </div>
+                <h5 className="text-base font-serif text-slate-900 mb-2 tracking-wide">
+                  Special Wedding Transit Service
+                </h5>
+                <p className="text-sm text-slate-700 max-w-sm mx-auto leading-relaxed">
+                  Complimentary transport departing Kochi Airport at <span className="font-semibold text-slate-900">7:00 AM on December 12th</span>
+                </p>
+                <p className="text-xs text-slate-500 mt-2 italic">
+                  RSVP to secure your seat on the Love Express!
+                </p>
+              </div>
+              
           {/* Perforated edge bottom */}
           <div className="relative left-[2px]">
             <img src="/perforated-bottom.svg" alt="" />
@@ -280,7 +387,7 @@ export default function WeddingInvitation() {
 
         {/* Semi-circular path overlay */}
         <div className="absolute bottom-32 -right-4 z-20 pointer-events-none">
-          <div className="absolute -right-4 rotate-[180deg]">
+          <div className="absolute -right-8 top-6 rotate-[200deg]">
             <svg width="150" height="240" viewBox="0 0 120 240" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M 0 0 Q 120 0, 120 120"
@@ -290,7 +397,7 @@ export default function WeddingInvitation() {
                 fill="none"
               />
               <path
-                d="M 120 120 Q 120 240, 0 240"
+                d="M 120 120 Q 120 240, 0 290"
                 stroke="#000"
                 strokeWidth="3"
                 strokeDasharray="8 8"
@@ -298,8 +405,8 @@ export default function WeddingInvitation() {
               />
             </svg>
             {/* Plane at midpoint of black path */}
-            <div className="absolute" style={{ left: '100px', top: '180px' }}>
-              <Plane className="w-8 h-8 text-black fill-white -rotate-12" strokeWidth={1.5} />
+            <div className="absolute" style={{ left: '100px', top: '188px' }}>
+              <Plane className="w-8 h-8 text-black fill-white -rotate-[20deg]" strokeWidth={1.5} />
             </div>
           </div>
         </div>
@@ -356,7 +463,7 @@ export default function WeddingInvitation() {
               <img src="/flight-path-2.svg" alt="" className="w-full h-16" />
               {/* Plane icon */}
               <div className="absolute right-2 top-[calc(50%+0.5rem)] -translate-y-1/2">
-                <Plane className="w-6 h-6 rotate-[20deg]" style={{ color: 'var(--text-muted)', fill: 'var(--text-muted)' }} strokeWidth={1.5} />
+                <Plane className="w-6 h-6 rotate-[20deg] text-black fill-white" strokeWidth={1.5} />
               </div>
             </div>
           </div>
