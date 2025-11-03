@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, Plane, Bus, Car, Backpack, Sparkles } from "lucide-react"
+import { Heart, Plane, Bus, Car, Backpack, Sparkles, Palmtree, Waves, Castle } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
@@ -208,6 +208,11 @@ export default function WeddingInvitation() {
           </p>
 
           {/* Calendar Section */}
+          <div className="text-center mb-4">
+            <h3 className="text-2xl font-serif text-white mb-1">CELEBRATION DATES</h3>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>December 2025</p>
+          </div>
+
           <div className={`flex justify-center`}>
             <div className="bg-white rounded-2xl p-6">
               <Calendar
@@ -236,7 +241,8 @@ export default function WeddingInvitation() {
           </div>
 
           <div className={`text-center mt-8 pt-6 ${bodoniModa.className}`} style={{ borderTop: '1px solid var(--text-muted)' }}>
-            <h4 className="text-3xl font-serif text-primary mb-2">21.12.2025</h4>
+            <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>Main Event</p>
+            <h4 className="text-3xl font-serif text-primary mb-2">{weddingDate}</h4>
           </div>
         </Card>
 
@@ -248,12 +254,13 @@ export default function WeddingInvitation() {
           </div>
 
           <div className="pt-10 pb-8 px-8">
-            <h3 className="text-2xl font-serif text-slate-800 mb-4 text-center tracking-wider">
-              VENUE
+            <h3 className="text-2xl font-serif text-slate-800 mb-2 text-center tracking-wider">
+              ARRIVAL GATE
             </h3>
+            <p className="text-xs text-slate-500 text-center mb-6">Primary Celebration Destination</p>
 
             <div className="text-center text-slate-600 mb-6">
-              <p className="text-sm mb-1">{venue.name}</p>
+              <p className="text-sm mb-1 font-medium">{venue.name}</p>
               <p className="text-xs text-slate-500">{venue.address}</p>
             </div>
 
@@ -415,9 +422,10 @@ export default function WeddingInvitation() {
         {/* Timeline Section */}
         <Card className="bg-primary text-primary shadow-xl border-[1px] border-secondary rounded-2xl">
           <div className="p-8">
-            <h3 className="text-3xl font-serif text-center mb-8 tracking-wider">
-              TIMELINE
+            <h3 className="text-3xl font-serif text-center mb-2 tracking-wider">
+              FLIGHT SCHEDULE
             </h3>
+            <p className="text-xs text-center mb-8" style={{ color: 'var(--text-muted)' }}>All celebrations boarding times</p>
 
             {/* Timeline items */}
             <div className={`relative mb-8 ${bodoniModa.className}`}>
@@ -436,9 +444,40 @@ export default function WeddingInvitation() {
                       : [event.title]
                   const hasLineBreak = titleLines.length > 1
 
+                  // Get dot color based on date
+                  const getDotColor = () => {
+                    if (event.date.includes('12th')) return '#dbeafe' // blue-100
+                    if (event.date.includes('13th')) return '#fef3c7' // amber-100
+                    if (event.date.includes('15th')) return '#ede9fe' // violet-100
+                    if (event.date.includes('21st')) return '#fce7f3' // pink-100
+                    return '#64748b' // slate-500
+                  }
+
+                  // Get icon based on location
+                  const getLocationIcon = () => {
+                    if (event.location.includes('Thodupuzha')) {
+                      return <Palmtree className="w-3 h-3 text-slate-900" />
+                    } else if (event.location.includes('Thiruvananthapuram')) {
+                      return <Waves className="w-3 h-3 text-slate-900" />
+                    } else if (event.location.includes('Pune')) {
+                      return <Castle className="w-3 h-3 text-slate-900" />
+                    }
+                    return <Palmtree className="w-3 h-3 text-slate-900" />
+                  }
+
                   return (
-                    <div key={event.id} className="grid grid-cols-2 gap-12">
-                      <div className="flex items-center justify-end pr-6">
+                    <div key={event.id} className="grid grid-cols-2 gap-12 relative">
+                      {/* Timeline dot */}
+                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                        <div
+                          className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center"
+                          style={{ backgroundColor: getDotColor() }}
+                        >
+                          {getLocationIcon()}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-end justify-center pr-6">
                         <div className={`text-base text-right ${hasLineBreak ? 'leading-tight' : ''}`} style={{ color: 'var(--text-muted)' }}>
                           {hasLineBreak ? (
                             <>
@@ -449,8 +488,14 @@ export default function WeddingInvitation() {
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center pl-6">
-                        <div className="text-5xl font-normal text-primary tracking-tight">{event.time}</div>
+                      <div className="flex flex-col items-start justify-center pl-6">
+                        <div className="text-xs mb-1" style={{ color: 'var(--text-light)' }}>
+                          {event.date}
+                        </div>
+                        <div className="text-5xl font-normal text-primary tracking-tight leading-tight">{event.time}</div>
+                        <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                          {event.location}
+                        </div>
                       </div>
                     </div>
                   )

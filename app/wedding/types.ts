@@ -2,6 +2,8 @@ export interface TimelineEvent {
   id: string
   title: string
   time: string
+  date: string
+  location: string
   description?: string
 }
 

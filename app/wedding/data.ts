@@ -5,32 +5,53 @@ export const weddingData: WeddingDetails = {
   groomName: "SHANTANU",
   weddingDate: "13.12.2025",
   venue: {
-    name: "Palace of Marriages No. 2",
-    address: "St. Petersburg, Furshtatskaya St. 52",
-    city: "St. Petersburg",
-    street: "Furshtatskaya St. 52"
+    name: "Wedding Venue",
+    address: "Thodupuzha, Kerala",
+    city: "Thodupuzha",
+    street: "Kerala"
   },
   timeline: [
     {
-      id: "guest-gathering",
-      title: "Guest gathering",
-      time: "12:00"
+      id: "haldi",
+      title: "Haldi",
+      time: "18:00",
+      date: "12th Dec",
+      location: "Thodupuzha, Kerala"
     },
     {
-      id: "registration-ceremony",
-      title: "Registration\nceremony",
-      time: "12:30"
+      id: "sangeet",
+      title: "Sangeet Sandhya",
+      time: "18:00",
+      date: "12th Dec",
+      location: "Thodupuzha, Kerala"
     },
     {
-      id: "banquet",
-      title: "Banquet at Putilov Mansion",
-      time: "13:30",
-      description: "Banquet at"
+      id: "vidhi",
+      title: "Vidhi",
+      time: "10:00",
+      date: "13th Dec",
+      location: "Thodupuzha, Kerala"
     },
     {
-      id: "end-of-evening",
-      title: "End of evening",
-      time: "23:00"
+      id: "meetup-dinner",
+      title: "Meetup Dinner",
+      time: "19:00",
+      date: "13th Dec",
+      location: "Thodupuzha, Kerala"
+    },
+    {
+      id: "party-dinner",
+      title: "Party Dinner",
+      time: "19:00",
+      date: "15th Dec",
+      location: "Thiruvananthapuram"
+    },
+    {
+      id: "party-lunch",
+      title: "Party Lunch",
+      time: "13:00",
+      date: "21st Dec",
+      location: "Pune"
     }
   ],
   importantDates: [
