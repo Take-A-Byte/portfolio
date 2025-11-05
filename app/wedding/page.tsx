@@ -6,6 +6,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
 import { weddingData } from "./data"
 import { useTranslation } from "./i18n/useTranslation"
+import AirplaneAnimation from "./AirplaneAnimation"
 import "./page.css"
 
 const bodoniModa = Bodoni_Moda({
@@ -38,10 +39,11 @@ export default function WeddingInvitation() {
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+    <div className="min-h-screen overflow-x-hidden wedding-content" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+      <AirplaneAnimation />
       <div className="max-w-md mx-auto space-y-4 xxs:space-y-5 xs:space-y-6 sm:space-y-10 bg-primary p-2 xxs:p-2.5 xs:p-3 sm:p-6 sm:rounded-3xl">
         {/* Boarding Pass / Ticket */}
-        <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl">
+        <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl z-50">
           <div className="flex flex-col">
           {/* Perforated top edge with semicircle cutouts */}
           <div className="flex justify-center w-[97%]">
@@ -539,6 +541,97 @@ export default function WeddingInvitation() {
               <div className="absolute right-2 top-[calc(50%+0.5rem)] -translate-y-1/2">
                 <Plane className="w-6 h-6 rotate-[20deg] text-black fill-white" strokeWidth={1.5} />
               </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Final Boarding Pass - Get Ready Section */}
+        <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl z-0">
+          <div className="flex flex-col">
+            {/* Perforated top edge */}
+            <div className="flex justify-center w-[97%] -z-20">
+              <img src="/perforated-top.svg" alt="" className="w-[97%]" />
+            </div>
+
+            {/* Boarding Pass Header */}
+            <div className={`text-center py-3 xxs:py-3 xs:py-4 ${dmSerifDisplay.className}`}>
+              <p className="text-sm xxs:text-sm xs:text-md font-medium text-slate-600 tracking-widest">
+                FINAL BOARDING CALL
+              </p>
+            </div>
+
+            {/* Perforation */}
+            <div className="flex items-center w-full">
+              <div className="w-6 h-12 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
+              </div>
+              <div className="flex-1 border-t-4 border-dashed border-primary"></div>
+              <div className="w-6 h-12 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
+              </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="pt-4 xxs:pt-5 xs:pt-6 sm:pt-8 pb-6 xxs:pb-7 xs:pb-8 sm:pb-10 px-3 xxs:px-3 xs:px-4 sm:px-8">
+
+              {/* Plane Icon */}
+              <div className="flex justify-center mb-6">
+                <div className="relative">
+                  <Plane className="w-20 h-20 text-slate-900" strokeWidth={1.5} />
+                </div>
+              </div>
+
+              {/* Get Ready Message */}
+              <div className={`text-center mb-6 ${dmSerifDisplay.className}`}>
+                <h2 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 mb-3">
+                  Get Ready to Onboard!
+                </h2>
+                <p className="text-sm xxs:text-sm xs:text-base text-slate-600 leading-relaxed max-w-sm mx-auto">
+                  Your journey to happiness is about to begin. Pack your bags, bring your smiles, and prepare for the celebration of a lifetime!
+                </p>
+              </div>
+
+              {/* Decorative Hearts */}
+              <div className="flex justify-center gap-3 mb-6">
+                <Heart className="w-5 h-5 text-red-400 fill-red-400 heart-pump" />
+                <Heart className="w-6 h-6 text-red-400 fill-red-400 heart-pump" style={{ animationDelay: '0.2s' }} />
+                <Heart className="w-5 h-5 text-red-400 fill-red-400 heart-pump" style={{ animationDelay: '0.4s' }} />
+              </div>
+
+              {/* See You There */}
+              <div className={`text-center ${bodoniModa.className}`}>
+                <p className="text-xl xxs:text-xl xs:text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
+                  See You There!
+                </p>
+                <p className="text-xs xxs:text-xs xs:text-sm text-slate-500 italic">
+                  With love and anticipation
+                </p>
+              </div>
+
+              {/* Stamp */}
+              <div className="flex justify-center mt-8">
+                <div className={`w-28 h-28 rounded-full border-[3px] border-slate-900 flex items-center justify-center transform -rotate-12 ${dmSerifDisplay.className}`}>
+                  <div className="absolute inset-0 rounded-full border-[1.5px] border-slate-900" style={{ margin: '3px' }}></div>
+                  <div className="text-center flex flex-col items-center gap-1">
+                    <Heart className="w-5 h-5 mb-1 text-slate-900 fill-red-400" />
+                    <p className="text-xs font-bold leading-none text-slate-900">
+                      CONFIRMED
+                    </p>
+                    <div className="border-t border-slate-900 w-10 my-1"></div>
+                    <p className="text-[10px] font-bold leading-none tracking-tight text-slate-900">
+                      DECEMBER
+                    </p>
+                    <p className="text-lg font-bold leading-none text-slate-900">
+                      2025
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Perforated bottom edge */}
+            <div className="flex justify-center w-[97%]">
+              <img src="/perforated-bottom.svg" alt="" className="w-[97%]" />
             </div>
           </div>
         </Card>
