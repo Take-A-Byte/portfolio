@@ -5,8 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
 import { weddingData } from "./data"
-import { useState, useEffect } from "react"
-import { detectIfFromKerala } from "./locationService"
+import { useTranslation } from "./i18n/useTranslation"
 import "./page.css"
 
 const bodoniModa = Bodoni_Moda({
@@ -22,19 +21,21 @@ const dmSerifDisplay = DM_Serif_Display({
 })
 
 export default function WeddingInvitation() {
-  const { brideName, groomName, weddingDate, venue, timeline, importantDates } = weddingData
-  const [isFromKerala, setIsFromKerala] = useState<boolean | null>(null)
+  const { weddingDate, venue, timeline, importantDates } = weddingData
+  const { t, isLoading } = useTranslation()
 
-  useEffect(() => {
-    // Detect location using the location service
-    // Tries geolocation first, falls back to IP-based detection
-    const detectLocation = async () => {
-      const fromKerala = await detectIfFromKerala()
-      setIsFromKerala(fromKerala)
-    }
-
-    detectLocation()
-  }, [])
+  // Show loading state while detecting location
+  if (isLoading) {
+    return (
+      <div className="min-h-screen overflow-x-hidden flex items-center justify-center" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+        <div className="text-center">
+          <div className="relative">
+            <Heart className="w-12 h-12 mx-auto text-red-400 fill-red-400 heart-pump" />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
@@ -84,11 +85,11 @@ export default function WeddingInvitation() {
             {/* Names */}
             <div className={`flex flex-col items-center justify-center mb-8 ${dmSerifDisplay.className}`}>
               <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 mb-1 text-center">
-                {brideName}
+                {t.brideName}
               </h1>
               <div className="text-2xl xxs:text-2xl xs:text-3xl font-light text-slate-600 mb-1">&</div>
               <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 text-center">
-                {groomName}
+                {t.groomName}
               </h1>
             </div>
 
@@ -220,11 +221,7 @@ export default function WeddingInvitation() {
             WE ARE WAITING FOR YOU
           </h3>
           <p className="text-xs xxs:text-xs xs:text-sm sm:text-sm text-center mb-6 sm:mb-8" style={{ color: 'var(--text-muted)' }}>
-            {isFromKerala === null
-              ? "At our wedding celebration in God's Own Country"
-              : isFromKerala
-                ? "ഞങ്ങളുടെ കുടുംബത്തിലെ ആദ്യ ആഘോഷത്തിൽ"
-                : "At our wedding celebration in God's Own Country"}
+            {t.celebrationMessage}
           </p>
 
           {/* Calendar Section */}

@@ -1,0 +1,16 @@
+export const en = {
+  brideName: "MURALEEMAYOORA",
+  groomName: "SHANTANU",
+  celebrationMessage: "At our wedding celebration in God's Own Country",
+  weddingTicket: "WEDDING TICKET",
+  dearFriendsTitle: "DEAR OUR\nFRIENDS AND FAMILY!",
+  invitationText: "This is an official invitation to our wedding! You received it because we really want to see you on this day by our side!",
+  waitingForYou: "WE ARE WAITING FOR YOU",
+  celebrationDates: "CELEBRATION DATES",
+  wedding: "Wedding",
+  arrivalGate: "ARRIVAL GATE",
+  primaryDestination: "Primary Celebration Destination",
+  viewOnMaps: "View on Google Maps",
+  flightSchedule: "FLIGHT SCHEDULE",
+  allCelebrations: "All celebrations boarding times",
+} as const
