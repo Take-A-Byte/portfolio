@@ -6,7 +6,7 @@ export const weddingData: WeddingDetails = {
   weddingDate: "13.12.2025",
   venue: {
     name: "Wedding Venue",
-    address: "Thodupuzha, Kerala",
+    address: "Nutmeg County, Muvattupuzha, Kerala",
     city: "Thodupuzha",
     street: "Kerala"
   },

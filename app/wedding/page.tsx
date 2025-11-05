@@ -23,19 +23,19 @@ export default function WeddingInvitation() {
   const { brideName, groomName, weddingDate, venue, timeline, importantDates } = weddingData
 
   return (
-    <div className="min-h-screen py-8 px-4" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
-      <div className="max-w-md mx-auto space-y-10 bg-primary p-6 rounded-3xl">
+    <div className="min-h-screen py-2 xxs:py-3 xs:py-4 sm:py-8 px-2 xxs:px-2 xs:px-3 sm:px-4" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+      <div className="max-w-md mx-auto space-y-4 xxs:space-y-5 xs:space-y-6 sm:space-y-10 bg-primary p-2 xxs:p-2.5 xs:p-3 sm:p-6 rounded-xl xxs:rounded-xl xs:rounded-2xl sm:rounded-3xl">
         {/* Boarding Pass / Ticket */}
         <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl">
           <div className="flex flex-col">
           {/* Perforated top edge with semicircle cutouts */}
           <div className="h-8">
-            <img src="/perforated-top.svg" alt="" />
+            <img src="/perforated-top.svg" alt="" className="w-full" />
           </div>
 
         {/* Wedding Ticket */}
-            <div className={`text-center py-4 ${dmSerifDisplay.className}`}>
-              <p className="text-md font-medium text-slate-600 tracking-widest">
+            <div className={`text-center py-3 xxs:py-3 xs:py-4 ${dmSerifDisplay.className}`}>
+              <p className="text-sm xxs:text-sm xs:text-md font-medium text-slate-600 tracking-widest">
                 WEDDING TICKET
               </p>
             </div>
@@ -57,23 +57,23 @@ export default function WeddingInvitation() {
           </div>
 
           {/* Main Content */}
-          <div className="pt-8 pb-6 px-8">
-            
+          <div className="pt-4 xxs:pt-5 xs:pt-6 sm:pt-8 pb-3 xxs:pb-3 xs:pb-4 sm:pb-6 px-3 xxs:px-3 xs:px-4 sm:px-8">
+
 
             {/* Globe illustration */}
             <div className="flex justify-center mb-6">
-              <div className="relative w-48 h-48">
+              <div className="relative w-32 xxs:w-36 xs:w-40 sm:w-48 h-32 xxs:h-36 xs:h-40 sm:h-48">
                 <img src="/globe.svg" alt="Globe" className="w-full h-full text-slate-900" />
               </div>
             </div>
 
             {/* Names */}
             <div className={`flex flex-col items-center justify-center mb-8 ${dmSerifDisplay.className}`}>
-              <h1 className="text-3xl sm:text-4xl font-serif text-slate-800 mb-1 text-center">
+              <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 mb-1 text-center">
                 {brideName}
               </h1>
-              <div className="text-3xl font-light text-slate-600 mb-1">&</div>
-              <h1 className="text-3xl sm:text-4xl font-serif text-slate-800 text-center">
+              <div className="text-2xl xxs:text-2xl xs:text-3xl font-light text-slate-600 mb-1">&</div>
+              <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 text-center">
                 {groomName}
               </h1>
             </div>
@@ -155,36 +155,38 @@ export default function WeddingInvitation() {
           </div>
 
         {/* Wedding Ticket */}
-            <div className={`text-center py-4 ${dmSerifDisplay.className}`}>
-              <p className="text-md font-medium text-slate-600 tracking-widest">
+            <div className={`text-center py-3 xxs:py-3 xs:py-4 ${dmSerifDisplay.className}`}>
+              <p className="text-sm xxs:text-sm xs:text-md font-medium text-slate-600 tracking-widest">
                 WEDDING TICKET
               </p>
             </div>
 
           {/* Perforated edge bottom */}
           <div className="relative left-[2px]">
-            <img src="/perforated-bottom.svg" alt="" />
+            <img src="/perforated-bottom.svg" alt="" className="w-full" />
           </div>
           </div>
         </Card>
 
         {/* Dear Friends & Calendar Section - Combined */}
-        <Card className="bg-primary text-primary p-8 rounded-xl shadow-xl border-[1px] border-secondary">
+        <Card className="bg-primary text-primary p-3 xxs:p-3 xs:p-4 sm:p-8 rounded-xl shadow-xl border-[1px] border-secondary">
           {/* Dear Friends Section */}
-          <h2 className="text-3xl font-serif text-center mb-6 leading-tight">
+          <h2 className="text-xl xxs:text-xl xs:text-2xl sm:text-3xl font-serif text-center mb-4 sm:mb-6 leading-tight">
             DEAR OUR<br />FRIENDS AND FAMILY!
           </h2>
 
-          <p className="text-sm text-slate-300 leading-relaxed text-center mb-8">
+          <p className="text-sm text-slate-300 leading-relaxed text-center mb-6 sm:mb-8">
             This is an official invitation to our wedding! You received it because we really want to see you on this day by our side!
           </p>
 
-          {/* Couple photo placeholder */}
-          <div className="relative w-full h-64 bg-slate-800 rounded-2xl overflow-hidden mb-8">
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Heart className="w-16 h-16 text-slate-700" />
-            </div>
+          {/* Couple photo */}
+          <div className="relative w-full aspect-square bg-slate-800 rounded-2xl overflow-hidden sm:mb-8 border-2 border-slate-700">
+            <img
+              src="/images/couple-photo.jpg"
+              alt="Couple Photo"
+              className="w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-slate-900/10 to-transparent"></div>
           </div>
 
           {/* Dotted line with plane */}
@@ -200,21 +202,21 @@ export default function WeddingInvitation() {
           </div>
 
           {/* Waiting text */}
-          <h3 className="text-2xl font-serif text-center mb-6">
+          <h3 className="text-lg xxs:text-lg xs:text-xl sm:text-2xl font-serif text-center mb-4 sm:mb-6">
             WE ARE WAITING FOR YOU
           </h3>
-          <p className="text-sm text-center mb-8" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-xs xxs:text-xs xs:text-sm sm:text-sm text-center mb-6 sm:mb-8" style={{ color: 'var(--text-muted)' }}>
             At the first celebration of our family
           </p>
 
           {/* Calendar Section */}
           <div className="text-center mb-4">
-            <h3 className="text-2xl font-serif text-white mb-1">CELEBRATION DATES</h3>
+            <h3 className="text-lg xxs:text-lg xs:text-xl sm:text-2xl font-serif text-white mb-1">CELEBRATION DATES</h3>
             <p className="text-xs" style={{ color: 'var(--text-muted)' }}>December 2025</p>
           </div>
 
           <div className={`flex justify-center`}>
-            <div className="bg-white rounded-2xl p-6">
+            <div className="bg-white rounded-2xl p-3 sm:p-6">
               <Calendar
                 mode="multiple"
                 selected={importantDates}
@@ -241,7 +243,7 @@ export default function WeddingInvitation() {
           </div>
 
           <div className={`text-center mt-8 pt-6 ${bodoniModa.className}`} style={{ borderTop: '1px solid var(--text-muted)' }}>
-            <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>Main Event</p>
+            <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>Wedding</p>
             <h4 className="text-3xl font-serif text-primary mb-2">{weddingDate}</h4>
           </div>
         </Card>
@@ -250,26 +252,38 @@ export default function WeddingInvitation() {
         <Card className="bg-secondary shadow-xl overflow-visible border-0 relative rounded-2xl">
           {/* Perforated top edge with semicircle cutouts */}
           <div className="h-8">
-            <img src="/perforated-top.svg" alt="" />
+            <img src="/perforated-top.svg" alt="" className="w-full" />
           </div>
 
-          <div className="pt-10 pb-8 px-8">
-            <h3 className="text-2xl font-serif text-slate-800 mb-2 text-center tracking-wider">
+          <div className="pt-4 xxs:pt-5 xs:pt-6 sm:pt-10 pb-4 xxs:pb-5 xs:pb-6 sm:pb-8 px-3 xxs:px-3 xs:px-4 sm:px-8">
+            <h3 className="text-lg xxs:text-lg xs:text-xl sm:text-2xl font-serif text-slate-800 mb-2 text-center tracking-wider">
               ARRIVAL GATE
             </h3>
-            <p className="text-xs text-slate-500 text-center mb-6">Primary Celebration Destination</p>
+            <p className="text-xs text-slate-500 text-center mb-4 sm:mb-6">Primary Celebration Destination</p>
 
-            <div className="text-center text-slate-600 mb-6">
+            <div className="text-center text-slate-600 mb-4 sm:mb-6">
               <p className="text-sm mb-1 font-medium">{venue.name}</p>
-              <p className="text-xs text-slate-500">{venue.address}</p>
+              <p className="text-xs text-slate-500 mb-2">{venue.address}</p>
+              <a
+                href="https://maps.app.goo.gl/K2VY6MDLL7wM3vWs8?g_st=aw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-700 hover:text-slate-900 underline decoration-slate-400 hover:decoration-slate-900 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+                View on Google Maps
+              </a>
             </div>
 
-            {/* Venue image placeholder */}
-            <div className="relative w-full h-80 bg-slate-200 rounded-2xl overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-slate-400 text-sm">Venue Image</div>
-              </div>
+            {/* Venue image */}
+            <div className="relative w-full h-48 xxs:h-52 xs:h-60 sm:h-80 bg-slate-200 rounded-2xl overflow-hidden border-4 border-slate-300">
+              <img
+                src="/images/wedding-venue.webp"
+                alt="Wedding Venue"
+                className="w-full h-full object-cover object-center"
+              />
             </div>
           </div>
 
@@ -290,13 +304,13 @@ export default function WeddingInvitation() {
             </div>
 
             {/* How to get there instructions */}
-            <div className="px-8">
-              <h4 className="text-lg font-serif text-slate-800 mb-2 text-center tracking-wider">
+            <div className="px-3 xxs:px-5 xs:px-7 sm:px-8">
+              <h4 className="text-sm xxs:text-sm xs:text-base sm:text-lg font-serif text-slate-800 mb-2 text-center tracking-wider">
                 YOUR JOURNEY TO HAPPINESS
               </h4>
-              <p className="text-xs text-slate-500 text-center mb-6 italic">Boarding Pass Instructions</p>
+              <p className="text-xs text-slate-500 text-center mb-4 sm:mb-6 italic">Boarding Pass Instructions</p>
 
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 sm:space-y-4 mb-6">
                 {/* Step 1 */}
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center">
@@ -372,14 +386,14 @@ export default function WeddingInvitation() {
             </div>
 
               {/* Transport note */}
-              <div className="mx-8 mb-8 text-center">
-                <div className="inline-block mb-3">
-                  <Heart className="w-10 h-10 text-red-400 fill-red-400 heart-pump" />
+              <div className="mx-3 xxs:mx-3 xs:mx-4 sm:mx-8 mb-6 sm:mb-8 text-center">
+                <div className="inline-block mb-2 sm:mb-3">
+                  <Heart className="w-8 sm:w-10 h-8 sm:h-10 text-red-400 fill-red-400 heart-pump" />
                 </div>
-                <h5 className="text-base font-serif text-slate-900 mb-2 tracking-wide">
+                <h5 className="text-xs xxs:text-xs xs:text-sm sm:text-base font-serif text-slate-900 mb-2 tracking-wide">
                   Special Wedding Transit Service
                 </h5>
-                <p className="text-sm text-slate-700 max-w-sm mx-auto leading-relaxed">
+                <p className="text-xs xxs:text-xs xs:text-xs sm:text-sm text-slate-700 max-w-sm mx-auto leading-relaxed">
                   Complimentary transport departing Kochi Airport at <span className="font-semibold text-slate-900">7:00 AM on December 12th</span>
                 </p>
                 <p className="text-xs text-slate-500 mt-2 italic">
@@ -389,7 +403,7 @@ export default function WeddingInvitation() {
               
           {/* Perforated edge bottom */}
           <div className="relative left-[2px]">
-            <img src="/perforated-bottom.svg" alt="" />
+            <img src="/perforated-bottom.svg" alt="" className="w-full" />
           </div>
 
         {/* Semi-circular path overlay */}
@@ -421,18 +435,18 @@ export default function WeddingInvitation() {
 
         {/* Timeline Section */}
         <Card className="bg-primary text-primary shadow-xl border-[1px] border-secondary rounded-2xl">
-          <div className="p-8">
-            <h3 className="text-3xl font-serif text-center mb-2 tracking-wider">
+          <div className="p-3 xxs:p-3 xs:p-4 sm:p-8">
+            <h3 className="text-xl xxs:text-xl xs:text-2xl sm:text-3xl font-serif text-center mb-2 tracking-wider">
               FLIGHT SCHEDULE
             </h3>
-            <p className="text-xs text-center mb-8" style={{ color: 'var(--text-muted)' }}>All celebrations boarding times</p>
+            <p className="text-xs text-center mb-6 sm:mb-8" style={{ color: 'var(--text-muted)' }}>All celebrations boarding times</p>
 
             {/* Timeline items */}
             <div className={`relative mb-8 ${bodoniModa.className}`}>
               {/* Vertical line - thicker */}
               <div className="absolute left-1/2 top-0 bottom-0 w-1 -translate-x-1/2" style={{ backgroundColor: 'var(--text-secondary)' }}></div>
 
-              <div className="space-y-12">
+              <div className="space-y-8 sm:space-y-12">
                 {timeline.map((event, index) => {
                   // Check for both " at " and "\n" splits
                   const hasNewline = event.title.includes('\n')
@@ -474,10 +488,10 @@ export default function WeddingInvitation() {
                   const styles = getLocationStyles()
 
                   return (
-                    <div key={event.id} className="grid grid-cols-2 gap-12 relative">
+                    <div key={event.id} className="grid grid-cols-2 gap-4 xxs:gap-5 xs:gap-6 sm:gap-12 relative">
 
-                      <div className="flex flex-col items-end justify-center pr-6">
-                        <div className={`text-base text-right ${hasLineBreak ? 'leading-tight' : ''}`} style={{ color: 'var(--text-muted)' }}>
+                      <div className="flex flex-col items-end justify-center pr-2 xxs:pr-2 xs:pr-3 sm:pr-6">
+                        <div className={`text-xs xxs:text-xs xs:text-sm sm:text-base text-right ${hasLineBreak ? 'leading-tight' : ''}`} style={{ color: 'var(--text-muted)' }}>
                           {hasLineBreak ? (
                             <>
                               {titleLines[0]}{hasAtSplit ? ' at' : ''}<br />{titleLines[1]}
@@ -487,11 +501,11 @@ export default function WeddingInvitation() {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col items-start justify-center pl-6">
+                      <div className="flex flex-col items-start justify-center pl-2 xxs:pl-2 xs:pl-3 sm:pl-6">
                         <div className={styles.dateClass}>
                           {event.date}
                         </div>
-                        <div className="text-5xl font-normal text-primary tracking-tight leading-tight">{event.time}</div>
+                        <div className="text-2xl xxs:text-3xl xs:text-4xl sm:text-5xl font-normal text-primary tracking-tight leading-tight">{event.time}</div>
                         <div className={styles.locationClass}>
                           {event.location}
                         </div>
