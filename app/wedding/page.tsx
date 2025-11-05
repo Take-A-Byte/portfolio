@@ -23,14 +23,14 @@ export default function WeddingInvitation() {
   const { brideName, groomName, weddingDate, venue, timeline, importantDates } = weddingData
 
   return (
-    <div className="min-h-screen" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
-      <div className="max-w-md mx-auto space-y-4 xxs:space-y-5 xs:space-y-6 sm:space-y-10 bg-primary p-2 xxs:p-2.5 xs:p-3 sm:p-6 rounded-xl xxs:rounded-xl xs:rounded-2xl sm:rounded-3xl">
+    <div className="min-h-screen overflow-x-hidden" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+      <div className="max-w-md mx-auto space-y-4 xxs:space-y-5 xs:space-y-6 sm:space-y-10 bg-primary p-2 xxs:p-2.5 xs:p-3 sm:p-6 sm:rounded-3xl">
         {/* Boarding Pass / Ticket */}
         <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl">
           <div className="flex flex-col">
           {/* Perforated top edge with semicircle cutouts */}
-          <div className="h-8">
-            <img src="/perforated-top.svg" alt="" className="w-full" />
+          <div className=" flex justify-center w-[97%]">
+            <img src="/perforated-top.svg" alt="" className="w-[97%]" />
           </div>
 
         {/* Wedding Ticket */}
@@ -119,7 +119,7 @@ export default function WeddingInvitation() {
                   <div className="text-center flex flex-col items-center gap-0">
                     <Plane className="w-3.5 h-3.5 mb-0.5" style={{ color: 'var(--text-primary)' }} />
                     <p className={`text-[7px] font-bold leading-none ${bodoniModa.className}`} style={{ color: 'var(--text-primary)' }}>
-                      21.06
+                      {weddingDate.split('.').slice(0, 2).join('.')}
                     </p>
                     <div className="border-t border-primary w-8 my-0.5"></div>
                     <p className="text-[8px] font-bold leading-none tracking-tight" style={{ color: 'var(--text-primary)' }}>
@@ -162,8 +162,8 @@ export default function WeddingInvitation() {
             </div>
 
           {/* Perforated edge bottom */}
-          <div className="relative left-[2px]">
-            <img src="/perforated-bottom.svg" alt="" className="w-full" />
+          <div className="flex justify-center w-[97%]">
+            <img src="/perforated-bottom.svg" alt="" className="w-[97%]" />
           </div>
           </div>
         </Card>
@@ -251,8 +251,8 @@ export default function WeddingInvitation() {
         {/* Venue Section */}
         <Card className="bg-secondary shadow-xl overflow-visible border-0 relative rounded-2xl">
           {/* Perforated top edge with semicircle cutouts */}
-          <div className="h-8">
-            <img src="/perforated-top.svg" alt="" className="w-full" />
+          <div className="h-8 flex justify-center w-[97%]">
+            <img src="/perforated-top.svg" alt="" className="w-[97%]" />
           </div>
 
           <div className="pt-4 xxs:pt-5 xs:pt-6 sm:pt-10 pb-4 xxs:pb-5 xs:pb-6 sm:pb-8 px-3 xxs:px-3 xs:px-4 sm:px-8">
@@ -284,6 +284,7 @@ export default function WeddingInvitation() {
                 alt="Wedding Venue"
                 className="w-full h-full object-cover object-center"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-slate-900/5 to-transparent"></div>
             </div>
           </div>
 
@@ -402,8 +403,8 @@ export default function WeddingInvitation() {
               </div>
               
           {/* Perforated edge bottom */}
-          <div className="relative left-[2px]">
-            <img src="/perforated-bottom.svg" alt="" className="w-full" />
+          <div className="flex justify-center w-[97%]">
+            <img src="/perforated-bottom.svg" alt="" className="w-[97%]" />
           </div>
 
         {/* Semi-circular path overlay */}
