@@ -106,3 +106,31 @@
 .heart-pump {
   animation: heartbeat 1.5s ease-in-out infinite;
 }
+
+/* Figure-8 plane animation using separate horizontal and vertical movements */
+@keyframes plane-horizontal {
+  from { transform: translateX(-80px); }
+  to   { transform: translateX(80px); }
+}
+
+@keyframes plane-vertical {
+  from { transform: translateY(-30px); }
+  to   { transform: translateY(30px); }
+}
+
+@keyframes plane-rotate {
+  from { transform: rotate(-45deg); }
+  to   { transform: rotate(225deg); }
+}
+
+.plane-figure8-x {
+  animation: 3s ease-in-out -0.75s alternate infinite plane-horizontal;
+}
+
+.plane-figure8-y {
+  animation: 1.5s ease-in-out 0s alternate infinite plane-vertical;
+}
+
+.plane-figure8-rotate {
+  animation: 3s ease-in-out -0.75s alternate infinite plane-rotate;
+}

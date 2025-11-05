@@ -22,7 +22,20 @@ const dmSerifDisplay = DM_Serif_Display({
 
 export default function WeddingInvitation() {
   const { weddingDate, venue, timeline, importantDates } = weddingData
-  const { t } = useTranslation()
+  const { t, isLoading } = useTranslation()
+
+  // Show loading state while detecting location
+  if (isLoading) {
+    return (
+      <div className="min-h-screen overflow-x-hidden flex items-center justify-center" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+        <div className="text-center">
+          <div className="relative">
+            <Heart className="w-12 h-12 mx-auto text-red-400 fill-red-400 heart-pump" />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
