@@ -23,7 +23,7 @@ export default function WeddingInvitation() {
   const { brideName, groomName, weddingDate, venue, timeline, importantDates } = weddingData
 
   return (
-    <div className="min-h-screen py-2 xxs:py-3 xs:py-4 sm:py-8 px-2 xxs:px-2 xs:px-3 sm:px-4" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
+    <div className="min-h-screen" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
       <div className="max-w-md mx-auto space-y-4 xxs:space-y-5 xs:space-y-6 sm:space-y-10 bg-primary p-2 xxs:p-2.5 xs:p-3 sm:p-6 rounded-xl xxs:rounded-xl xs:rounded-2xl sm:rounded-3xl">
         {/* Boarding Pass / Ticket */}
         <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl">
