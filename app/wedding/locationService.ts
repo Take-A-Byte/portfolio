@@ -1,10 +1,12 @@
 /**
- * Service to detect if the user is from Kerala
+ * Service to detect user's location (Kerala or Maharashtra)
  * Tries geolocation first, falls back to IP-based detection
  */
 
+export type UserRegion = 'kerala' | 'maharashtra' | 'other'
+
 interface LocationResult {
-  isFromKerala: boolean
+  region: UserRegion
   method: 'geolocation' | 'ip' | 'error'
 }
 
@@ -33,12 +35,18 @@ async function detectLocationViaGeolocation(): Promise<LocationResult | null> {
           )
           const data = await response.json()
 
-          // Check if the state is Kerala
+          // Check if the state is Kerala or Maharashtra
           const state = data.address?.state?.toLowerCase() || ''
-          const isFromKerala = state.includes('kerala')
+          let region: UserRegion = 'other'
+
+          if (state.includes('kerala')) {
+            region = 'kerala'
+          } else if (state.includes('maharashtra')) {
+            region = 'maharashtra'
+          }
 
           resolve({
-            isFromKerala,
+            region,
             method: 'geolocation'
           })
         } catch (error) {
@@ -67,40 +75,57 @@ async function detectLocationViaIP(): Promise<LocationResult> {
     const response = await fetch('https://ipapi.co/json/')
     const data = await response.json()
 
-    // Check if the region/state is Kerala or country code indicates India with Kerala region
-    const isFromKerala = data.region?.toLowerCase().includes('kerala') ||
-                        data.region_code === 'KL'
+    // Check if the region/state is Kerala or Maharashtra
+    const regionName = data.region?.toLowerCase() || ''
+    const regionCode = data.region_code || ''
+
+    let region: UserRegion = 'other'
+
+    if (regionName.includes('kerala') || regionCode === 'KL') {
+      region = 'kerala'
+    } else if (regionName.includes('maharashtra') || regionCode === 'MH') {
+      region = 'maharashtra'
+    }
 
     return {
-      isFromKerala,
+      region,
       method: 'ip'
     }
   } catch (error) {
     console.error('IP-based location detection failed:', error)
     return {
-      isFromKerala: false,
+      region: 'other',
       method: 'error'
     }
   }
 }
 
 /**
- * Main function to detect if user is from Kerala
+ * Main function to detect user's region
  * Tries geolocation first, falls back to IP-based detection
  */
-export async function detectIfFromKerala(): Promise<boolean> {
+export async function detectUserRegion(): Promise<UserRegion> {
   // Try geolocation first
   const geoResult = await detectLocationViaGeolocation()
 
   if (geoResult !== null) {
-    console.log('Location detected via:', geoResult.method)
-    return geoResult.isFromKerala
+    console.log('Location detected via:', geoResult.method, '- Region:', geoResult.region)
+    return geoResult.region
   }
 
   // Fallback to IP-based detection
   console.log('Geolocation unavailable, falling back to IP detection')
   const ipResult = await detectLocationViaIP()
-  console.log('Location detected via:', ipResult.method)
+  console.log('Location detected via:', ipResult.method, '- Region:', ipResult.region)
 
-  return ipResult.isFromKerala
+  return ipResult.region
+}
+
+/**
+ * @deprecated Use detectUserRegion() instead
+ * Legacy function for backward compatibility
+ */
+export async function detectIfFromKerala(): Promise<boolean> {
+  const region = await detectUserRegion()
+  return region === 'kerala'
 }
