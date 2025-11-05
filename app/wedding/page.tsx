@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
 import { weddingData } from "./data"
+import { useState, useEffect } from "react"
+import { detectIfFromKerala } from "./locationService"
 import "./page.css"
 
 const bodoniModa = Bodoni_Moda({
@@ -21,6 +23,18 @@ const dmSerifDisplay = DM_Serif_Display({
 
 export default function WeddingInvitation() {
   const { brideName, groomName, weddingDate, venue, timeline, importantDates } = weddingData
+  const [isFromKerala, setIsFromKerala] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    // Detect location using the location service
+    // Tries geolocation first, falls back to IP-based detection
+    const detectLocation = async () => {
+      const fromKerala = await detectIfFromKerala()
+      setIsFromKerala(fromKerala)
+    }
+
+    detectLocation()
+  }, [])
 
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
@@ -29,7 +43,7 @@ export default function WeddingInvitation() {
         <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl">
           <div className="flex flex-col">
           {/* Perforated top edge with semicircle cutouts */}
-          <div className=" flex justify-center w-[97%]">
+          <div className="flex justify-center w-[97%]">
             <img src="/perforated-top.svg" alt="" className="w-[97%]" />
           </div>
 
@@ -206,7 +220,11 @@ export default function WeddingInvitation() {
             WE ARE WAITING FOR YOU
           </h3>
           <p className="text-xs xxs:text-xs xs:text-sm sm:text-sm text-center mb-6 sm:mb-8" style={{ color: 'var(--text-muted)' }}>
-            At the first celebration of our family
+            {isFromKerala === null
+              ? "At our wedding celebration in God's Own Country"
+              : isFromKerala
+                ? "ഞങ്ങളുടെ കുടുംബത്തിലെ ആദ്യ ആഘോഷത്തിൽ"
+                : "At our wedding celebration in God's Own Country"}
           </p>
 
           {/* Calendar Section */}
@@ -251,7 +269,7 @@ export default function WeddingInvitation() {
         {/* Venue Section */}
         <Card className="bg-secondary shadow-xl overflow-visible border-0 relative rounded-2xl">
           {/* Perforated top edge with semicircle cutouts */}
-          <div className="h-8 flex justify-center w-[97%]">
+          <div className="flex justify-center w-[97%]">
             <img src="/perforated-top.svg" alt="" className="w-[97%]" />
           </div>
 
