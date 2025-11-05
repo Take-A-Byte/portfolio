@@ -179,12 +179,14 @@ export default function WeddingInvitation() {
             This is an official invitation to our wedding! You received it because we really want to see you on this day by our side!
           </p>
 
-          {/* Couple photo placeholder */}
-          <div className="relative w-full h-40 xxs:h-44 xs:h-48 sm:h-64 bg-slate-800 rounded-2xl overflow-hidden mb-6 sm:mb-8">
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Heart className="w-10 xxs:w-11 xs:w-12 sm:w-16 h-10 xxs:h-11 xs:h-12 sm:h-16 text-slate-700" />
-            </div>
+          {/* Couple photo */}
+          <div className="relative w-full aspect-square bg-slate-800 rounded-2xl overflow-hidden sm:mb-8 border-2 border-slate-700">
+            <img
+              src="/images/couple-photo.jpg"
+              alt="Couple Photo"
+              className="w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-slate-900/10 to-transparent"></div>
           </div>
 
           {/* Dotted line with plane */}
