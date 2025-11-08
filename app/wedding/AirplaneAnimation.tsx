@@ -6,6 +6,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
+import { Scene } from 'three'
 
 // ========================================
 // ANIMATION CONTROL
@@ -16,30 +17,36 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 //
 // IMPORTANT: Changing scrollPercent values will update when each animation plays
 const animationKeyframes = [
-  { section: 0, scrollPercent: 0, zIndex: 0 },      // Initial movement
-  { section: 1, scrollPercent: 9, zIndex: 0 },      // First turn
-  { section: 2, scrollPercent: 18, zIndex: 0 },     // Second turn
-  { section: 3, scrollPercent: 27, zIndex: 0 },     // Third turn
-  { section: 4, scrollPercent: 36, zIndex: 0 },     // Center position
-  { section: 5, scrollPercent: 45, zIndex: 0 },     // Rotation sequence
-  { section: 6, scrollPercent: 55, zIndex: 0 },     // Rotation sequence continued
-  { section: 7, scrollPercent: 64, zIndex: 0 },     // Moving forward
-  { section: 8, scrollPercent: 73, zIndex: 0 },     // Further forward
-  { section: 9, scrollPercent: 82, zIndex: 50 },     // Flying back
-  { section: 10, scrollPercent: 95, zIndex: 50 },   // Final exit
+  { section: 0, scrollPercent: 0, zIndex: 0, opacity: 1, surfaceVisible: true },      // Initial movement
+  { section: 1, scrollPercent: 9, zIndex: 0, opacity: 1, surfaceVisible: true },      // First turn
+  { section: 2, scrollPercent: 18, zIndex: 0, opacity: 1, surfaceVisible: true},     // Second turn
+  { section: 3, scrollPercent: 27, zIndex: 0, opacity: 1, surfaceVisible: true },     // Third turn
+  { section: 4, scrollPercent: 36, zIndex: 0, opacity: 1, surfaceVisible: true },     // Center position
+  { section: 5, scrollPercent: 45, zIndex: 0, opacity: 1, surfaceVisible: true },     // Rotation sequence
+  { section: 6, scrollPercent: 55, zIndex: 0, opacity: 0.8, surfaceVisible: true },     // Rotation sequence continued
+  { section: 7, scrollPercent: 68, zIndex: 0, opacity: 0.2, surfaceVisible: false },     // Moving forward
+  { section: 8, scrollPercent: 88, zIndex: 50, opacity: 0.8, surfaceVisible: true },     // Further forward
+  { section: 9, scrollPercent: 93, zIndex: 50, opacity: 1, surfaceVisible: true },    // Flying back
+  { section: 10, scrollPercent: 96, zIndex: 50, opacity: 1, surfaceVisible: true },   // Final exit
 ]
 
 export default function AirplaneAnimation() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const sceneRef = useRef<any>(null)
+  const sceneRef = useRef<Scene | null>(null)
 
   useEffect(() => {
     // Register GSAP plugins
     gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin)
 
+    interface View {
+      bottom: number
+      height: number
+      camera?: THREE.PerspectiveCamera
+    }
+
     class Scene {
-      views: any[]
+      views: View[]
       renderer: THREE.WebGLRenderer
       scene: THREE.Scene
       light: THREE.PointLight
@@ -97,8 +104,6 @@ export default function AirplaneAnimation() {
 
         const edges = new THREE.EdgesGeometry(model.children[0].geometry as THREE.BufferGeometry)
         const line = new THREE.LineSegments(edges)
-        line.material.depthTest = false
-        line.material.transparent = true
         line.position.x = 0.5
         line.position.z = -1
         line.position.y = 0.2
@@ -150,6 +155,8 @@ export default function AirplaneAnimation() {
 
     function setupAnimation(model: THREE.Group, scene: Scene) {
       const plane = scene.modelGroup
+      const surface = plane.children[0]
+      const line = plane.children[1]
 
       gsap.fromTo('canvas', { x: "50%", autoAlpha: 0 }, { duration: 1, x: "0%", autoAlpha: 1 })
 
@@ -160,7 +167,7 @@ export default function AirplaneAnimation() {
 
       scene.render()
 
-      const tl = new gsap.timeline({
+      const tl : gsap.core.Timeline = gsap.timeline({
         onUpdate: scene.render,
         scrollTrigger: {
           trigger: ".wedding-content",
@@ -182,18 +189,17 @@ export default function AirplaneAnimation() {
       const sections = [
         // Section 0: Initial movement
         {
-          start: animationKeyframes[0].scrollPercent,
+          ...animationKeyframes[0],
           end: animationKeyframes[1].scrollPercent,
-          zIndex: animationKeyframes[0].zIndex,
           animations: [
             { target: plane.position, props: { x: -10 }, ease: 'power1.in' }
           ]
         },
         // Section 1: First turn
         {
+          ...animationKeyframes[1],
           start: animationKeyframes[1].scrollPercent,
           end: animationKeyframes[2].scrollPercent,
-          zIndex: animationKeyframes[1].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.25, y: 0, z: -tau * 0.05 }, ease: 'power1.inOut' },
             { target: plane.position, props: { x: -40, y: 0, z: -60 }, ease: 'power1.inOut' }
@@ -201,9 +207,9 @@ export default function AirplaneAnimation() {
         },
         // Section 2: Second turn
         {
+          ...animationKeyframes[2],
           start: animationKeyframes[2].scrollPercent,
           end: animationKeyframes[3].scrollPercent,
-          zIndex: animationKeyframes[2].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.25, y: 0, z: tau * 0.05 }, ease: 'power3.inOut' },
             { target: plane.position, props: { x: 40, y: 0, z: -60 }, ease: 'power2.inOut' }
@@ -211,9 +217,9 @@ export default function AirplaneAnimation() {
         },
         // Section 3: Third turn
         {
+          ...animationKeyframes[3],
           start: animationKeyframes[3].scrollPercent,
           end: animationKeyframes[4].scrollPercent,
-          zIndex: animationKeyframes[3].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.2, y: 0, z: -tau * 0.1 }, ease: 'power3.inOut' },
             { target: plane.position, props: { x: -40, y: 0, z: -30 }, ease: 'power2.inOut' }
@@ -221,9 +227,9 @@ export default function AirplaneAnimation() {
         },
         // Section 4: Center position
         {
+          ...animationKeyframes[4],
           start: animationKeyframes[4].scrollPercent,
           end: animationKeyframes[5].scrollPercent,
-          zIndex: animationKeyframes[4].zIndex,
           animations: [
             { target: plane.rotation, props: { x: 0, z: 0, y: tau * 0.25 }, ease: 'power2.inOut' },
             { target: plane.position, props: { x: 0, y: -10, z: 50 }, ease: 'power2.inOut' }
@@ -231,9 +237,9 @@ export default function AirplaneAnimation() {
         },
         // Section 5: Rotation sequence
         {
+          ...animationKeyframes[5],
           start: animationKeyframes[5].scrollPercent,
           end: animationKeyframes[6].scrollPercent,
-          zIndex: animationKeyframes[5].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.25, y: tau * 0.5, z: 0 }, ease: 'power4.inOut' },
             { target: plane.position, props: { z: 30 }, ease: 'power4.inOut' }
@@ -241,9 +247,9 @@ export default function AirplaneAnimation() {
         },
         // Section 6: Rotation sequence continued
         {
+          ...animationKeyframes[6],
           start: animationKeyframes[6].scrollPercent,
           end: animationKeyframes[7].scrollPercent,
-          zIndex: animationKeyframes[6].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.25, y: tau * 0.5, z: 0 }, ease: 'power4.inOut' },
             { target: plane.position, props: { z: 60, x: 30 }, ease: 'power4.inOut' }
@@ -251,9 +257,9 @@ export default function AirplaneAnimation() {
         },
         // Section 7: Moving forward
         {
+          ...animationKeyframes[7],
           start: animationKeyframes[7].scrollPercent,
           end: animationKeyframes[8].scrollPercent,
-          zIndex: animationKeyframes[7].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.25, y: tau * 0.5, z: 0 }, ease: 'power4.inOut' },
             { target: plane.position, props: { z: 60, x: 30 }, ease: 'power4.inOut' }
@@ -261,9 +267,9 @@ export default function AirplaneAnimation() {
         },
         // Section 8: Further forward
         {
+          ...animationKeyframes[8],
           start: animationKeyframes[8].scrollPercent,
           end: animationKeyframes[9].scrollPercent,
-          zIndex: animationKeyframes[8].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.35, y: tau * 0.75, z: tau * 0.6 }, ease: 'power4.inOut' },
             { target: plane.position, props: { z: 100, x: 20, y: 0 }, ease: 'power4.inOut' }
@@ -271,9 +277,9 @@ export default function AirplaneAnimation() {
         },
         // Section 9: Flying back
         {
+          ...animationKeyframes[9],
           start: animationKeyframes[9].scrollPercent,
           end: animationKeyframes[10].scrollPercent,
-          zIndex: animationKeyframes[9].zIndex,
           animations: [
             { target: plane.rotation, props: { x: tau * 0.15, y: tau * 0.85, z: -tau * 0 }, ease: 'power1.in' },
             { target: plane.position, props: { z: -150, x: 0, y: 0 }, ease: 'power1.inOut' }
@@ -281,9 +287,9 @@ export default function AirplaneAnimation() {
         },
         // Section 10: Final exit
         {
+          ...animationKeyframes[10],
           start: animationKeyframes[10].scrollPercent,
           end: 100,
-          zIndex: animationKeyframes[10].zIndex,
           animations: [
             { target: plane.rotation, props: { x: -tau * 0.05, y: tau, z: -tau * 0.1 }, ease: 'none' },
             { target: plane.position, props: { x: 0, y: 30, z: 320 }, ease: 'power1.in' },
@@ -299,7 +305,38 @@ export default function AirplaneAnimation() {
 
         // Apply z-index change at the start of this section
         if (containerRef.current) {
-          tl.to(containerRef.current, { zIndex: section.zIndex, duration: 0.01 }, startPosition)
+          tl.to(
+            containerRef.current,
+            {
+              zIndex: section.zIndex,
+              duration: 0.01,
+              opacity: section.opacity
+            },
+            startPosition)
+        }
+
+        // Switch between surface (layer 0) and wireframe (layer 1) views
+        if (section.surfaceVisible !== undefined) {
+          tl.to(
+            scene.views[1],
+            {
+              height: section.surfaceVisible ? 0 : 1,
+              bottom: section.surfaceVisible ? 0 : 0,
+              duration: 0.01,
+              ease: 'none'
+            },
+            startPosition
+          )
+          tl.to(
+            scene.views[0],
+            {
+              height: section.surfaceVisible ? 1 : 0,
+              bottom: section.surfaceVisible ? 0 : 0,
+              duration: 0.01,
+              ease: 'none'
+            },
+            startPosition
+          )
         }
 
         // Apply all animations for this section
@@ -320,7 +357,7 @@ export default function AirplaneAnimation() {
             const mat = new THREE.MeshPhongMaterial({
               color: 0xffffff,
               specular: 0xD0CBC7,
-              shininess: 5,
+              shininess: 1,
               flatShading: true,
               transparent: true,
               opacity: 0.5

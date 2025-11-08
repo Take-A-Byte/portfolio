@@ -546,7 +546,8 @@ export default function WeddingInvitation() {
         </Card>
 
         {/* Final Boarding Pass - Get Ready Section */}
-        <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl z-0">
+        <div className="flex flex-col">
+        <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl z-0 mb-16">
           <div className="flex flex-col">
             {/* Perforated top edge */}
             <div className="flex justify-center w-[97%] -z-20">
@@ -635,6 +636,10 @@ export default function WeddingInvitation() {
             </div>
           </div>
         </Card>
+          <p className="text-xs text-slate-300 italic flex-1 items-center justify-center mb-16 text-center">
+            Made with love by Muraleemayoor & Shantanu
+          </p>
+        </div>
       </div>
     </div>
   )
