@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Heart, Plane, Bus, Car, Backpack, Sparkles } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
@@ -24,6 +25,51 @@ const dmSerifDisplay = DM_Serif_Display({
 export default function WeddingInvitation() {
   const { weddingDate, venue, timeline, importantDates } = weddingData
   const { t, isLoading } = useTranslation()
+  const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(true)
+
+  // Request fullscreen on first user interaction
+  useEffect(() => {
+    const enterFullscreen = async () => {
+      try {
+        const elem = document.documentElement as any
+
+        // Check if already in fullscreen
+        if (document.fullscreenElement || (document as any).webkitFullscreenElement) {
+          return
+        }
+
+        // Try different fullscreen APIs for mobile compatibility
+        if (elem.requestFullscreen) {
+          await elem.requestFullscreen()
+        } else if (elem.webkitRequestFullscreen) {
+          // Safari/iOS
+          await elem.webkitRequestFullscreen()
+        } else if (elem.mozRequestFullScreen) {
+          // Firefox
+          await elem.mozRequestFullScreen()
+        } else if (elem.msRequestFullscreen) {
+          // IE/Edge
+          await elem.msRequestFullscreen()
+        }
+      } catch (err) {
+        console.log('Fullscreen request failed:', err)
+      }
+    }
+
+    const handleInteraction = () => {
+      setShowFullscreenPrompt(false)
+      enterFullscreen()
+    }
+
+    // Try to enter fullscreen on first click or touch
+    document.addEventListener('click', handleInteraction, { once: true })
+    document.addEventListener('touchstart', handleInteraction, { once: true })
+
+    return () => {
+      document.removeEventListener('click', handleInteraction)
+      document.removeEventListener('touchstart', handleInteraction)
+    }
+  }, [])
 
   // Show loading state while detecting location
   if (isLoading) {
@@ -41,6 +87,28 @@ export default function WeddingInvitation() {
   return (
     <div className="min-h-screen overflow-x-hidden wedding-content" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
       <AirplaneAnimation />
+
+      {/* Fullscreen Prompt Overlay */}
+      {showFullscreenPrompt && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 mx-4 max-w-sm text-center transform animate-in zoom-in duration-300">
+            <div className="mb-4">
+              <Heart className="w-12 h-12 mx-auto text-red-400 fill-red-400 heart-pump" />
+            </div>
+            <h3 className={`text-xl font-serif text-slate-800 mb-2 ${dmSerifDisplay.className}`}>
+              Welcome!
+            </h3>
+            <p className="text-sm text-slate-600 mb-4">
+              Tap anywhere to go fullscreen for a better experience
+            </p>
+            <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
+              <Sparkles className="w-4 h-4" />
+              <span>Enjoy the celebration</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-md mx-auto space-y-4 xxs:space-y-5 xs:space-y-6 sm:space-y-10 bg-primary p-2 xxs:p-2.5 xs:p-3 sm:p-6 sm:rounded-3xl">
         {/* Boarding Pass / Ticket */}
         <Card className="relative bg-secondary shadow-2xl overflow-visible border-0 rounded-xl z-50">
@@ -197,9 +265,9 @@ export default function WeddingInvitation() {
           </p>
 
           {/* Couple photo */}
-          <div className="relative w-full aspect-square bg-slate-800 rounded-2xl overflow-hidden sm:mb-8 border-2 border-slate-700">
+          <div className="relative w-full aspect-square rounded-2xl overflow-hidden sm:mb-8 border-2 bg-[#f0ede6] border-slate-700">
             <img
-              src="/images/couple-photo.jpg"
+              src="/images/couple-sketch.png"
               alt="Couple Photo"
               className="w-full h-full object-cover object-center"
             />
@@ -378,7 +446,7 @@ export default function WeddingInvitation() {
                           <p className="text-xs font-semibold text-slate-800">The Adventurer's Route</p>
                         </div>
                         <p className="text-xs text-slate-600">
-                          Take a public bus to Thodupuzha town, then hop into a local cab. Experience Kerala like a local explorer!
+                          Take a KSRTC bus to Angamaly (~20 mins), then another to Muvattupuzha (~35 mins), followed by a short cab ride to the venue. Experience Kerala like a local!
                         </p>
                       </div>
                     </div>
@@ -637,7 +705,7 @@ export default function WeddingInvitation() {
           </div>
         </Card>
           <p className="text-xs text-slate-300 italic flex-1 items-center justify-center mb-16 text-center">
-            Made with love by Muraleemayoor & Shantanu
+            Here's to love, laughter, and happily ever after!
           </p>
         </div>
       </div>
