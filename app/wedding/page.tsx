@@ -401,7 +401,6 @@ export default function WeddingInvitation() {
           {/* Calendar Section */}
           <div className="text-center mb-4">
             <h3 className="text-lg xxs:text-lg xs:text-xl sm:text-2xl font-serif text-white mb-1">CELEBRATION DATES</h3>
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>December 2025</p>
           </div>
 
           <div className={`flex justify-center`}>
