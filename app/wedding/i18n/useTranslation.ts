@@ -13,14 +13,30 @@ export function useTranslation() {
   useEffect(() => {
     const detectLocale = async () => {
       try {
-        const region = await detectUserRegion()
+        // Check UTM parameter first
+        const params = new URLSearchParams(window.location.search)
+        const utmSource = params.get('utm_source')?.toLowerCase()
 
-        // Map region to locale
         let detectedLocale: Locale = 'en'
-        if (region === 'kerala') {
-          detectedLocale = 'ml'
-        } else if (region === 'maharashtra') {
-          detectedLocale = 'mr'
+
+        // If UTM parameter is provided, use it to determine locale
+        if (utmSource) {
+          if (utmSource === 'kerala' || utmSource === 'familyforeverpass') {
+            detectedLocale = 'ml'
+          } else if (utmSource === 'trivandrum' || utmSource === 'thiruvananthapuram') {
+            detectedLocale = 'ml'
+          } else if (utmSource === 'pune' || utmSource === 'maharashtra') {
+            detectedLocale = 'mr'
+          }
+        } else {
+          // No UTM, detect based on user's location
+          const region = await detectUserRegion()
+
+          if (region === 'kerala') {
+            detectedLocale = 'ml'
+          } else if (region === 'maharashtra') {
+            detectedLocale = 'mr'
+          }
         }
 
         setLocale(detectedLocale)

@@ -1,6 +1,10 @@
 export const ml = {
   brideName: "MURALEEMAYOORA",
-  groomName: "ശാന്തനു",
+  brideNameLocal: "മുരളീമയൂര",
+  brideFamily: "",
+  groomName: "SHANTANU",
+  groomNameLocal: "ശാന്തനു",
+  groomFamily: "",
   celebrationMessage: "ഞങ്ങളുടെ കുടുംബത്തിലെ ആദ്യ ആഘോഷത്തിൽ",
   weddingTicket: "WEDDING TICKET",
   dearFriendsTitle: "DEAR OUR\nFRIENDS AND FAMILY!",

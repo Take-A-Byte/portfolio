@@ -5,6 +5,7 @@ export interface TimelineEvent {
   date: string
   location: string
   description?: string
+  mapsUrl?: string
 }
 
 export interface Venue {
