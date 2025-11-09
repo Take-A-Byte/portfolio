@@ -5,9 +5,13 @@ import { Heart, Plane, Bus, Car, Backpack, Sparkles } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Bodoni_Moda, DM_Serif_Display } from "next/font/google"
-import { weddingData } from "./data"
+import { getLocationConfig } from "./data"
 import { useTranslation } from "./i18n/useTranslation"
+import { detectUserRegion } from "./locationService"
 import AirplaneAnimation from "./AirplaneAnimation"
+import { TravelInstructions } from "./types"
+import { cn } from "@/lib/utils"
+import { PerforationDivider } from "./components/PerforationDivider"
 import "./page.css"
 
 const bodoniModa = Bodoni_Moda({
@@ -22,13 +26,93 @@ const dmSerifDisplay = DM_Serif_Display({
   style: ["normal", "italic"]
 })
 
+// Helper function to get icon component
+const getIconComponent = (iconName: string) => {
+  const iconMap: Record<string, any> = {
+    plane: Plane,
+    bus: Bus,
+    car: Car,
+    backpack: Backpack,
+    sparkles: Sparkles
+  }
+  return iconMap[iconName] || Bus
+}
+
 export default function WeddingInvitation() {
-  const { weddingDate, venue, timeline, importantDates } = weddingData
   const { t, isLoading } = useTranslation()
+  const defaultConfig = getLocationConfig('pune')
   const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(true)
+  const [filteredTimeline, setFilteredTimeline] = useState(defaultConfig.events)
+  const [filteredDates, setFilteredDates] = useState(defaultConfig.dates)
+  const [eventType, setEventType] = useState(defaultConfig.eventType)
+  const [displayDate, setDisplayDate] = useState(defaultConfig.displayDate)
+  const [venueImage, setVenueImage] = useState(defaultConfig.venueImage)
+  const [venueName, setVenueName] = useState(defaultConfig.venueName)
+  const [venueAddress, setVenueAddress] = useState(defaultConfig.venueAddress)
+  const [venueMapsUrl, setVenueMapsUrl] = useState(defaultConfig.venueMapsUrl)
+  const [travelInstructions, setTravelInstructions] = useState<TravelInstructions>(defaultConfig.travelInstructions)
+  const [invitationMessage, setInvitationMessage] = useState(defaultConfig.invitationMessage)
+
+  // Filter timeline and calendar dates based on utm_source parameter or user location
+  // Priority: utm_source parameter > user location > default (Pune)
+  // Default by location: Maharashtra -> Pune, Kerala -> Trivandrum
+  // With ?utm_source=kerala: Show all events (12th, 13th, 15th, 21st Dec)
+  // With ?utm_source=trivandrum or ?utm_source=thiruvananthapuram: Show only Trivandrum dinner (15th Dec)
+  // With ?utm_source=pune: Show only Pune lunch (21st Dec)
+  // With ?utm_source=familyforeverpass: Show everything with full transport, localization based on detected location
+  useEffect(() => {
+    const loadEventConfig = async () => {
+      const params = new URLSearchParams(window.location.search)
+      const utmSource = params.get('utm_source')?.toLowerCase()
+
+      let locationKey: 'kerala' | 'trivandrum' | 'pune' = 'pune' // default
+
+      // If utm_source is provided, it takes priority
+      if (utmSource) {
+        if (utmSource === 'kerala') {
+          locationKey = 'kerala'
+        } else if (utmSource === 'familyforeverpass') {
+          // For familyforeverpass, always show all events (kerala config)
+          // Localization language will be handled by the i18n system based on detected region
+          locationKey = 'kerala'
+        } else if (utmSource === 'trivandrum' || utmSource === 'thiruvananthapuram') {
+          locationKey = 'trivandrum'
+        } else if (utmSource === 'pune' || utmSource === 'maharashtra') {
+          locationKey = 'pune'
+        }
+      } else {
+        // No utm_source, use location detection
+        const userRegion = await detectUserRegion()
+
+        if (userRegion === 'kerala') {
+          locationKey = 'trivandrum'
+        } else if (userRegion === 'maharashtra') {
+          locationKey = 'pune'
+        }
+        // 'other' regions default to pune
+      }
+
+      const config = getLocationConfig(locationKey)
+
+      setFilteredTimeline(config.events)
+      setFilteredDates(config.dates)
+      setEventType(config.eventType)
+      setDisplayDate(config.displayDate)
+      setVenueImage(config.venueImage)
+      setVenueName(config.venueName)
+      setVenueAddress(config.venueAddress)
+      setVenueMapsUrl(config.venueMapsUrl)
+      setTravelInstructions(config.travelInstructions)
+      setInvitationMessage(config.invitationMessage)
+    }
+
+    loadEventConfig()
+  }, [])
 
   // Request fullscreen on first user interaction
   useEffect(() => {
+    let isSkipped = false
+
     const enterFullscreen = async () => {
       try {
         const elem = document.documentElement as any
@@ -57,17 +141,27 @@ export default function WeddingInvitation() {
     }
 
     const handleInteraction = () => {
-      setShowFullscreenPrompt(false)
-      enterFullscreen()
+      if (!isSkipped) {
+        setShowFullscreenPrompt(false)
+        enterFullscreen()
+      }
     }
 
     // Try to enter fullscreen on first click or touch
-    document.addEventListener('click', handleInteraction, { once: true })
-    document.addEventListener('touchstart', handleInteraction, { once: true })
+    document.addEventListener('click', handleInteraction)
+    document.addEventListener('touchstart', handleInteraction)
+
+    // Expose a function to skip fullscreen
+    ;(window as any).__skipFullscreen = () => {
+      isSkipped = true
+      document.removeEventListener('click', handleInteraction)
+      document.removeEventListener('touchstart', handleInteraction)
+    }
 
     return () => {
       document.removeEventListener('click', handleInteraction)
       document.removeEventListener('touchstart', handleInteraction)
+      delete (window as any).__skipFullscreen
     }
   }, [])
 
@@ -95,16 +189,28 @@ export default function WeddingInvitation() {
             <div className="mb-4">
               <Heart className="w-12 h-12 mx-auto text-red-400 fill-red-400 heart-pump" />
             </div>
-            <h3 className={`text-xl font-serif text-slate-800 mb-2 ${dmSerifDisplay.className}`}>
+            <h3 className={cn("text-xl font-serif text-slate-800 mb-2", dmSerifDisplay.className)}>
               Welcome!
             </h3>
             <p className="text-sm text-slate-600 mb-4">
               Tap anywhere to go fullscreen for a better experience
             </p>
-            <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
+            <div className="flex items-center justify-center gap-2 text-xs text-slate-500 mb-4">
               <Sparkles className="w-4 h-4" />
               <span>Enjoy the celebration</span>
             </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                if ((window as any).__skipFullscreen) {
+                  (window as any).__skipFullscreen()
+                }
+                setShowFullscreenPrompt(false)
+              }}
+              className="text-xs text-slate-400 hover:text-slate-600 underline transition-colors px-6 py-3 -mx-6 -mb-2"
+            >
+              Skip fullscreen
+            </button>
           </div>
         </div>
       )}
@@ -119,27 +225,14 @@ export default function WeddingInvitation() {
           </div>
 
         {/* Wedding Ticket */}
-            <div className={`text-center py-3 xxs:py-3 xs:py-4 ${dmSerifDisplay.className}`}>
+            <div className={cn("text-center py-3 xxs:py-3 xs:py-4", dmSerifDisplay.className)}>
               <p className="text-sm xxs:text-sm xs:text-md font-medium text-slate-600 tracking-widest">
                 WEDDING TICKET
               </p>
             </div>
 
           {/* Perforation */}
-          <div className="flex items-center w-full">
-            {/* Left semicircle */}
-            <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
-            </div>
-
-            {/* Dashed line that fills remaining width */}
-            <div className="flex-1 border-t-4 border-dashed border-primary"></div>
-
-            {/* Right semicircle */}
-            <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
-            </div>
-          </div>
+          <PerforationDivider />
 
           {/* Main Content */}
           <div className="pt-4 xxs:pt-5 xs:pt-6 sm:pt-8 pb-3 xxs:pb-3 xs:pb-4 sm:pb-6 px-3 xxs:px-3 xs:px-4 sm:px-8">
@@ -153,14 +246,38 @@ export default function WeddingInvitation() {
             </div>
 
             {/* Names */}
-            <div className={`flex flex-col items-center justify-center mb-8 ${dmSerifDisplay.className}`}>
-              <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 mb-1 text-center">
-                {t.brideName}
-              </h1>
+            <div className={cn("flex flex-col items-center justify-center mb-8", dmSerifDisplay.className)}>
+              <div className="flex flex-col items-center mb-1">
+                <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 text-center">
+                  {t.brideName}
+                </h1>
+                {t.brideNameLocal && (
+                  <p className="text-sm xxs:text-sm xs:text-base text-slate-400 italic">
+                    {t.brideNameLocal}
+                    {t.brideFamily && (
+                      <span className="text-xs text-slate-500 ml-1">
+                        ({t.brideFamily})
+                      </span>
+                    )}
+                  </p>
+                )}
+              </div>
               <div className="text-2xl xxs:text-2xl xs:text-3xl font-light text-slate-600 mb-1">&</div>
-              <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 text-center">
-                {t.groomName}
-              </h1>
+              <div className="flex flex-col items-center">
+                <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800  text-center">
+                  {t.groomName}
+                </h1>
+                {t.groomNameLocal && (
+                  <p className="text-sm xxs:text-sm xs:text-base text-slate-400 italic">
+                    {t.groomNameLocal}
+                    {t.groomFamily && (
+                      <span className="text-xs text-slate-500 ml-1">
+                        ({t.groomFamily})
+                      </span>
+                    )}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Flight details table */}
@@ -179,7 +296,7 @@ export default function WeddingInvitation() {
                     {/* Flight & Date */}
                     <div className="border-b border-slate-800 px-3 py-2">
                       <p className="text-[9px] text-slate-500 mb-0.5 tracking-wide uppercase">Flight & Date</p>
-                      <p className={`text-xs font-semibold text-slate-900`}>{weddingDate}</p>
+                      <p className={`text-xs font-semibold text-slate-900`}>{displayDate}</p>
                     </div>
 
                     {/* Class */}
@@ -198,13 +315,13 @@ export default function WeddingInvitation() {
               </div>
 
               {/* Stamp Overlay */}
-              <div className={`absolute -right-4 top-[85%] -translate-y-1/2 ${dmSerifDisplay.className}`}>
+              <div className={cn("absolute -right-4 top-[85%] -translate-y-1/2", dmSerifDisplay.className)}>
                 <div className="w-24 h-24 rounded-full border-[3px] border-primary flex items-center justify-center bg-transparent transform rotate-12 relative shadow-lg">
                   <div className="absolute inset-0 rounded-full border-[1.5px] border-primary" style={{ margin: '3px' }}></div>
                   <div className="text-center flex flex-col items-center gap-0">
                     <Plane className="w-3.5 h-3.5 mb-0.5" style={{ color: 'var(--text-primary)' }} />
-                    <p className={`text-[7px] font-bold leading-none ${bodoniModa.className}`} style={{ color: 'var(--text-primary)' }}>
-                      {weddingDate.split('.').slice(0, 2).join('.')}
+                    <p className={cn("text-[7px] font-bold leading-none", bodoniModa.className)} style={{ color: 'var(--text-primary)' }}>
+                      {displayDate.split('.').slice(0, 2).join('.')}
                     </p>
                     <div className="border-t border-primary w-8 my-0.5"></div>
                     <p className="text-[8px] font-bold leading-none tracking-tight" style={{ color: 'var(--text-primary)' }}>
@@ -224,23 +341,10 @@ export default function WeddingInvitation() {
 
 
           {/* Perforation */}
-          <div className="flex items-center w-full h-8">
-            {/* Left semicircle */}
-            <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
-            </div>
-
-            {/* Dashed line that fills remaining width */}
-            <div className="flex-1 border-t-4 border-dashed border-primary"></div>
-
-            {/* Right semicircle */}
-            <div className="w-6 h-12 overflow-hidden">
-              <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
-            </div>
-          </div>
+          <PerforationDivider className="h-8" />
 
         {/* Wedding Ticket */}
-            <div className={`text-center py-3 xxs:py-3 xs:py-4 ${dmSerifDisplay.className}`}>
+            <div className={cn("text-center py-3 xxs:py-3 xs:py-4", dmSerifDisplay.className)}>
               <p className="text-sm xxs:text-sm xs:text-md font-medium text-slate-600 tracking-widest">
                 WEDDING TICKET
               </p>
@@ -261,7 +365,7 @@ export default function WeddingInvitation() {
           </h2>
 
           <p className="text-sm text-slate-300 leading-relaxed text-center mb-6 sm:mb-8">
-            This is an official invitation to our wedding! You received it because we really want to see you on this day by our side!
+            {invitationMessage}
           </p>
 
           {/* Couple photo */}
@@ -281,8 +385,8 @@ export default function WeddingInvitation() {
               alt="Decorative line"
               className="w-full"
             />
-            <div className="absolute top-1/2 left-[2rem] -translate-y-[calc(50%-4px)] bg-primary px-2">
-              <Plane className="w-8 h-8 text-primary fill-transparent rotate-[45deg]" strokeWidth={1} />
+            <div className="absolute top-1/2 left-[2rem] -translate-y-[calc(50%-4px)] px-2">
+              <Plane className="w-8 h-8 text-primary fill-primary  rotate-[45deg]" strokeWidth={1} />
             </div>
           </div>
 
@@ -304,7 +408,7 @@ export default function WeddingInvitation() {
             <div className="bg-white rounded-2xl p-3 sm:p-6">
               <Calendar
                 mode="multiple"
-                selected={importantDates}
+                selected={filteredDates}
                 defaultMonth={new Date(2025, 11, 21)}
                 disableNavigation
                 disabled={true}
@@ -327,9 +431,9 @@ export default function WeddingInvitation() {
             </div>
           </div>
 
-          <div className={`text-center mt-8 pt-6 ${bodoniModa.className}`} style={{ borderTop: '1px solid var(--text-muted)' }}>
-            <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>Wedding</p>
-            <h4 className="text-3xl font-serif text-primary mb-2">{weddingDate}</h4>
+          <div className={cn("text-center mt-8 pt-6", bodoniModa.className)} style={{ borderTop: '1px solid var(--text-muted)' }}>
+            <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>{eventType}</p>
+            <h4 className="text-3xl font-serif text-primary mb-2">{displayDate}</h4>
           </div>
         </Card>
 
@@ -347,10 +451,10 @@ export default function WeddingInvitation() {
             <p className="text-xs text-slate-500 text-center mb-4 sm:mb-6">Primary Celebration Destination</p>
 
             <div className="text-center text-slate-600 mb-4 sm:mb-6">
-              <p className="text-sm mb-1 font-medium">{venue.name}</p>
-              <p className="text-xs text-slate-500 mb-2">{venue.address}</p>
+              <p className="text-sm mb-1 font-medium">{venueName}</p>
+              <p className="text-xs text-slate-500 mb-2">{venueAddress}</p>
               <a
-                href="https://maps.app.goo.gl/K2VY6MDLL7wM3vWs8?g_st=aw"
+                href={venueMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs text-slate-700 hover:text-slate-900 underline decoration-slate-400 hover:decoration-slate-900 transition-colors"
@@ -365,29 +469,17 @@ export default function WeddingInvitation() {
             {/* Venue image */}
             <div className="relative w-full h-48 xxs:h-52 xs:h-60 sm:h-80 bg-slate-200 rounded-2xl overflow-hidden border-4 border-slate-300">
               <img
-                src="/images/wedding-venue.webp"
-                alt="Wedding Venue"
+                src={venueImage}
+                alt="Venue"
                 className="w-full h-full object-cover object-center"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-slate-900/5 to-transparent"></div>
             </div>
           </div>
 
+            {/* Transport Instructions */}
             {/* Dashed separator */}
-            <div className="flex items-center w-full my-8">
-              {/* Left semicircle */}
-              <div className="w-6 h-12 overflow-hidden">
-                <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
-              </div>
-
-              {/* Dashed line that fills remaining width */}
-              <div className="flex-1 border-t-4 border-dashed border-primary"></div>
-
-              {/* Right semicircle */}
-              <div className="w-6 h-12 overflow-hidden">
-                <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
-              </div>
-            </div>
+            <PerforationDivider className="my-8" />
 
             {/* How to get there instructions */}
             <div className="px-3 xxs:px-5 xs:px-7 sm:px-8">
@@ -397,96 +489,72 @@ export default function WeddingInvitation() {
               <p className="text-xs text-slate-500 text-center mb-4 sm:mb-6 italic">Boarding Pass Instructions</p>
 
               <div className="space-y-3 sm:space-y-4 mb-6">
-                {/* Step 1 */}
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center">
-                    <Plane className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex-1 pt-0.5">
-                    <p className="text-sm font-medium text-slate-800 mb-1">First Stop: Gateway to God's Own Country</p>
-                    <p className="text-xs text-slate-600">
-                      Board your flight to Kochi International Airport, Kerala - where palm trees sway and love is in the air!
-                    </p>
-                  </div>
-                </div>
+                {travelInstructions.steps.map((step) => {
+                  const StepIcon = getIconComponent(step.icon)
 
-                {/* Step 2 */}
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center">
-                    <Bus className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex-1 pt-0.5">
-                    <p className="text-sm font-medium text-slate-800 mb-2">Next Stop: Where the Party Begins!</p>
-                    <p className="text-xs text-slate-600 mb-3">Choose your adventure from Kochi to our venue:</p>
-
-                    <div className="space-y-3 ml-2">
-                      <div className="bg-gradient-to-r from-slate-50 to-transparent border-l-2 border-slate-900 pl-3 py-2">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <Sparkles className="w-3 h-3 text-slate-900" />
-                          <p className="text-xs font-semibold text-slate-800">VIP Love Express (Recommended!)</p>
-                        </div>
-                        <p className="text-xs text-slate-600">
-                          Early birds arriving by 7:00 AM on 12th Dec get the royal treatment! Our special wedding bus will whisk you directly to the venue. No stops, just love and laughter!
-                        </p>
+                  return (
+                    <div key={step.id} className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center">
+                        <StepIcon className="w-3.5 h-3.5" />
                       </div>
+                      <div className="flex-1 pt-0.5">
+                        <p className="text-sm font-medium text-slate-800 mb-1">{step.title}</p>
+                        <p className="text-xs text-slate-600 mb-3">{step.description}</p>
 
-                      <div className="bg-gradient-to-r from-slate-50 to-transparent border-l-2 border-slate-400 pl-3 py-2">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <Car className="w-3 h-3 text-slate-700" />
-                          <p className="text-xs font-semibold text-slate-800">Private Chariot</p>
-                        </div>
-                        <p className="text-xs text-slate-600">
-                          Book your own cab and cruise through Kerala's scenic routes at your own pace. Perfect for families or those who love a road trip!
-                        </p>
-                      </div>
+                        {/* Render transport options if available */}
+                        {step.transportOptions && step.transportOptions.length > 0 && (
+                          <div className="space-y-3 ml-2">
+                            {step.transportOptions.map((option) => {
+                              const OptionIcon = getIconComponent(option.icon)
 
-                      <div className="bg-gradient-to-r from-slate-50 to-transparent border-l-2 border-slate-300 pl-3 py-2">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <Backpack className="w-3 h-3 text-slate-600" />
-                          <p className="text-xs font-semibold text-slate-800">The Adventurer's Route</p>
-                        </div>
-                        <p className="text-xs text-slate-600">
-                          Take a KSRTC bus to Angamaly (~20 mins), then another to Muvattupuzha (~35 mins), followed by a short cab ride to the venue. Experience Kerala like a local!
-                        </p>
+                              return (
+                                <div
+                                  key={option.id}
+                                  className={cn("bg-gradient-to-r from-slate-50 to-transparent border-l-2 pl-3 py-2", option.borderColor)}
+                                >
+                                  <div className="flex items-center gap-1.5 mb-1">
+                                    <OptionIcon className={cn("w-3 h-3", option.iconColor)} />
+                                    <p className="text-xs font-semibold text-slate-800">
+                                      {option.title}
+                                      {option.recommended && ''}
+                                    </p>
+                                  </div>
+                                  <p className="text-xs text-slate-600">{option.description}</p>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
                       </div>
                     </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Dashed separator and Transport note - Only for Kerala events */}
+            {travelInstructions.enabled && travelInstructions.specialNote && (
+              <>
+                <PerforationDivider />
+
+                {/* Transport note */}
+                <div className="mx-3 xxs:mx-3 xs:mx-4 sm:mx-8 mb-6 sm:mb-8 text-center">
+                  <div className="inline-block mb-2 sm:mb-3">
+                    <Heart className="w-8 sm:w-10 h-8 sm:h-10 text-red-400 fill-red-400 heart-pump" />
                   </div>
+                  <h5 className="text-xs xxs:text-xs xs:text-sm sm:text-base font-serif text-slate-900 mb-2 tracking-wide">
+                    {travelInstructions.specialNote.title}
+                  </h5>
+                  <p className="text-xs xxs:text-xs xs:text-xs sm:text-sm text-slate-700 max-w-sm mx-auto leading-relaxed">
+                    {travelInstructions.specialNote.description}
+                  </p>
+                  <p className="text-xs text-slate-500 mt-2 italic">
+                    {travelInstructions.specialNote.details}
+                  </p>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
 
-            {/* Dashed separator */}
-            <div className="flex items-center w-full">
-              {/* Left semicircle */}
-              <div className="w-6 h-12 overflow-hidden">
-                <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
-              </div>
-
-              {/* Dashed line that fills remaining width */}
-              <div className="flex-1 border-t-4 border-dashed border-primary"></div>
-
-              {/* Right semicircle */}
-              <div className="w-6 h-12 overflow-hidden">
-                <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
-              </div>
-            </div>
-
-              {/* Transport note */}
-              <div className="mx-3 xxs:mx-3 xs:mx-4 sm:mx-8 mb-6 sm:mb-8 text-center">
-                <div className="inline-block mb-2 sm:mb-3">
-                  <Heart className="w-8 sm:w-10 h-8 sm:h-10 text-red-400 fill-red-400 heart-pump" />
-                </div>
-                <h5 className="text-xs xxs:text-xs xs:text-sm sm:text-base font-serif text-slate-900 mb-2 tracking-wide">
-                  Special Wedding Transit Service
-                </h5>
-                <p className="text-xs xxs:text-xs xs:text-xs sm:text-sm text-slate-700 max-w-sm mx-auto leading-relaxed">
-                  Complimentary transport departing Kochi Airport at <span className="font-semibold text-slate-900">7:00 AM on December 12th</span>
-                </p>
-                <p className="text-xs text-slate-500 mt-2 italic">
-                  RSVP to secure your seat on the Love Express!
-                </p>
-              </div>
-              
           {/* Perforated edge bottom */}
           <div className="flex justify-center w-[97%]">
             <img src="/perforated-bottom.svg" alt="" className="w-[97%]" />
@@ -528,12 +596,12 @@ export default function WeddingInvitation() {
             <p className="text-xs text-center mb-6 sm:mb-8" style={{ color: 'var(--text-muted)' }}>All celebrations boarding times</p>
 
             {/* Timeline items */}
-            <div className={`relative mb-8 ${bodoniModa.className}`}>
+            <div className={cn("relative mb-8", bodoniModa.className)}>
               {/* Vertical line - thicker */}
               <div className="absolute left-1/2 top-0 bottom-0 w-1 -translate-x-1/2" style={{ backgroundColor: 'var(--text-secondary)' }}></div>
 
               <div className="space-y-8 sm:space-y-12">
-                {timeline.map((event, index) => {
+                {filteredTimeline.map((event) => {
                   // Check for both " at " and "\n" splits
                   const hasNewline = event.title.includes('\n')
                   const hasAtSplit = event.title.includes(' at ')
@@ -544,40 +612,32 @@ export default function WeddingInvitation() {
                       : [event.title]
                   const hasLineBreak = titleLines.length > 1
 
-                  // Color based on location with muted theme colors
-                  const getLocationStyles = () => {
-                    // Different colors for each place
-                    if (event.location.includes('Thodupuzha')) {
-                      return {
-                        dateClass: "text-xs mb-1 border-b-2 border-emerald-200 pb-0.5 inline-block font-bold text-emerald-200",
-                        locationClass: "text-xs mt-1 border-l-4 border-emerald-200 pl-2 font-semibold text-emerald-200"
-                      }
-                    }
-                    if (event.location.includes('Thiruvananthapuram')) {
-                      return {
-                        dateClass: "text-xs mb-1 border-b-2 border-cyan-200 pb-0.5 inline-block font-bold text-cyan-200",
-                        locationClass: "text-xs mt-1 border-l-4 border-cyan-200 pl-2 font-semibold text-cyan-200"
-                      }
-                    }
-                    if (event.location.includes('Pune')) {
-                      return {
-                        dateClass: "text-xs mb-1 border-b-2 border-amber-200 pb-0.5 inline-block font-bold text-amber-200",
-                        locationClass: "text-xs mt-1 border-l-4 border-amber-200 pl-2 font-semibold text-amber-200"
-                      }
-                    }
-                    return {
-                      dateClass: "text-xs mb-1 border-b-2 border-slate-200 pb-0.5 inline-block font-bold text-slate-200",
-                      locationClass: "text-xs mt-1 border-l-4 border-slate-200 pl-2 font-semibold"
-                    }
-                  }
-
-                  const styles = getLocationStyles()
+                  // Determine location for conditional classes
+                  const isThodupuzha = event.location.includes('Thodupuzha')
+                  const isThiruvananthapuram = event.location.includes('Thiruvananthapuram')
+                  const isPune = event.location.includes('Pune')
 
                   return (
-                    <div key={event.id} className="grid grid-cols-2 gap-4 xxs:gap-5 xs:gap-6 sm:gap-12 relative">
-
+                    <div
+                      key={event.id}
+                      className={cn(
+                        "grid grid-cols-2 gap-4 xxs:gap-5 xs:gap-6 sm:gap-12 relative",
+                        {
+                          'location-thodupuzha': isThodupuzha,
+                          'location-thiruvananthapuram': isThiruvananthapuram,
+                          'location-pune': isPune,
+                          'location-default': !isThodupuzha && !isThiruvananthapuram && !isPune
+                        }
+                      )}
+                    >
                       <div className="flex flex-col items-end justify-center pr-2 xxs:pr-2 xs:pr-3 sm:pr-6">
-                        <div className={`text-xs xxs:text-xs xs:text-sm sm:text-base text-right ${hasLineBreak ? 'leading-tight' : ''}`} style={{ color: 'var(--text-muted)' }}>
+                        <div
+                          className={cn(
+                            "text-xs xxs:text-xs xs:text-sm sm:text-base text-right",
+                            { 'leading-tight': hasLineBreak }
+                          )}
+                          style={{ color: 'var(--text-muted)' }}
+                        >
                           {hasLineBreak ? (
                             <>
                               {titleLines[0]}{hasAtSplit ? ' at' : ''}<br />{titleLines[1]}
@@ -588,11 +648,11 @@ export default function WeddingInvitation() {
                         </div>
                       </div>
                       <div className="flex flex-col items-start justify-center pl-2 xxs:pl-2 xs:pl-3 sm:pl-6">
-                        <div className={styles.dateClass}>
+                        <div className="event-date">
                           {event.date}
                         </div>
                         <div className="text-2xl xxs:text-3xl xs:text-4xl sm:text-5xl font-normal text-primary tracking-tight leading-tight">{event.time}</div>
-                        <div className={styles.locationClass}>
+                        <div className="event-location">
                           {event.location}
                         </div>
                       </div>
@@ -623,22 +683,14 @@ export default function WeddingInvitation() {
             </div>
 
             {/* Boarding Pass Header */}
-            <div className={`text-center py-3 xxs:py-3 xs:py-4 ${dmSerifDisplay.className}`}>
+            <div className={cn("text-center py-3 xxs:py-3 xs:py-4", dmSerifDisplay.className)}>
               <p className="text-sm xxs:text-sm xs:text-md font-medium text-slate-600 tracking-widest">
                 FINAL BOARDING CALL
               </p>
             </div>
 
             {/* Perforation */}
-            <div className="flex items-center w-full">
-              <div className="w-6 h-12 overflow-hidden">
-                <div className="w-12 h-12 rounded-full bg-primary -ml-6"></div>
-              </div>
-              <div className="flex-1 border-t-4 border-dashed border-primary"></div>
-              <div className="w-6 h-12 overflow-hidden">
-                <div className="w-12 h-12 rounded-full bg-primary -mr-6"></div>
-              </div>
-            </div>
+            <PerforationDivider />
 
             {/* Main Content */}
             <div className="pt-4 xxs:pt-5 xs:pt-6 sm:pt-8 pb-6 xxs:pb-7 xs:pb-8 sm:pb-10 px-3 xxs:px-3 xs:px-4 sm:px-8">
@@ -651,7 +703,7 @@ export default function WeddingInvitation() {
               </div>
 
               {/* Get Ready Message */}
-              <div className={`text-center mb-6 ${dmSerifDisplay.className}`}>
+              <div className={cn("text-center mb-6", dmSerifDisplay.className)}>
                 <h2 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 mb-3">
                   Get Ready to Onboard!
                 </h2>
@@ -668,7 +720,7 @@ export default function WeddingInvitation() {
               </div>
 
               {/* See You There */}
-              <div className={`text-center ${bodoniModa.className}`}>
+              <div className={cn("text-center", bodoniModa.className)}>
                 <p className="text-xl xxs:text-xl xs:text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
                   See You There!
                 </p>
@@ -679,7 +731,7 @@ export default function WeddingInvitation() {
 
               {/* Stamp */}
               <div className="flex justify-center mt-8">
-                <div className={`w-28 h-28 rounded-full border-[3px] border-slate-900 flex items-center justify-center transform -rotate-12 ${dmSerifDisplay.className}`}>
+                <div className={cn("w-28 h-28 rounded-full border-[3px] border-slate-900 flex items-center justify-center transform -rotate-12", dmSerifDisplay.className)}>
                   <div className="absolute inset-0 rounded-full border-[1.5px] border-slate-900" style={{ margin: '3px' }}></div>
                   <div className="text-center flex flex-col items-center gap-1">
                     <Heart className="w-5 h-5 mb-1 text-slate-900 fill-red-400" />

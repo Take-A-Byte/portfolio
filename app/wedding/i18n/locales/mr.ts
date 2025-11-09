@@ -1,6 +1,10 @@
 export const mr = {
-  brideName: "मुरलीमयूरा",
+  brideName: "  MURALEEMAYOORA",
+  brideNameLocal: "मुरलीमयुरा",
+  brideFamily: "निवेद आणि सरिता यांची कन्या",
   groomName: "SHANTANU",
+  groomNameLocal: "शंतनु",
+  groomFamily: "स्व. जितेंद्र मेथीकर आणि सुषमा मेथीकर यांचा पुत्र",
   celebrationMessage: "At our wedding celebration in God's Own Country",
   weddingTicket: "WEDDING TICKET",
   dearFriendsTitle: "DEAR OUR\nFRIENDS AND FAMILY!",

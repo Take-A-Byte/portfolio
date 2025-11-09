@@ -1,6 +1,10 @@
 export const en = {
   brideName: "MURALEEMAYOORA",
+  brideNameLocal: "",
+  brideFamily: "",
   groomName: "SHANTANU",
+  groomNameLocal: "",
+  groomFamily: "",
   celebrationMessage: "At our wedding celebration in God's Own Country",
   weddingTicket: "WEDDING TICKET",
   dearFriendsTitle: "DEAR OUR\nFRIENDS AND FAMILY!",
