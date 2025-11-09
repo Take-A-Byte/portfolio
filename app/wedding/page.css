@@ -107,6 +107,66 @@
   animation: heartbeat 1.5s ease-in-out infinite;
 }
 
+/* Timeline event location styles */
+.event-date {
+  font-size: 0.75rem; /* text-xs */
+  margin-bottom: 0.25rem; /* mb-1 */
+  border-bottom-width: 2px;
+  padding-bottom: 0.125rem; /* pb-0.5 */
+  display: inline-block;
+  font-weight: 700; /* font-bold */
+}
+
+.event-location {
+  font-size: 0.75rem; /* text-xs */
+  margin-top: 0.25rem; /* mt-1 */
+  border-left-width: 4px;
+  padding-left: 0.5rem; /* pl-2 */
+  font-weight: 600; /* font-semibold */
+}
+
+/* Location-specific color variations */
+.location-thodupuzha .event-date {
+  border-bottom-color: #a7f3d0; /* border-emerald-200 */
+  color: #a7f3d0; /* text-emerald-200 */
+}
+
+.location-thodupuzha .event-location {
+  border-left-color: #a7f3d0; /* border-emerald-200 */
+  color: #a7f3d0; /* text-emerald-200 */
+}
+
+.location-thiruvananthapuram .event-date {
+  border-bottom-color: #a5f3fc; /* border-cyan-200 */
+  color: #a5f3fc; /* text-cyan-200 */
+}
+
+.location-thiruvananthapuram .event-location {
+  border-left-color: #a5f3fc; /* border-cyan-200 */
+  color: #a5f3fc; /* text-cyan-200 */
+}
+
+.location-pune .event-date {
+  border-bottom-color: #fde68a; /* border-amber-200 */
+  color: #fde68a; /* text-amber-200 */
+}
+
+.location-pune .event-location {
+  border-left-color: #fde68a; /* border-amber-200 */
+  color: #fde68a; /* text-amber-200 */
+}
+
+/* Default location styles */
+.location-default .event-date {
+  border-bottom-color: #e2e8f0; /* border-slate-200 */
+  color: #e2e8f0; /* text-slate-200 */
+}
+
+.location-default .event-location {
+  border-left-color: #e2e8f0; /* border-slate-200 */
+  color: #e2e8f0; /* text-slate-200 */
+}
+
 /* Figure-8 plane animation using separate horizontal and vertical movements */
 @keyframes plane-horizontal {
   from { transform: translateX(-80px); }

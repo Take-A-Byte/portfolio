@@ -21,8 +21,18 @@ export function useTranslation() {
 
         // If UTM parameter is provided, use it to determine locale
         if (utmSource) {
-          if (utmSource === 'kerala' || utmSource === 'familyforeverpass') {
+          if (utmSource === 'kerala') {
             detectedLocale = 'ml'
+          } else if (utmSource === 'familyforeverpass') {
+            // For familyforeverpass, detect user's actual location for localization
+            const region = await detectUserRegion()
+            if (region === 'kerala') {
+              detectedLocale = 'ml'
+            } else if (region === 'maharashtra') {
+              detectedLocale = 'mr'
+            } else {
+              detectedLocale = 'en'
+            }
           } else if (utmSource === 'trivandrum' || utmSource === 'thiruvananthapuram') {
             detectedLocale = 'ml'
           } else if (utmSource === 'pune' || utmSource === 'maharashtra') {
