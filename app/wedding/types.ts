@@ -2,10 +2,14 @@ export interface TimelineEvent {
   id: string
   title: string
   time: string
-  date: string
-  location: string
+  endTime?: string
+  date: Date
   description?: string
-  mapsUrl?: string
+}
+
+export interface VenueEvents {
+  events: TimelineEvent[]
+  venue: VenueInfo
 }
 
 export interface Venue {
@@ -19,6 +23,13 @@ export interface Venue {
   }
   imageUrl?: string
   mapsUrl?: string
+}
+
+export interface VenueInfo {
+  name: string
+  address: string
+  image: string
+  mapsUrl: string
 }
 
 export interface TransportOption {
@@ -49,11 +60,13 @@ export interface TravelInstructions {
   }
 }
 
+export interface CabinCrewMember {
+  name: string
+  role: string
+}
+
 export interface WeddingDetails {
   brideName: string
   groomName: string
-  weddingDate: string
-  venue: Venue
-  timeline: TimelineEvent[]
-  importantDates: Date[]
+  cabinCrew?: CabinCrewMember[]
 }
