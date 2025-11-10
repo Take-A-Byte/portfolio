@@ -63,6 +63,7 @@ export interface TravelInstructions {
 export interface CabinCrewMember {
   name: string
   role: string
+  relation?: string
 }
 
 export interface WeddingDetails {

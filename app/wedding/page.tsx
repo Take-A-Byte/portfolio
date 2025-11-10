@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { Heart, Plane, Bus, Car, Backpack, Sparkles } from "lucide-react"
+import { Heart, Plane, Bus, Car, Backpack, Sparkles, Minimize2 } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel"
@@ -69,6 +69,7 @@ export default function WeddingInvitation() {
   const { t, isLoading } = useTranslation()
   const defaultConfig = getLocationConfig('pune')
   const [showFullscreenPrompt, setShowFullscreenPrompt] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const [venueEvents, setVenueEvents] = useState<VenueEvents[]>(defaultConfig.eventGroups)
   const [filteredDates, setFilteredDates] = useState(defaultConfig.dates)
   const [eventType, setEventType] = useState(defaultConfig.eventType)
@@ -154,6 +155,31 @@ export default function WeddingInvitation() {
     })
   }, [carouselApi])
 
+  // Track fullscreen state changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isCurrentlyFullscreen = !!(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      )
+      setIsFullscreen(isCurrentlyFullscreen)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+    document.addEventListener('msfullscreenchange', handleFullscreenChange)
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('msfullscreenchange', handleFullscreenChange)
+    }
+  }, [])
+
   // Request fullscreen on first user interaction
   useEffect(() => {
     let isSkipped = false
@@ -210,6 +236,23 @@ export default function WeddingInvitation() {
     }
   }, [])
 
+  // Function to exit fullscreen
+  const exitFullscreen = async () => {
+    try {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen()
+      } else if ((document as any).webkitExitFullscreen) {
+        await (document as any).webkitExitFullscreen()
+      } else if ((document as any).mozCancelFullScreen) {
+        await (document as any).mozCancelFullScreen()
+      } else if ((document as any).msExitFullscreen) {
+        await (document as any).msExitFullscreen()
+      }
+    } catch (err) {
+      console.log('Exit fullscreen failed:', err)
+    }
+  }
+
   // Show loading state while detecting location
   if (isLoading) {
     return (
@@ -226,6 +269,18 @@ export default function WeddingInvitation() {
   return (
     <div className="min-h-screen overflow-x-hidden wedding-content" style={{ background: `linear-gradient(to bottom, var(--gradient-start), var(--gradient-end))` }}>
       <AirplaneAnimation />
+
+      {/* Exit Fullscreen Button */}
+      {isFullscreen && (
+        <button
+          onClick={exitFullscreen}
+          className="fixed top-4 right-4 z-[9998] bg-white/90 hover:bg-white text-slate-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+          aria-label="Exit fullscreen"
+          title="Exit fullscreen"
+        >
+          <Minimize2 className="w-5 h-5" />
+        </button>
+      )}
 
       {/* Fullscreen Prompt Overlay */}
       {showFullscreenPrompt && (
@@ -901,6 +956,9 @@ export default function WeddingInvitation() {
                       <div key={index} className="border border-slate-300 rounded-lg p-2">
                         <div className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">{crew.role}</div>
                         <div className="text-sm text-slate-700 font-medium">{crew.name}</div>
+                        {crew.relation && (
+                          <div className="text-[10px] text-slate-500 italic">{crew.relation}</div>
+                        )}
                       </div>
                     ))}
                   </div>
