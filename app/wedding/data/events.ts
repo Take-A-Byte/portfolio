@@ -1,6 +1,6 @@
 import { VenueEvents } from "./../types"
 import { keralaTravelInstructions, simpleTravelInstructions } from "./travel"
-import { thodupuzhaVenue, trivandrumVenue, puneVenue } from "./venue"
+import { thodupuzhaVenue, trivandrumVenue, puneVenue, weddingVenue } from "./venue"
 
 // Main events (main wedding celebration)
 export const mainEventGroup: VenueEvents = {
@@ -25,7 +25,7 @@ export const mainEventGroup: VenueEvents = {
             date: new Date(2025, 11, 13)
         }
     ],
-    venue: thodupuzhaVenue
+    venue: weddingVenue
 }
 
 export const thodupuzhaEventGroup: VenueEvents = {
