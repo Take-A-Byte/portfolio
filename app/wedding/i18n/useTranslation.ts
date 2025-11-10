@@ -23,8 +23,8 @@ export function useTranslation() {
         if (utmSource) {
           if (utmSource === 'kerala') {
             detectedLocale = 'ml'
-          } else if (utmSource === 'familyforeverpass') {
-            // For familyforeverpass, detect user's actual location for localization
+          } else if (utmSource === 'privilegeduser') {
+            // For privilegeduser, detect user's actual location for localization
             const region = await detectUserRegion()
             if (region === 'kerala') {
               detectedLocale = 'ml'

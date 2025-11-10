@@ -26,8 +26,8 @@ const animationKeyframes = [
   { section: 6, scrollPercent: 55, zIndex: 0, opacity: 0.8, surfaceVisible: true },     // Rotation sequence continued
   { section: 7, scrollPercent: 62, zIndex: 0, opacity: 0.2, surfaceVisible: false },     // Moving forward
   { section: 8, scrollPercent: 80, zIndex: 50, opacity: 0.8, surfaceVisible: true },     // Further forward
-  { section: 9, scrollPercent: 87, zIndex: 50, opacity: 1, surfaceVisible: true },    // Flying back
-  { section: 10, scrollPercent: 94, zIndex: 50, opacity: 1, surfaceVisible: true },   // Final exit
+  { section: 9, scrollPercent: 90, zIndex: 50, opacity: 1, surfaceVisible: true },    // Flying back
+  { section: 10, scrollPercent: 96, zIndex: 50, opacity: 1, surfaceVisible: true },   // Final exit
 ]
 
 export default function AirplaneAnimation() {

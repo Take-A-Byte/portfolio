@@ -86,11 +86,11 @@ export default function WeddingInvitation() {
   // Priority: utm_source parameter > user location > default (Pune)
   // Default by location: Maharashtra -> Pune, Kerala -> Trivandrum
   // With ?utm_source=kerala: Show all events (12th, 13th, 15th, 21st Dec)
-  // With ?utm_source=privilegeduser: Show all Thodupuzha wedding events (Haldi, Sangeet, Vidhi, Meetup Dinner)
+  // With ?utm_source=familyforeverpass: Show all Thodupuzha wedding events (Haldi, Sangeet, Vidhi, Meetup Dinner)
   // With ?utm_source=thodupuzha or ?utm_source=idukki: Show only Thodupuzha Meetup Dinner (13th Dec)
   // With ?utm_source=trivandrum or ?utm_source=thiruvananthapuram: Show only Trivandrum dinner (15th Dec)
   // With ?utm_source=pune: Show only Pune lunch (21st Dec)
-  // With ?utm_source=familyforeverpass: Show everything with full transport, localization based on detected region
+  // With ?utm_source=privilegeduser: Show everything with full transport, localization based on detected region
   useEffect(() => {
     const loadEventConfig = async () => {
       const params = new URLSearchParams(window.location.search)
@@ -98,18 +98,18 @@ export default function WeddingInvitation() {
 
       setUtmSource(utmParam || null)
 
-      let locationKey: 'kerala' | 'thodupuzha' | 'privilegeduser' | 'trivandrum' | 'pune' = 'pune' // default
+      let locationKey: 'kerala' | 'thodupuzha' | 'familyforeverpass' | 'trivandrum' | 'pune' = 'pune' // default
 
       // If utm_source is provided, it takes priority
       if (utmParam) {
         if (utmParam === 'kerala') {
           locationKey = 'kerala'
-        } else if (utmParam === 'familyforeverpass') {
-          // For familyforeverpass, always show all events (kerala config)
+        } else if (utmParam === 'privilegeduser') {
+          // For privilegeduser, always show all events (kerala config)
           // Localization language will be handled by the i18n system based on detected region
           locationKey = 'kerala'
-        } else if (utmParam === 'privilegeduser') {
-          locationKey = 'privilegeduser'
+        } else if (utmParam === 'familyforeverpass') {
+          locationKey = 'familyforeverpass'
         } else if (utmParam === 'thodupuzha' || utmParam === 'idukki') {
           locationKey = 'thodupuzha'
         } else if (utmParam === 'trivandrum' || utmParam === 'thiruvananthapuram') {
@@ -471,7 +471,7 @@ export default function WeddingInvitation() {
         <Card className="bg-primary text-primary p-3 xxs:p-3 xs:p-4 sm:p-8 rounded-xl shadow-xl border-[1px] border-secondary">
           {/* Dear Friends Section */}
           <h2 className="text-xl xxs:text-xl xs:text-2xl sm:text-3xl font-serif text-center mb-4 sm:mb-6 leading-tight">
-            DEAR OUR<br />FRIENDS AND FAMILY!
+            DEAR<br />FRIENDS AND FAMILY!
           </h2>
 
           <p className="text-sm text-slate-300 leading-relaxed text-center mb-6 sm:mb-8">
@@ -953,7 +953,7 @@ export default function WeddingInvitation() {
                   </p>
                   <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto mb-3">
                     {weddingData.cabinCrew.map((crew, index) => (
-                      <div key={index} className="border border-slate-300 rounded-lg p-2">
+                      <div key={index} className={`border border-slate-300 rounded-lg p-2 ${weddingData.cabinCrew && weddingData.cabinCrew.length === 3 && index === 2 ? 'col-span-2 max-w-[calc(50%-0.375rem)] mx-auto' : ''}`}>
                         <div className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">{crew.role}</div>
                         <div className="text-sm text-slate-700 font-medium">{crew.name}</div>
                         {crew.relation && (
