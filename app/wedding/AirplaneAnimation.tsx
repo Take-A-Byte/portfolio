@@ -24,8 +24,8 @@ const animationKeyframes = [
   { section: 4, scrollPercent: 36, zIndex: 0, opacity: 1, surfaceVisible: true },     // Center position
   { section: 5, scrollPercent: 45, zIndex: 0, opacity: 1, surfaceVisible: true },     // Rotation sequence
   { section: 6, scrollPercent: 55, zIndex: 0, opacity: 0.8, surfaceVisible: true },     // Rotation sequence continued
-  { section: 7, scrollPercent: 68, zIndex: 0, opacity: 0.2, surfaceVisible: false },     // Moving forward
-  { section: 8, scrollPercent: 88, zIndex: 50, opacity: 0.8, surfaceVisible: true },     // Further forward
+  { section: 7, scrollPercent: 62, zIndex: 0, opacity: 0.2, surfaceVisible: false },     // Moving forward
+  { section: 8, scrollPercent: 84, zIndex: 50, opacity: 0.8, surfaceVisible: true },     // Further forward
   { section: 9, scrollPercent: 93, zIndex: 50, opacity: 1, surfaceVisible: true },    // Flying back
   { section: 10, scrollPercent: 96, zIndex: 50, opacity: 1, surfaceVisible: true },   // Final exit
 ]
