@@ -46,7 +46,7 @@ export const weddingEventGroup: VenueEvents = {
         ...mainEventGroup.events,
         ...thodupuzhaEventGroup.events
     ],
-    venue: thodupuzhaVenue
+    venue: weddingVenue
 }
 
 // Trivandrum event
