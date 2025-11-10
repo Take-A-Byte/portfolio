@@ -100,7 +100,8 @@ export const eventsByLocation = {
         eventType: "Wedding",
         travelInstructions: keralaTravelInstructions,
         invitationMessage: "This is an official invitation to our wedding! You received it because we really want to see you at all our celebrations by our side!",
-        celebrationMessage: "At our wedding celebration in God's Own Country"
+        celebrationMessage: "At our wedding celebration in God's Own Country",
+        regards: "Methikar (Chaturmuttha) family"
     },
     trivandrum: {
         eventGroups: [trivandrumEventGroup],
@@ -117,7 +118,8 @@ export const eventsByLocation = {
         eventType: "Wedding Lunch",
         invitationMessage: "This is an official invitation to our wedding lunch! You received it because we really want to celebrate with you on this joyful day!",
         celebrationMessage: "At our wedding celebration in the Oxford of the East",
-        travelInstructions: simpleTravelInstructions
+        travelInstructions: simpleTravelInstructions,
+        regards: "Methikar (Chaturmuttha) family"
     }
 }
 

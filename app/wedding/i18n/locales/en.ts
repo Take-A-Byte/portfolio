@@ -4,7 +4,7 @@ export const en = {
   brideFamily: "Daughter of Niveda and Saritha",
   groomName: "SHANTANU",
   groomNameLocal: "",
-  groomFamily: "Son of Late Jitendra Methikar and Mrs. Sushma Methikar",
+  groomFamily: "Son of Late Jitendra and Mrs. Sushma Methikar",
   celebrationMessage: "At our wedding celebration in God's Own Country",
   weddingTicket: "WEDDING TICKET",
   dearFriendsTitle: "DEAR OUR\nFRIENDS AND FAMILY!",

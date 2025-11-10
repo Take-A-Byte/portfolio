@@ -4,7 +4,7 @@ export const mr = {
   brideFamily: "निवेद आणि सरिता यांची कन्या",
   groomName: "SHANTANU",
   groomNameLocal: "शंतनु",
-  groomFamily: "स्व. जितेंद्र मेथीकर आणि श्रीमती सुषमा मेथीकर यांचा पुत्र",
+  groomFamily: "स्व. जितेंद्र आणि श्रीमती सुषमा मेथीकर यांचा पुत्र",
   celebrationMessage: "At our wedding celebration in the Oxford of the East",
   weddingTicket: "WEDDING TICKET",
   dearFriendsTitle: "DEAR OUR\nFRIENDS AND FAMILY!",
