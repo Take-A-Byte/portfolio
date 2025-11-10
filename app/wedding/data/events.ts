@@ -94,7 +94,7 @@ export const eventsByLocation = {
         celebrationMessage: "At our wedding celebration in God's Own Country",
         regards: "NIVED Son of Late P G Muraleedharan Nair and PS RAJAMMA"
     },
-    privilegeduser: {
+    familyforeverpass: {
         eventGroups: [weddingEventGroup, puneEventGroup],
         primaryDate: new Date(2025, 11, 13), // Wedding date (13th Dec)
         eventType: "Wedding",
