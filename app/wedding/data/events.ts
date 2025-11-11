@@ -101,7 +101,7 @@ export const eventsByLocation = {
         travelInstructions: keralaTravelInstructions,
         invitationMessage: "This is an official invitation to our wedding! You received it because we really want to see you at all our celebrations by our side!",
         celebrationMessage: "At our wedding celebration in God's Own Country",
-        regards: "Methikar (Chaturmuttha) family"
+        regards: "Methikar (Chaturmuttha) & Nived's family"
     },
     trivandrum: {
         eventGroups: [trivandrumEventGroup],
