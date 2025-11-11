@@ -84,7 +84,8 @@ export const eventsByLocation = {
         eventType: "Wedding",
         travelInstructions: keralaTravelInstructions,
         invitationMessage: "This is an official invitation to our wedding! You received it because we really want to see you at all our celebrations by our side!",
-        celebrationMessage: "At our wedding celebration in God's Own Country"
+        celebrationMessage: "At our wedding celebration in God's Own Country",
+        showCrew: true
     },
     thodupuzha: {
         eventGroups: [thodupuzhaEventGroup],
@@ -92,7 +93,8 @@ export const eventsByLocation = {
         eventType: "Wedding Dinner",
         invitationMessage: "This is an official invitation to our wedding! You received it because we really want to see you at all our celebrations by our side!",
         celebrationMessage: "At our wedding celebration in God's Own Country",
-        regards: "NIVED Son of Late P G Muraleedharan Nair and PS RAJAMMA"
+        regards: "NIVED Son of Late P G Muraleedharan Nair and PS RAJAMMA",
+        showCrew: true
     },
     familyforeverpass: {
         eventGroups: [weddingEventGroup, puneEventGroup],
@@ -101,7 +103,8 @@ export const eventsByLocation = {
         travelInstructions: keralaTravelInstructions,
         invitationMessage: "This is an official invitation to our wedding! You received it because we really want to see you at all our celebrations by our side!",
         celebrationMessage: "At our wedding celebration in God's Own Country",
-        regards: "Methikar (Chaturmuttha) & Nived's family"
+        regards: "Methikar (Chaturmuttha) & Nived's family",
+        showCrew: true
     },
     trivandrum: {
         eventGroups: [trivandrumEventGroup],
@@ -110,7 +113,8 @@ export const eventsByLocation = {
         invitationMessage: "This is an official invitation to our wedding dinner! You received it because we really want to celebrate with you on this special evening!",
         celebrationMessage: "At our wedding celebration in God's Own Country",
         regards: "Saritha G D/o GOPALAKRISHNAN N and KRISHNAKUMARI B",
-        travelInstructions: simpleTravelInstructions
+        travelInstructions: simpleTravelInstructions,
+        showCrew: true
     },
     pune: {
         eventGroups: [puneEventGroup],
@@ -119,7 +123,18 @@ export const eventsByLocation = {
         invitationMessage: "This is an official invitation to our wedding lunch! You received it because we really want to celebrate with you on this joyful day!",
         celebrationMessage: "At our wedding celebration in the Oxford of the East",
         travelInstructions: simpleTravelInstructions,
-        regards: "Methikar (Chaturmuttha) family"
+        regards: "Methikar (Chaturmuttha) family",
+        showCrew: false
+    },
+    punerivip: {
+        eventGroups: [mainEventGroup, thodupuzhaEventGroup, trivandrumEventGroup, puneEventGroup],
+        primaryDate: new Date(2025, 11, 13), // Main wedding date (13th Dec)
+        eventType: "Wedding",
+        travelInstructions: keralaTravelInstructions,
+        invitationMessage: "This is an official invitation to our wedding! You received it because we really want to see you at all our celebrations by our side!",
+        celebrationMessage: "At our wedding celebration in God's Own Country",
+        regards: "Methikar (Chaturmuttha) family",
+        showCrew: false
     }
 }
 

@@ -65,6 +65,13 @@ const getIconComponent = (iconName: string) => {
   return iconMap[iconName] || Bus
 }
 
+// Helper function to get utm-specific configurations
+const getUtmConfig = (utmSource: string | null) => {
+  return {
+    showGroomFirst: utmSource === 'punerivip' || utmSource === 'pune',
+  }
+}
+
 export default function WeddingInvitation() {
   const { t, isLoading } = useTranslation()
   const defaultConfig = getLocationConfig('pune')
@@ -81,6 +88,19 @@ export default function WeddingInvitation() {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>()
   const [currentVenueIndex, setCurrentVenueIndex] = useState(0)
   const [utmSource, setUtmSource] = useState<string | null>(null)
+  const [showCrew, setShowCrew] = useState(true)
+
+  // Get utm-specific configuration
+  const utmConfig = getUtmConfig(utmSource)
+
+  // Get couple data for rendering
+  const getCoupleData = () => {
+    const bride = { name: t.brideName, nameLocal: t.brideNameLocal, family: t.brideFamily }
+    const groom = { name: t.groomName, nameLocal: t.groomNameLocal, family: t.groomFamily }
+
+    // Order based on utm configuration
+    return utmConfig.showGroomFirst ? [groom, bride] : [bride, groom]
+  }
 
   // Filter timeline and calendar dates based on utm_source parameter or user location
   // Priority: utm_source parameter > user location > default (Pune)
@@ -91,6 +111,7 @@ export default function WeddingInvitation() {
   // With ?utm_source=trivandrum or ?utm_source=thiruvananthapuram: Show only Trivandrum dinner (15th Dec)
   // With ?utm_source=pune: Show only Pune lunch (21st Dec)
   // With ?utm_source=privilegeduser: Show everything with full transport, localization based on detected region
+  // With ?utm_source=punerivip: Same as privilegeduser but without crew section
   useEffect(() => {
     const loadEventConfig = async () => {
       const params = new URLSearchParams(window.location.search)
@@ -98,7 +119,7 @@ export default function WeddingInvitation() {
 
       setUtmSource(utmParam || null)
 
-      let locationKey: 'kerala' | 'thodupuzha' | 'familyforeverpass' | 'trivandrum' | 'pune' = 'pune' // default
+      let locationKey: 'kerala' | 'thodupuzha' | 'familyforeverpass' | 'trivandrum' | 'pune' | 'punerivip' = 'pune' // default
 
       // If utm_source is provided, it takes priority
       if (utmParam) {
@@ -108,6 +129,9 @@ export default function WeddingInvitation() {
           // For privilegeduser, always show all events (kerala config)
           // Localization language will be handled by the i18n system based on detected region
           locationKey = 'kerala'
+        } else if (utmParam === 'punerivip') {
+          // For punerivip, show all events like kerala but without crew
+          locationKey = 'punerivip'
         } else if (utmParam === 'familyforeverpass') {
           locationKey = 'familyforeverpass'
         } else if (utmParam === 'thodupuzha' || utmParam === 'idukki') {
@@ -139,6 +163,7 @@ export default function WeddingInvitation() {
       setInvitationMessage(config.invitationMessage)
       setCelebrationMessage(config.celebrationMessage)
       setRegards(config.regards)
+      setShowCrew(config.showCrew !== undefined ? config.showCrew : true)
     }
 
     loadEventConfig()
@@ -211,7 +236,13 @@ export default function WeddingInvitation() {
       }
     }
 
-    const handleInteraction = () => {
+    const handleInteraction = (e: Event) => {
+      // Check if the click is on the skip button or its children
+      const target = e.target as HTMLElement
+      if (target.closest('[data-skip-fullscreen]')) {
+        return
+      }
+
       if (!isSkipped) {
         setShowFullscreenPrompt(false)
         enterFullscreen()
@@ -225,6 +256,7 @@ export default function WeddingInvitation() {
     // Expose a function to skip fullscreen
     ;(window as any).__skipFullscreen = () => {
       isSkipped = true
+      setShowFullscreenPrompt(false)
       document.removeEventListener('click', handleInteraction)
       document.removeEventListener('touchstart', handleInteraction)
     }
@@ -300,12 +332,12 @@ export default function WeddingInvitation() {
               <span>Enjoy the celebration</span>
             </div>
             <button
+              data-skip-fullscreen
               onClick={(e) => {
                 e.stopPropagation()
                 if ((window as any).__skipFullscreen) {
                   (window as any).__skipFullscreen()
                 }
-                setShowFullscreenPrompt(false)
               }}
               className="text-xs text-slate-400 hover:text-slate-600 underline transition-colors px-6 py-3 -mx-6 -mb-2"
             >
@@ -347,37 +379,26 @@ export default function WeddingInvitation() {
 
             {/* Names */}
             <div className={cn("flex flex-col items-center justify-center mb-8", dmSerifDisplay.className)}>
-              <div className="flex flex-col items-center mb-1">
-                <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 text-center">
-                  {t.brideName}
-                </h1>
-                {(t.brideNameLocal || t.brideFamily) && (
-                  <p className="text-sm xxs:text-sm xs:text-base text-slate-400 italic text-center">
-                    {t.brideNameLocal}
-                    {t.brideFamily && (
-                      <span className="text-xs text-slate-500 ml-1">
-                        ({t.brideFamily})
-                      </span>
+              {getCoupleData().map((person, index) => (
+                <React.Fragment key={index}>
+                  <div className="flex flex-col items-center mb-1">
+                    <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800 text-center">
+                      {person.name}
+                    </h1>
+                    {(person.nameLocal || person.family) && (
+                      <p className="text-sm xxs:text-sm xs:text-base text-slate-400 italic text-center">
+                        {person.nameLocal}
+                        {person.family && (
+                          <span className="text-xs text-slate-500 ml-1">
+                            ({person.family})
+                          </span>
+                        )}
+                      </p>
                     )}
-                  </p>
-                )}
-              </div>
-              <div className="text-2xl xxs:text-2xl xs:text-3xl font-light text-slate-600 mb-1">&</div>
-              <div className="flex flex-col items-center">
-                <h1 className="text-2xl xxs:text-2xl xs:text-3xl sm:text-4xl font-serif text-slate-800  text-center">
-                  {t.groomName}
-                </h1>
-                {(t.groomNameLocal || t.groomFamily) && (
-                  <p className="text-sm xxs:text-sm xs:text-base text-slate-400 italic text-center">
-                    {t.groomNameLocal}
-                    {t.groomFamily && (
-                      <span className="text-xs text-slate-500 ml-1">
-                        ({t.groomFamily})
-                      </span>
-                    )}
-                  </p>
-                )}
-              </div>
+                  </div>
+                  {index === 0 && <div className="text-2xl xxs:text-2xl xs:text-3xl font-light text-slate-600 mb-1">&</div>}
+                </React.Fragment>
+              ))}
             </div>
 
             {/* Flight details table */}
@@ -938,12 +959,13 @@ export default function WeddingInvitation() {
               </div>
           </div>
 
+              {/* Perforation Divider and Cabin Crew Section - Only show if showCrew is true */}
+              {showCrew && (
+                <>
+                  <PerforationDivider />
 
-              <PerforationDivider />
-
-              {/* Cabin Crew Section */}
-              
-              {weddingData.cabinCrew && weddingData.cabinCrew.length > 0 && (
+                  {/* Cabin Crew Section */}
+                  {weddingData.cabinCrew && weddingData.cabinCrew.length > 0 && (
                 <div className={cn("text-center my-6", bodoniModa.className)}>
                   <p className="text-xs text-slate-500 uppercase tracking-widest">
                       Family Crew Roster
@@ -951,9 +973,9 @@ export default function WeddingInvitation() {
                   <p className="text-[10px] text-slate-400 mb-3">
                     SERVING SMILES AT 35,000 FEET OF HAPPINESS
                   </p>
-                  <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto mb-3">
+                  <div className={`grid gap-3 max-w-xs mx-auto mb-3 ${weddingData.cabinCrew?.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-2'}`}>
                     {weddingData.cabinCrew.map((crew, index) => (
-                      <div key={index} className={`border border-slate-300 rounded-lg p-2 ${weddingData.cabinCrew && weddingData.cabinCrew.length === 3 && index === 2 ? 'col-span-2 max-w-[calc(50%-0.375rem)] mx-auto' : ''}`}>
+                      <div key={index} className={`border border-slate-300 rounded-lg p-2 ${weddingData.cabinCrew?.length === 1 ? 'max-w-[calc(50%-0.375rem)]' : ''}`}>
                         <div className="text-[9px] text-slate-400 uppercase tracking-wider mb-1">{crew.role}</div>
                         <div className="text-sm text-slate-700 font-medium">{crew.name}</div>
                         {crew.relation && (
@@ -966,6 +988,8 @@ export default function WeddingInvitation() {
                     Flying high on love and celebration
                   </p>
                 </div>
+                  )}
+                </>
               )}
             </div>
 
