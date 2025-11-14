@@ -55,7 +55,7 @@ export const trivandrumEventGroup: VenueEvents = {
         {
             id: "party-dinner",
             title: "Party Dinner",
-            time: "19:00",
+            time: "17:00",
             date: new Date(2025, 11, 15),
         }
     ],
@@ -113,7 +113,6 @@ export const eventsByLocation = {
         invitationMessage: "This is an official invitation to our wedding dinner! You received it because we really want to celebrate with you on this special evening!",
         celebrationMessage: "At our wedding celebration in God's Own Country",
         regards: "Saritha G D/o GOPALAKRISHNAN N and KRISHNAKUMARI B",
-        travelInstructions: simpleTravelInstructions,
         showCrew: true
     },
     pune: {
@@ -135,6 +134,14 @@ export const eventsByLocation = {
         celebrationMessage: "At our wedding celebration in God's Own Country",
         regards: "Methikar (Chaturmuttha) family",
         showCrew: false
+    },
+    godsowncountry: {
+        eventGroups: [mainEventGroup, thodupuzhaEventGroup, trivandrumEventGroup, puneEventGroup],
+        primaryDate: new Date(2025, 11, 13), // Main wedding date (13th Dec)
+        eventType: "Wedding",
+        invitationMessage: "This is an official invitation to our wedding! You received it because we really want to see you at all our celebrations by our side!",
+        celebrationMessage: "At our wedding celebration in God's Own Country",
+        showCrew: true
     }
 }
 

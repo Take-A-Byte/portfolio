@@ -102,6 +102,14 @@ export default function WeddingInvitation() {
     return utmConfig.showGroomFirst ? [groom, bride] : [bride, groom]
   }
 
+  // Friends - https://integratedidentities.in/wedding?utm_source=familyforeverpass
+  //         - https://integratedidentities.in/wedding?utm_source=privilegeduser
+  // Aai - https://integratedidentities.in/wedding?utm_source=pune
+  //     - https://integratedidentities.in/wedding?utm_source=punerivip
+  // Acha - https://integratedidentities.in/wedding?utm_source=godsowncountry
+  //      - https://integratedidentities.in/wedding?utm_source=trivandrum
+  //      - https://integratedidentities.in/wedding?utm_source=thodupuzha
+  //
   // Filter timeline and calendar dates based on utm_source parameter or user location
   // Priority: utm_source parameter > user location > default (Pune)
   // Default by location: Maharashtra -> Pune, Kerala -> Trivandrum
@@ -111,6 +119,7 @@ export default function WeddingInvitation() {
   // With ?utm_source=trivandrum or ?utm_source=thiruvananthapuram: Show only Trivandrum dinner (15th Dec)
   // With ?utm_source=pune: Show only Pune lunch (21st Dec)
   // With ?utm_source=privilegeduser: Show everything with full transport, localization based on detected region
+  // With ?utm_source=godsowncountry: Show everything with full transport, Malayalam localization (for mallu crowd)
   // With ?utm_source=punerivip: Same as privilegeduser but without crew section
   useEffect(() => {
     const loadEventConfig = async () => {
@@ -119,7 +128,7 @@ export default function WeddingInvitation() {
 
       setUtmSource(utmParam || null)
 
-      let locationKey: 'kerala' | 'thodupuzha' | 'familyforeverpass' | 'trivandrum' | 'pune' | 'punerivip' = 'pune' // default
+      let locationKey: 'kerala' | 'thodupuzha' | 'familyforeverpass' | 'trivandrum' | 'pune' | 'punerivip' | 'godsowncountry' = 'pune' // default
 
       // If utm_source is provided, it takes priority
       if (utmParam) {
@@ -129,6 +138,10 @@ export default function WeddingInvitation() {
           // For privilegeduser, always show all events (kerala config)
           // Localization language will be handled by the i18n system based on detected region
           locationKey = 'kerala'
+        } else if (utmParam === 'godsowncountry') {
+          // For Malayalam crowd - show all events without transport
+          // Localization will use Malayalam (ml) locale
+          locationKey = 'godsowncountry'
         } else if (utmParam === 'punerivip') {
           // For punerivip, show all events like kerala but without crew
           locationKey = 'punerivip'

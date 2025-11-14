@@ -21,7 +21,7 @@ export function useTranslation() {
 
         // If UTM parameter is provided, use it to determine locale
         if (utmSource) {
-          if (utmSource === 'kerala') {
+          if (utmSource === 'kerala' || utmSource === 'godsowncountry' || utmSource === 'trivandrum' || utmSource === 'thiruvananthapuram' || utmSource === 'thodupuzha') {
             detectedLocale = 'ml'
           } else if (utmSource === 'privilegeduser') {
             // For privilegeduser, detect user's actual location for localization
@@ -33,8 +33,6 @@ export function useTranslation() {
             } else {
               detectedLocale = 'en'
             }
-          } else if (utmSource === 'trivandrum' || utmSource === 'thiruvananthapuram') {
-            detectedLocale = 'ml'
           } else if (utmSource === 'pune' || utmSource === 'maharashtra') {
             detectedLocale = 'mr'
           }

@@ -1,7 +1,7 @@
 export const ml = {
   brideName: "MURALEEMAYOORA",
   brideNameLocal: "മുരളീമയൂര",
-  brideFamily: "നിവേദയുടെയും സരിതയുടെയും മകൾ",
+  brideFamily: "നിവേദ് പി. എം., സരിത ജി. എന്നിവരുടെ മകൾ",
   groomName: "SHANTANU",
   groomNameLocal: "ശാന്തനു",
   groomFamily: "സ്വർഗ്ഗസ്ഥനായ ജിതേന്ദ്രയുടെയും ശ്രീമതി സുഷമ മെത്തീക്കറിന്റെയും പുത്രൻ",

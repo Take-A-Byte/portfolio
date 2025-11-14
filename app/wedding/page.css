@@ -109,7 +109,7 @@
 
 /* Timeline event location styles */
 .event-date {
-  font-size: 0.75rem; /* text-xs */
+  @apply text-base;
   margin-bottom: 0.25rem; /* mb-1 */
   border-bottom-width: 2px;
   padding-bottom: 0.125rem; /* pb-0.5 */

@@ -1,7 +1,7 @@
 export const mr = {
   brideName: "  MURALEEMAYOORA",
   brideNameLocal: "मुरलीमयुरा",
-  brideFamily: "निवेद आणि सरिता यांची कन्या",
+  brideFamily: "निवेद. पी. ए. आणि सरिता. जी. यांची कन्या",
   groomName: "SHANTANU",
   groomNameLocal: "शंतनु",
   groomFamily: "स्व. जितेंद्र आणि श्रीमती सुषमा मेथीकर यांचा पुत्र",

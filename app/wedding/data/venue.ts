@@ -16,7 +16,7 @@ export const thodupuzhaVenue: VenueInfo = {
 
 export const trivandrumVenue: VenueInfo = {
     name: "Trivandrum Dinner Venue",
-    address: "Sri Sri Ravishankar Vidya Mandir (SSRVM)/Keralasramam, Kanjirampara, Thiruvananthapuram",
+    address: "Sri Sri Ravishankar Vidya Mandir (SSRVM)/Keralasramam, Maruthankuzhi, Thiruvananthapuram",
     image: "/images/trivandrum-venue.jpg",
     mapsUrl: "https://maps.app.goo.gl/B72t37bh76qRt4uE7"
 }
