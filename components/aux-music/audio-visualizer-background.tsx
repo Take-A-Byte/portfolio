@@ -462,11 +462,8 @@ export function AudioVisualizerBackground() {
   const MAX_RENDER_DISTANCE = 2000 // Maximum distance to render particles
   const DISTANCE_FADE_START = 1500 // Distance where particles start fading
 
-  const targetCameraYRef = useRef(INITIAL_CAMERA_Y)
-  const targetCameraZRef = useRef(INITIAL_CAMERA_Z)
   const mouseXRef = useRef(0)
   const mouseYRef = useRef(0)
-  const lastScrollTimeRef = useRef(0)
   const lastMouseMoveTimeRef = useRef(0)
   const isActiveRef = useRef(true)
   const fpsHistoryRef = useRef<number[]>([])
@@ -504,13 +501,6 @@ export function AudioVisualizerBackground() {
     isActiveRef.current = true
     audioStartedRef.current = false
 
-    // Initialize camera targets with current scroll position
-    const initialScrollY = window.scrollY
-    const parallaxFactorY = 0.05
-    const parallaxFactorZ = 0.5
-    targetCameraYRef.current = INITIAL_CAMERA_Y + initialScrollY * parallaxFactorY
-    targetCameraZRef.current = INITIAL_CAMERA_Z - initialScrollY * parallaxFactorZ
-
     // Create audio element
     const audioElement = document.createElement("audio")
     audioElement.src = "/audio-visualizer/song.mp3"
@@ -542,7 +532,7 @@ export function AudioVisualizerBackground() {
     rendererRef.current = renderer
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000)
-    camera.position.set(0, targetCameraYRef.current, targetCameraZRef.current)
+    camera.position.set(0, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z)
     cameraRef.current = camera
 
     const scene = new THREE.Scene()
@@ -866,16 +856,8 @@ export function AudioVisualizerBackground() {
 
       controlsRef.current.update()
 
-      // Smoothly interpolate camera to target position (parallax + mouse)
+      // Mouse-based look-at adjustment
       if (cameraRef.current) {
-        // Lerp factor - lower = smoother but slower, higher = faster but jerkier
-        const lerpFactor = 0.02 // Reduced for slower, smoother transitions
-
-        // Smooth camera movement toward target
-        cameraRef.current.position.y += (targetCameraYRef.current - cameraRef.current.position.y) * lerpFactor
-        cameraRef.current.position.z += (targetCameraZRef.current - cameraRef.current.position.z) * lerpFactor
-
-        // Subtle mouse-based look-at adjustment
         const mouseInfluence = 50
         const targetX = mouseXRef.current * mouseInfluence
         const targetY = mouseYRef.current * mouseInfluence
@@ -962,27 +944,8 @@ export function AudioVisualizerBackground() {
       rendererRef.current.setSize(window.innerWidth, window.innerHeight)
     }
 
-    // Throttled scroll handler for parallax effect
-    // Only updates camera target every 100ms to reduce performance impact
+    // Scroll handler - starts audio on user scroll
     const handleScroll = () => {
-      const now = Date.now()
-      const throttleDelay = 100 // milliseconds - increased for less frequent computation
-
-      // Throttle: only update if enough time has passed
-      if (now - lastScrollTimeRef.current < throttleDelay) {
-        return
-      }
-      lastScrollTimeRef.current = now
-
-      const parallaxFactorY = 0.05 // Vertical movement sensitivity
-      const parallaxFactorZ = 0.5 // Zoom in/out sensitivity
-      const scrollY = window.scrollY
-
-      // Move camera up and zoom in as user scrolls down
-      targetCameraYRef.current = INITIAL_CAMERA_Y + scrollY * parallaxFactorY
-      targetCameraZRef.current = INITIAL_CAMERA_Z - scrollY * parallaxFactorZ
-
-      // Start audio on scroll interaction
       startAudio()
     }
 
