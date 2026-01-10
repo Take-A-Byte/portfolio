@@ -451,7 +451,7 @@ export function AudioVisualizerBackground() {
 
   // Visual constants
   const SHADOW_COLOR = 0x13091b // Dark purple background color
-  const PARTICLE_COUNT = 150000 // Total number of particles to render
+  const PARTICLE_COUNT = 100000 // Total number of particles to render
   const PATH_LENGTH = 64 // Number of points defining the particle path
   const MAX_VOLUME = 0.05 // Audio volume (5%)
   const INITIAL_CAMERA_Z = 800 // Camera distance from origin
