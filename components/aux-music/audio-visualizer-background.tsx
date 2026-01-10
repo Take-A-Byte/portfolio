@@ -675,9 +675,9 @@ export function AudioVisualizerBackground() {
         z = 0
       } else {
         // Middle points: random wandering creates organic flow
-        x = THREE.MathUtils.randFloatSpread(600)
-        y = -400 + (800 / PATH_LENGTH) * i + THREE.MathUtils.randFloatSpread(200)
-        z = THREE.MathUtils.randFloatSpread(600)
+        x = THREE.MathUtils.randFloatSpread(1000) 
+        y = -300 + (800 / PATH_LENGTH) * i + THREE.MathUtils.randFloatSpread(50)
+        z = THREE.MathUtils.randFloatSpread(1500) // Increased from 600 for wider path
       }
 
       pathArray.push(x, y, z)
@@ -771,7 +771,7 @@ export function AudioVisualizerBackground() {
       // Smoothly interpolate camera to target position (parallax + mouse)
       if (cameraRef.current) {
         // Lerp factor - lower = smoother but slower, higher = faster but jerkier
-        const lerpFactor = 0.05
+        const lerpFactor = 0.02 // Reduced for slower, smoother transitions
 
         // Smooth camera movement toward target
         cameraRef.current.position.y += (targetCameraYRef.current - cameraRef.current.position.y) * lerpFactor
@@ -855,10 +855,10 @@ export function AudioVisualizerBackground() {
     }
 
     // Throttled scroll handler for parallax effect
-    // Only updates camera target every 50ms to reduce performance impact
+    // Only updates camera target every 100ms to reduce performance impact
     const handleScroll = () => {
       const now = Date.now()
-      const throttleDelay = 50 // milliseconds
+      const throttleDelay = 100 // milliseconds - increased for less frequent computation
 
       // Throttle: only update if enough time has passed
       if (now - lastScrollTimeRef.current < throttleDelay) {
