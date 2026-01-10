@@ -183,9 +183,8 @@ export default function ProjectsPage() {
                         }`}
                       >
                         {project.links.map((link, linkIdx) => (
-                          <>
+                          <span key={linkIdx}>
                             <Link
-                              key={linkIdx}
                               href={link.link}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -196,7 +195,7 @@ export default function ProjectsPage() {
                             {project.links && linkIdx < project.links.length - 1 && (
                               <span className="text-sm text-gray-400" aria-hidden="true">,</span>
                             )}
-                          </>
+                          </span>
                         ))}
                       </div>
                     )}
