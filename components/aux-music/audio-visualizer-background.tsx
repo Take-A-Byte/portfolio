@@ -451,8 +451,8 @@ export function AudioVisualizerBackground() {
 
   // Visual constants
   const SHADOW_COLOR = 0x13091b // Dark purple background color
-  const PARTICLE_COUNT = 100000 // Total number of particles to render
-  const PATH_LENGTH = 64 // Number of points defining the particle path
+  const PARTICLE_COUNT = 50000 // Total number of particles to render
+  const PATH_LENGTH = 32 // Number of points defining the particle path (must result in power-of-2 FFT size)
   const MAX_VOLUME = 0.05 // Audio volume (5%)
   const INITIAL_CAMERA_Z = 800 // Camera distance from origin
   const INITIAL_CAMERA_Y = 0 // Camera height
@@ -462,6 +462,7 @@ export function AudioVisualizerBackground() {
   const mouseXRef = useRef(0)
   const mouseYRef = useRef(0)
   const lastScrollTimeRef = useRef(0)
+  const lastMouseMoveTimeRef = useRef(0)
 
   const startAudio = useCallback(() => {
     if (audioStartedRef.current || !audioElementRef.current || !analyserRef.current) return
@@ -568,8 +569,8 @@ export function AudioVisualizerBackground() {
     controlsRef.current = controls
 
     // Initialize particle system
-    // Each particle is a small plane (4x4 units)
-    const prefabGeometry = new THREE.PlaneGeometry(4, 4)
+    // Each particle is a small plane (3x3 units)
+    const prefabGeometry = new THREE.PlaneGeometry(3, 3)
     const prefabVertexCount = prefabGeometry.getAttribute("position").count
     const bufferGeometry = new PrefabBufferGeometry(prefabGeometry, PARTICLE_COUNT)
 
@@ -755,7 +756,7 @@ export function AudioVisualizerBackground() {
     )
 
     const particleSystem = new THREE.Mesh(bufferGeometry, material)
-    particleSystem.frustumCulled = false
+    particleSystem.frustumCulled = true
     scene.add(particleSystem)
     particleSystemRef.current = particleSystem
 
@@ -793,20 +794,25 @@ export function AudioVisualizerBackground() {
 
       // Mirror frequency data to create symmetrical effect
       // Pattern: forward, backward, forward, backward
-      const dataArray: number[] = []
-      const cap = data.length * 0.5
+      const cap = Math.floor(data.length * 0.5)
+      const dataArray = new Array(cap * 4)
+      let idx = 0
 
+      // Forward
       for (let i = 0; i < cap; i++) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
+      // Backward
       for (let i = cap - 1; i >= 0; i--) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
+      // Forward
       for (let i = 0; i < cap; i++) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
+      // Backward
       for (let i = cap - 1; i >= 0; i--) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
 
       // Convert frequency data to path radius
@@ -880,6 +886,15 @@ export function AudioVisualizerBackground() {
 
     // Mouse move handler for interactive camera rotation
     const handleMouseMove = (event: MouseEvent) => {
+      const now = Date.now()
+      const throttleDelay = 16 // ~60fps
+
+      // Throttle: only update if enough time has passed
+      if (now - lastMouseMoveTimeRef.current < throttleDelay) {
+        return
+      }
+      lastMouseMoveTimeRef.current = now
+
       // Normalize mouse position to -1 to 1 range
       mouseXRef.current = (event.clientX / window.innerWidth) * 2 - 1
       mouseYRef.current = -(event.clientY / window.innerHeight) * 2 + 1
