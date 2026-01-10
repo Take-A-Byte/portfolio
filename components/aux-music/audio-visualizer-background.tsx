@@ -272,6 +272,7 @@ class PhongAnimationMaterial extends THREE.ShaderMaterial {
       "uniform vec3 specular;",
       "uniform float shininess;",
       "uniform float opacity;",
+      "varying float vDistanceFade;",
       THREE.ShaderChunk["common"],
       THREE.ShaderChunk["packing"],
       THREE.ShaderChunk["dithering_pars_fragment"],
@@ -305,6 +306,8 @@ class PhongAnimationMaterial extends THREE.ShaderMaterial {
       THREE.ShaderChunk["logdepthbuf_fragment"],
       THREE.ShaderChunk["map_fragment"],
       THREE.ShaderChunk["color_fragment"],
+      "diffuseColor.a *= vDistanceFade;", // Apply distance-based fade
+      "if (diffuseColor.a < 0.01) discard;", // Discard fully transparent fragments for performance
       THREE.ShaderChunk["alphamap_fragment"],
       THREE.ShaderChunk["alphatest_fragment"],
       THREE.ShaderChunk["alphahash_fragment"],
@@ -456,6 +459,8 @@ export function AudioVisualizerBackground() {
   const MAX_VOLUME = 0.05 // Audio volume (5%)
   const INITIAL_CAMERA_Z = 800 // Camera distance from origin
   const INITIAL_CAMERA_Y = 0 // Camera height
+  const MAX_RENDER_DISTANCE = 2000 // Maximum distance to render particles
+  const DISTANCE_FADE_START = 1500 // Distance where particles start fading
 
   const targetCameraYRef = useRef(INITIAL_CAMERA_Y)
   const targetCameraZRef = useRef(INITIAL_CAMERA_Z)
@@ -464,6 +469,9 @@ export function AudioVisualizerBackground() {
   const lastScrollTimeRef = useRef(0)
   const lastMouseMoveTimeRef = useRef(0)
   const isActiveRef = useRef(true)
+  const fpsHistoryRef = useRef<number[]>([])
+  const lastFrameTimeRef = useRef(performance.now())
+  const currentRenderDistanceRef = useRef(MAX_RENDER_DISTANCE)
 
   const startAudio = useCallback(() => {
     if (audioStartedRef.current || !audioElementRef.current || !analyserRef.current) return
@@ -712,6 +720,9 @@ export function AudioVisualizerBackground() {
           uPath: { value: pathArray },
           uRadius: { value: radiusArray },
           uRoundness: { value: new THREE.Vector2(2, 2) },
+          uCameraPosition: { value: new THREE.Vector3() },
+          uMaxDistance: { value: MAX_RENDER_DISTANCE },
+          uFadeStart: { value: DISTANCE_FADE_START },
         },
         shaderFunctions: [
           BAS.ShaderChunk["quaternion_rotation"],
@@ -723,9 +734,13 @@ export function AudioVisualizerBackground() {
           "uniform vec3 uPath[PATH_LENGTH];",
           "uniform float uRadius[PATH_LENGTH];",
           "uniform vec2 uRoundness;",
+          "uniform vec3 uCameraPosition;",
+          "uniform float uMaxDistance;",
+          "uniform float uFadeStart;",
           "attribute vec2 aDelayDuration;",
           "attribute vec3 aPivot;",
           "attribute vec4 aAxisAngle;",
+          "varying float vDistanceFade;",
         ],
         shaderVertexInit: [
           // Calculate animation timing for this particle
@@ -757,6 +772,10 @@ export function AudioVisualizerBackground() {
           "transformed += aPivot * radius;", // Offset from center based on radius
           "transformed = rotateVector(tQuat, transformed);", // Apply rotation
           "transformed += catmullRom(p0, p1, p2, p3, uRoundness, tWeight);", // Move along path
+          // Calculate distance-based fade for culling
+          "vec3 worldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;",
+          "float distToCamera = distance(worldPos, uCameraPosition);",
+          "vDistanceFade = smoothstep(uMaxDistance, uFadeStart, distToCamera);",
         ],
       },
       {
@@ -769,8 +788,35 @@ export function AudioVisualizerBackground() {
 
     const particleSystem = new THREE.Mesh(bufferGeometry, material)
     particleSystem.frustumCulled = true
+    // Enable transparency for distance fade
+    material.transparent = true
+    material.depthWrite = false // Disable depth write for transparent particles
+    // Assign to layer 0 (default visible layer)
+    particleSystem.layers.set(0)
+
+    // Compute bounding sphere for frustum culling optimization
+    bufferGeometry.computeBoundingSphere()
+    // Set a large bounding sphere that encompasses the entire particle path
+    const maxPathExtent = Math.max(
+      ...pathArray.map((_, i) => {
+        if (i % 3 === 0) {
+          const x = pathArray[i]
+          const y = pathArray[i + 1]
+          const z = pathArray[i + 2]
+          return Math.sqrt(x * x + y * y + z * z)
+        }
+        return 0
+      })
+    )
+    if (bufferGeometry.boundingSphere) {
+      bufferGeometry.boundingSphere.radius = maxPathExtent + 500 // Add margin for particle spread
+    }
+
     scene.add(particleSystem)
     particleSystemRef.current = particleSystem
+
+    // Configure camera to render layer 0 by default (can be adjusted dynamically)
+    camera.layers.enable(0)
 
     // Animation loop - runs every frame (~60fps)
     const tick = () => {
@@ -782,6 +828,40 @@ export function AudioVisualizerBackground() {
       if (!controlsRef.current || !analyserRef.current || !particleSystemRef.current || !audioElementRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) {
         animationFrameRef.current = requestAnimationFrame(tick)
         return
+      }
+
+      // Performance monitoring: Calculate FPS
+      const now = performance.now()
+      const delta = now - lastFrameTimeRef.current
+      lastFrameTimeRef.current = now
+      const currentFPS = 1000 / delta
+
+      // Track FPS history (last 60 frames)
+      fpsHistoryRef.current.push(currentFPS)
+      if (fpsHistoryRef.current.length > 60) {
+        fpsHistoryRef.current.shift()
+      }
+
+      // Adjust render distance based on average FPS every 60 frames
+      if (fpsHistoryRef.current.length === 60) {
+        const avgFPS = fpsHistoryRef.current.reduce((a, b) => a + b, 0) / 60
+        const material = particleSystemRef.current.material as PhongAnimationMaterial
+
+        // If FPS drops below 45, reduce render distance
+        if (avgFPS < 45 && currentRenderDistanceRef.current > 1000) {
+          currentRenderDistanceRef.current = Math.max(1000, currentRenderDistanceRef.current - 200)
+          material.uniforms["uMaxDistance"].value = currentRenderDistanceRef.current
+          material.uniforms["uFadeStart"].value = currentRenderDistanceRef.current * 0.75
+        }
+        // If FPS is good (>55), gradually restore render distance
+        else if (avgFPS > 55 && currentRenderDistanceRef.current < MAX_RENDER_DISTANCE) {
+          currentRenderDistanceRef.current = Math.min(MAX_RENDER_DISTANCE, currentRenderDistanceRef.current + 100)
+          material.uniforms["uMaxDistance"].value = currentRenderDistanceRef.current
+          material.uniforms["uFadeStart"].value = currentRenderDistanceRef.current * 0.75
+        }
+
+        // Clear history for next measurement
+        fpsHistoryRef.current = []
       }
 
       controlsRef.current.update()
@@ -860,6 +940,11 @@ export function AudioVisualizerBackground() {
 
       // Update animation time from audio playback position
       ;(particleSystemRef.current.material as PhongAnimationMaterial).uniforms["uTime"].value = audioElementRef.current.currentTime || 0
+
+      // Update camera position for distance-based culling
+      if (cameraRef.current) {
+        ;(particleSystemRef.current.material as PhongAnimationMaterial).uniforms["uCameraPosition"].value.copy(cameraRef.current.position)
+      }
 
       if (rendererRef.current && sceneRef.current && cameraRef.current) {
         rendererRef.current.render(sceneRef.current, cameraRef.current)
