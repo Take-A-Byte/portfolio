@@ -463,6 +463,7 @@ export function AudioVisualizerBackground() {
   const mouseYRef = useRef(0)
   const lastScrollTimeRef = useRef(0)
   const lastMouseMoveTimeRef = useRef(0)
+  const isActiveRef = useRef(true)
 
   const startAudio = useCallback(() => {
     if (audioStartedRef.current || !audioElementRef.current || !analyserRef.current) return
@@ -490,6 +491,17 @@ export function AudioVisualizerBackground() {
 
   useEffect(() => {
     if (!containerRef.current) return
+
+    // Reset flags for this mount
+    isActiveRef.current = true
+    audioStartedRef.current = false
+
+    // Initialize camera targets with current scroll position
+    const initialScrollY = window.scrollY
+    const parallaxFactorY = 0.05
+    const parallaxFactorZ = 0.5
+    targetCameraYRef.current = INITIAL_CAMERA_Y + initialScrollY * parallaxFactorY
+    targetCameraZRef.current = INITIAL_CAMERA_Z - initialScrollY * parallaxFactorZ
 
     // Create audio element
     const audioElement = document.createElement("audio")
@@ -522,7 +534,7 @@ export function AudioVisualizerBackground() {
     rendererRef.current = renderer
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000)
-    camera.position.set(0, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z)
+    camera.position.set(0, targetCameraYRef.current, targetCameraZRef.current)
     cameraRef.current = camera
 
     const scene = new THREE.Scene()
@@ -762,7 +774,12 @@ export function AudioVisualizerBackground() {
 
     // Animation loop - runs every frame (~60fps)
     const tick = () => {
-      if (!controlsRef.current || !analyserRef.current || !particleSystemRef.current || !audioElementRef.current) {
+      // Stop animation if component is being unmounted
+      if (!isActiveRef.current) {
+        return
+      }
+
+      if (!controlsRef.current || !analyserRef.current || !particleSystemRef.current || !audioElementRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) {
         animationFrameRef.current = requestAnimationFrame(tick)
         return
       }
@@ -901,14 +918,12 @@ export function AudioVisualizerBackground() {
     }
 
     // Audio context resume on user interaction
-    audioElement.addEventListener("canplay", () => {
-      if (analyserRef.current?.context) {
+    const handleCanPlay = () => {
+      if (analyserRef.current?.context && analyserRef.current.context.state === 'suspended') {
         analyserRef.current.context.resume()
       }
-      if (cameraRef.current) {
-        cameraRef.current.position.set(0, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z)
-      }
-    })
+    }
+    audioElement.addEventListener("canplay", handleCanPlay)
 
     // Event listeners
     window.addEventListener("resize", handleResize)
@@ -923,8 +938,12 @@ export function AudioVisualizerBackground() {
 
     // Cleanup
     return () => {
+      // Stop animation loop
+      isActiveRef.current = false
+
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
       }
 
       window.removeEventListener("resize", handleResize)
@@ -935,23 +954,41 @@ export function AudioVisualizerBackground() {
       window.removeEventListener("keydown", startAudio)
 
       if (audioElementRef.current) {
+        audioElementRef.current.removeEventListener("canplay", handleCanPlay)
         audioElementRef.current.pause()
-        audioElementRef.current.remove()
+        audioElementRef.current.src = "" // Release media resources
+        if (audioElementRef.current.parentNode) {
+          audioElementRef.current.parentNode.removeChild(audioElementRef.current)
+        }
+        audioElementRef.current = null
       }
 
-      if (analyserRef.current?.context) {
-        analyserRef.current.context.close()
-      }
-
-      if (rendererRef.current) {
-        rendererRef.current.dispose()
-        containerRef.current?.removeChild(rendererRef.current.domElement)
+      if (analyserRef.current?.context && analyserRef.current.context.state !== 'closed') {
+        analyserRef.current.context.close().catch(() => {
+          // Context already closed, ignore
+        })
+        analyserRef.current = null
       }
 
       if (particleSystemRef.current) {
         particleSystemRef.current.geometry.dispose()
         ;(particleSystemRef.current.material as THREE.Material).dispose()
+        particleSystemRef.current = null
       }
+
+      if (rendererRef.current) {
+        rendererRef.current.dispose()
+        if (rendererRef.current.domElement && rendererRef.current.domElement.parentNode) {
+          rendererRef.current.domElement.parentNode.removeChild(rendererRef.current.domElement)
+        }
+        rendererRef.current = null
+      }
+
+      // Clear other refs
+      sceneRef.current = null
+      cameraRef.current = null
+      controlsRef.current = null
+      lightsRef.current = null
     }
   }, [startAudio])
 
