@@ -945,9 +945,9 @@ export function AudioVisualizerBackground() {
     }
 
     // Scroll handler - starts audio on user scroll
-    const handleScroll = () => {
-      startAudio()
-    }
+    // const handleScroll = () => {
+    //   startAudio()
+    // }
 
     // Mouse move handler for interactive camera rotation
     const handleMouseMove = (event: MouseEvent) => {
@@ -975,7 +975,7 @@ export function AudioVisualizerBackground() {
 
     // Event listeners
     window.addEventListener("resize", handleResize)
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    // window.addEventListener("scroll", handleScroll, { passive: true })
     window.addEventListener("mousemove", handleMouseMove, { passive: true })
     window.addEventListener("click", startAudio)
     window.addEventListener("touchstart", startAudio)
