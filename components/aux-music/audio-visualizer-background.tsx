@@ -459,9 +459,18 @@ export function AudioVisualizerBackground() {
 
   const targetCameraYRef = useRef(INITIAL_CAMERA_Y)
   const targetCameraZRef = useRef(INITIAL_CAMERA_Z)
+  const mouseXRef = useRef(0)
+  const mouseYRef = useRef(0)
+  const lastScrollTimeRef = useRef(0)
 
   const startAudio = useCallback(() => {
-    if (audioStartedRef.current || !audioElementRef.current) return
+    if (audioStartedRef.current || !audioElementRef.current || !analyserRef.current) return
+
+    // Resume audio context first (required in many browsers)
+    if (analyserRef.current.context.state === 'suspended') {
+      analyserRef.current.context.resume()
+    }
+
     audioStartedRef.current = true
 
     audioElementRef.current
@@ -472,7 +481,8 @@ export function AudioVisualizerBackground() {
           audioElementRef.current.volume = MAX_VOLUME
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log('Audio playback prevented:', error)
         audioStartedRef.current = false
       })
   }, [])
@@ -496,10 +506,15 @@ export function AudioVisualizerBackground() {
     analyserRef.current = analyser
 
     // Initialize THREE.js
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: false,
+      powerPreference: 'high-performance'
+    })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setClearColor(SHADOW_COLOR)
-    renderer.setPixelRatio(window.devicePixelRatio)
+    // Limit pixel ratio to prevent over-rendering on high-DPI displays
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     // Disable color management for legacy shader compatibility
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace
     containerRef.current.appendChild(renderer.domElement)
@@ -542,15 +557,14 @@ export function AudioVisualizerBackground() {
 
     lightsRef.current = { light, light2, light3, ambientLight, light4, hemiLight }
 
-    // Camera controls - orbit automatically rotates around the scene
+    // Camera controls - disable auto-rotate for mouse control
     const controls = new OrbitControls(camera, renderer.domElement)
-    controls.autoRotate = true // Slowly spin the camera around
+    controls.autoRotate = false // Disabled - using mouse control instead
     controls.enableZoom = false // Disable user zoom
     controls.enablePan = false // Disable user panning
+    controls.enableRotate = false // Disable manual rotation - using mouse control
     controls.minDistance = 10 // Min camera distance
     controls.maxDistance = 1200 // Max camera distance
-    controls.minPolarAngle = Math.PI * 0.4 // Limit vertical rotation (top)
-    controls.maxPolarAngle = Math.PI * 0.6 // Limit vertical rotation (bottom)
     controlsRef.current = controls
 
     // Initialize particle system
@@ -661,9 +675,9 @@ export function AudioVisualizerBackground() {
         z = 0
       } else {
         // Middle points: random wandering creates organic flow
-        x = THREE.MathUtils.randFloatSpread(600)
-        y = -400 + (800 / PATH_LENGTH) * i + THREE.MathUtils.randFloatSpread(200)
-        z = THREE.MathUtils.randFloatSpread(600)
+        x = THREE.MathUtils.randFloatSpread(1000) 
+        y = -300 + (800 / PATH_LENGTH) * i + THREE.MathUtils.randFloatSpread(50)
+        z = THREE.MathUtils.randFloatSpread(1500) // Increased from 600 for wider path
       }
 
       pathArray.push(x, y, z)
@@ -754,10 +768,20 @@ export function AudioVisualizerBackground() {
 
       controlsRef.current.update()
 
-      // Apply parallax camera position (moves with scroll)
+      // Smoothly interpolate camera to target position (parallax + mouse)
       if (cameraRef.current) {
-        cameraRef.current.position.y = targetCameraYRef.current
-        cameraRef.current.position.z = targetCameraZRef.current
+        // Lerp factor - lower = smoother but slower, higher = faster but jerkier
+        const lerpFactor = 0.02 // Reduced for slower, smoother transitions
+
+        // Smooth camera movement toward target
+        cameraRef.current.position.y += (targetCameraYRef.current - cameraRef.current.position.y) * lerpFactor
+        cameraRef.current.position.z += (targetCameraZRef.current - cameraRef.current.position.z) * lerpFactor
+
+        // Subtle mouse-based look-at adjustment
+        const mouseInfluence = 50
+        const targetX = mouseXRef.current * mouseInfluence
+        const targetY = mouseYRef.current * mouseInfluence
+        cameraRef.current.lookAt(targetX, targetY, 0)
       }
 
       // Get latest audio frequency data
@@ -830,9 +854,18 @@ export function AudioVisualizerBackground() {
       rendererRef.current.setSize(window.innerWidth, window.innerHeight)
     }
 
-    // Scroll handler for parallax effect
-    // Camera moves with page scroll to create depth
+    // Throttled scroll handler for parallax effect
+    // Only updates camera target every 100ms to reduce performance impact
     const handleScroll = () => {
+      const now = Date.now()
+      const throttleDelay = 100 // milliseconds - increased for less frequent computation
+
+      // Throttle: only update if enough time has passed
+      if (now - lastScrollTimeRef.current < throttleDelay) {
+        return
+      }
+      lastScrollTimeRef.current = now
+
       const parallaxFactorY = 0.05 // Vertical movement sensitivity
       const parallaxFactorZ = 0.5 // Zoom in/out sensitivity
       const scrollY = window.scrollY
@@ -843,6 +876,13 @@ export function AudioVisualizerBackground() {
 
       // Start audio on scroll interaction
       startAudio()
+    }
+
+    // Mouse move handler for interactive camera rotation
+    const handleMouseMove = (event: MouseEvent) => {
+      // Normalize mouse position to -1 to 1 range
+      mouseXRef.current = (event.clientX / window.innerWidth) * 2 - 1
+      mouseYRef.current = -(event.clientY / window.innerHeight) * 2 + 1
     }
 
     // Audio context resume on user interaction
@@ -858,6 +898,7 @@ export function AudioVisualizerBackground() {
     // Event listeners
     window.addEventListener("resize", handleResize)
     window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("mousemove", handleMouseMove, { passive: true })
     window.addEventListener("click", startAudio)
     window.addEventListener("touchstart", startAudio)
     window.addEventListener("keydown", startAudio)
@@ -873,6 +914,7 @@ export function AudioVisualizerBackground() {
 
       window.removeEventListener("resize", handleResize)
       window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("click", startAudio)
       window.removeEventListener("touchstart", startAudio)
       window.removeEventListener("keydown", startAudio)
