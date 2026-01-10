@@ -179,7 +179,6 @@ export default function AuxMusicPage() {
                     <Badge className="px-4 py-2 text-sm bg-secondary/80 backdrop-blur-sm text-primary hover:bg-secondary hover:text-white transition-all">Flutter</Badge>
                     <Badge className="px-4 py-2 text-sm bg-secondary/80 backdrop-blur-sm text-primary hover:bg-secondary hover:text-white transition-all">Dart</Badge>
                     <Badge className="px-4 py-2 text-sm bg-secondary/80 backdrop-blur-sm text-primary hover:bg-secondary hover:text-white transition-all">YouTube API</Badge>
-                    <Badge className="px-4 py-2 text-sm bg-secondary/80 backdrop-blur-sm text-primary hover:bg-secondary hover:text-white transition-all">Local WiFi</Badge>
                     <Badge className="px-4 py-2 text-sm bg-secondary/80 backdrop-blur-sm text-primary hover:bg-secondary hover:text-white transition-all">Cross-Platform</Badge>
                   </div>
                 </div>
