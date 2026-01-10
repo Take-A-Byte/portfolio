@@ -461,7 +461,13 @@ export function AudioVisualizerBackground() {
   const targetCameraZRef = useRef(INITIAL_CAMERA_Z)
 
   const startAudio = useCallback(() => {
-    if (audioStartedRef.current || !audioElementRef.current) return
+    if (audioStartedRef.current || !audioElementRef.current || !analyserRef.current) return
+
+    // Resume audio context first (required in many browsers)
+    if (analyserRef.current.context.state === 'suspended') {
+      analyserRef.current.context.resume()
+    }
+
     audioStartedRef.current = true
 
     audioElementRef.current
@@ -472,7 +478,8 @@ export function AudioVisualizerBackground() {
           audioElementRef.current.volume = MAX_VOLUME
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log('Audio playback prevented:', error)
         audioStartedRef.current = false
       })
   }, [])
@@ -496,10 +503,15 @@ export function AudioVisualizerBackground() {
     analyserRef.current = analyser
 
     // Initialize THREE.js
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: false,
+      powerPreference: 'high-performance'
+    })
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setClearColor(SHADOW_COLOR)
-    renderer.setPixelRatio(window.devicePixelRatio)
+    // Limit pixel ratio to prevent over-rendering on high-DPI displays
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     // Disable color management for legacy shader compatibility
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace
     containerRef.current.appendChild(renderer.domElement)
@@ -754,12 +766,6 @@ export function AudioVisualizerBackground() {
 
       controlsRef.current.update()
 
-      // Apply parallax camera position (moves with scroll)
-      if (cameraRef.current) {
-        cameraRef.current.position.y = targetCameraYRef.current
-        cameraRef.current.position.z = targetCameraZRef.current
-      }
-
       // Get latest audio frequency data
       analyserRef.current.updateSample()
 
@@ -830,17 +836,8 @@ export function AudioVisualizerBackground() {
       rendererRef.current.setSize(window.innerWidth, window.innerHeight)
     }
 
-    // Scroll handler for parallax effect
-    // Camera moves with page scroll to create depth
+    // Scroll handler - only start audio, no camera movement
     const handleScroll = () => {
-      const parallaxFactorY = 0.05 // Vertical movement sensitivity
-      const parallaxFactorZ = 0.5 // Zoom in/out sensitivity
-      const scrollY = window.scrollY
-
-      // Move camera up and zoom in as user scrolls down
-      targetCameraYRef.current = INITIAL_CAMERA_Y + scrollY * parallaxFactorY
-      targetCameraZRef.current = INITIAL_CAMERA_Z - scrollY * parallaxFactorZ
-
       // Start audio on scroll interaction
       startAudio()
     }
