@@ -17,15 +17,30 @@ export default function ProjectsPage() {
 
   const projects : Project[] = [
     {
+      title: "Aux Music",
+      description:
+        "A collaborative music control app that lets everyone at the party add songs to the queue. One host, unlimited friends, one shared playlist powered by YouTube.",
+      links: [
+        {
+          title: "Learn more",
+          link: "/aux-music"
+        },
+        {
+          title: "GitHub",
+          link: "https://github.com/Take-A-Byte/AuxMusic"
+        }
+      ],
+    },
+    {
       title: "Workflow Automation Mobile App",
       description:
         "Mobile companion app for Nutrient's Workflow platform to view and approve your requests on the go.",
       links: [
-        { 
+        {
           title: "iOS app",
           link: "https://apps.apple.com/pl/app/nutrient-workflow-automation/id6742332469"
         },
-        { 
+        {
           title: "Android app",
           link: "https://play.google.com/store/apps/details?id=io.nutrient.workflow"
         }
@@ -168,9 +183,8 @@ export default function ProjectsPage() {
                         }`}
                       >
                         {project.links.map((link, linkIdx) => (
-                          <>
+                          <span key={linkIdx}>
                             <Link
-                              key={linkIdx}
                               href={link.link}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -181,7 +195,7 @@ export default function ProjectsPage() {
                             {project.links && linkIdx < project.links.length - 1 && (
                               <span className="text-sm text-gray-400" aria-hidden="true">,</span>
                             )}
-                          </>
+                          </span>
                         ))}
                       </div>
                     )}

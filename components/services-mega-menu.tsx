@@ -3,6 +3,12 @@ import Link from "next/link"
 import { ArrowRight, Code, Coffee } from "lucide-react"
 import { DropdownMegaMenu } from "./dropdown-mega-menu"
 
+const featuredProject = {
+  name: "Aux Music",
+  description: "A collaborative music control app that lets everyone at the party add songs to the queue.",
+  href: "/aux-music",
+}
+
 export function ServicesMegaMenu() {
   return (
     <DropdownMegaMenu title="Services">
@@ -27,13 +33,12 @@ export function ServicesMegaMenu() {
               <div className="grid grid-cols-1 gap-3">
                 <div className="rounded-md border border-gray-200 p-3">
                   <p className="text-sm font-medium text-gray-900">Featured Project</p>
-                  <p className="text-xs text-gray-500 mb-2">PSPDFKit for Windows</p>
+                  <p className="text-xs text-gray-500 mb-2">{featuredProject.name}</p>
                   <p className="text-xs text-gray-500 line-clamp-2">
-                    SDK offering developers powerful APIs for quickly adding document functionalities to a windows
-                    application.
+                    {featuredProject.description}
                   </p>
-                  <Link href="/projects" className="mt-2 inline-flex items-center text-xs font-medium text-primary">
-                    View all projects <ArrowRight className="ml-1 h-3 w-3" />
+                  <Link href={featuredProject.href} className="mt-2 inline-flex items-center text-xs font-medium text-primary">
+                    View project <ArrowRight className="ml-1 h-3 w-3" />
                   </Link>
                 </div>
               </div>
