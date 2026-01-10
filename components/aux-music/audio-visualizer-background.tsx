@@ -451,8 +451,8 @@ export function AudioVisualizerBackground() {
 
   // Visual constants
   const SHADOW_COLOR = 0x13091b // Dark purple background color
-  const PARTICLE_COUNT = 250000 // Total number of particles to render
-  const PATH_LENGTH = 32 // Number of points defining the particle path
+  const PARTICLE_COUNT = 150000 // Total number of particles to render
+  const PATH_LENGTH = 64 // Number of points defining the particle path
   const MAX_VOLUME = 0.05 // Audio volume (5%)
   const INITIAL_CAMERA_Z = 800 // Camera distance from origin
   const INITIAL_CAMERA_Y = 0 // Camera height
@@ -582,7 +582,7 @@ export function AudioVisualizerBackground() {
     let i, j, offset
 
     // Animation timing parameters - create staggered wave effect
-    const prefabDelay = 0.00015 // Delay between each particle starting
+    const prefabDelay = 0.001 // Delay between each particle starting (increased for more spacing)
     const vertexDelay = 0.0175 // Delay between vertices of same particle
     const minDuration = 32.0 // Minimum animation loop duration (seconds)
     const maxDuration = 56.5 // Maximum animation loop duration (seconds)
@@ -675,7 +675,7 @@ export function AudioVisualizerBackground() {
         z = 0
       } else {
         // Middle points: random wandering creates organic flow
-        x = THREE.MathUtils.randFloatSpread(1000) 
+        x = THREE.MathUtils.randFloatSpread(800) 
         y = -300 + (800 / PATH_LENGTH) * i + THREE.MathUtils.randFloatSpread(50)
         z = THREE.MathUtils.randFloatSpread(1500) // Increased from 600 for wider path
       }
@@ -828,7 +828,7 @@ export function AudioVisualizerBackground() {
 
       // Update light intensity based on audio volume
       // Creates pulsing effect synchronized with music
-      const a1 = analyserRef.current.getAverageFloat() * 15
+      const a1 = analyserRef.current.getAverageFloat() * 20
       if (lightsRef.current) {
         lightsRef.current.light.intensity = Math.max(0.5, a1 * a1)
         lightsRef.current.light2.intensity = Math.max(0.5, a1 * a1 * a1 * 1)
