@@ -766,6 +766,12 @@ export function AudioVisualizerBackground() {
 
       controlsRef.current.update()
 
+      // Apply parallax camera position (moves with scroll)
+      if (cameraRef.current) {
+        cameraRef.current.position.y = targetCameraYRef.current
+        cameraRef.current.position.z = targetCameraZRef.current
+      }
+
       // Get latest audio frequency data
       analyserRef.current.updateSample()
 
@@ -836,8 +842,17 @@ export function AudioVisualizerBackground() {
       rendererRef.current.setSize(window.innerWidth, window.innerHeight)
     }
 
-    // Scroll handler - only start audio, no camera movement
+    // Scroll handler for parallax effect
+    // Camera moves with page scroll to create depth
     const handleScroll = () => {
+      const parallaxFactorY = 0.05 // Vertical movement sensitivity
+      const parallaxFactorZ = 0.5 // Zoom in/out sensitivity
+      const scrollY = window.scrollY
+
+      // Move camera up and zoom in as user scrolls down
+      targetCameraYRef.current = INITIAL_CAMERA_Y + scrollY * parallaxFactorY
+      targetCameraZRef.current = INITIAL_CAMERA_Z - scrollY * parallaxFactorZ
+
       // Start audio on scroll interaction
       startAudio()
     }
