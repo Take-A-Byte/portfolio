@@ -150,8 +150,8 @@ export default function ProjectsPage() {
         </section>
 
         {/* Projects Timeline Section */}
-        <section className="py-12 md:py-24 lg:py-32 w-full">
-          <div className="container relative flex w-full items-center justify-center">
+        <section className="py-12 md:py-24 lg:py-32 w-full overflow-x-hidden">
+          <div className="container relative flex w-full items-center justify-center px-4 md:px-6">
             <div className="relative w-full max-w-3xl">
               {/* Vertical guiding line - positioned left on mobile, center on desktop */}
               <div className="absolute left-8 md:left-1/2 h-full w-1 md:-translate-x-1/2 transform bg-primary py-12"></div>
@@ -165,10 +165,10 @@ export default function ProjectsPage() {
                   >
                   {/* Project details */}
                   <div
-                    className={`group-hover:scale-110 
-                      ${index % 2 === 0 
-                        ? 'pl-[80px] text-left md:w-1/2 md:pl-0 md:pr-12 md:text-right md:group-hover:-translate-x-6 group-hover:translate-x-6' 
-                        : 'pl-[80px] text-left md:w-1/2 md:pl-12 md:text-left md:group-hover:translate-x-6 group-hover:translate-x-6'}`
+                    className={`md:group-hover:scale-110
+                      ${index % 2 === 0
+                        ? 'pl-[80px] text-left md:w-1/2 md:pl-0 md:pr-12 md:text-right md:group-hover:-translate-x-6'
+                        : 'pl-[80px] text-left md:w-1/2 md:pl-12 md:text-left md:group-hover:translate-x-6'}`
                     }
                   >
                     <h3 className="text-lg font-bold text-primary">{project.title}</h3>
@@ -178,7 +178,7 @@ export default function ProjectsPage() {
                       <div
                         className={`mt-2 flex flex-wrap gap-2 ${
                           index % 2 === 0
-                            ? 'justify-end md:justify-end'
+                            ? 'justify-start md:justify-end'
                             : 'justify-start md:justify-start'
                         }`}
                       >
@@ -203,8 +203,8 @@ export default function ProjectsPage() {
                   
                   {/* Circle Connector */}
                   <div
-                    className={`absolute left-8 md:left-1/2 z-10 flex h-28 w-20 -translate-x-1/2 transform items-center 
-                      justify-center rounded-full group-hover:w-24 
+                    className={`absolute left-8 md:left-1/2 z-10 flex h-28 w-20 -translate-x-1/2 transform items-center
+                      justify-center rounded-full md:group-hover:w-24
                       ${index % 2 === 0 
                         ? 'border-r-8 md:border-l-8 md:border-r-0' 
                         : 'border-r-8 md:border-r-8 md:border-l-0'} 

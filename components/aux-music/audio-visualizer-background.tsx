@@ -995,7 +995,6 @@ export function AudioVisualizerBackground() {
       }
 
       window.removeEventListener("resize", handleResize)
-      window.removeEventListener("scroll", handleScroll)
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("click", startAudio)
       window.removeEventListener("touchstart", startAudio)
