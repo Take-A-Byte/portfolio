@@ -1,50 +1,56 @@
 "use client"
 
-import { useState, useRef, useEffect, type ReactNode } from "react"
+import { useState, useRef, type ReactNode } from "react"
+import Link from "next/link"
 import { ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 interface DropdownMegaMenuProps {
   title: string
+  href?: string
   children: ReactNode
 }
 
-export function DropdownMegaMenu({ title, children }: DropdownMegaMenuProps) {
+export function DropdownMegaMenu({ title, href, children }: DropdownMegaMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Close menu when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
-      }
-    }
+  const open = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setIsOpen(true)
+  }
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+  // Small delay on close so the user can move from button → panel without it snapping shut
+  const close = () => {
+    closeTimer.current = setTimeout(() => setIsOpen(false), 120)
+  }
 
   return (
-    <div className="relative" ref={menuRef}>
-      <Button
-        variant="ghost"
-        className="flex items-center gap-1 text-sm font-medium h-9 px-3"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-      >
-        {title}
+    <div className="relative" onMouseEnter={open} onMouseLeave={close}>
+      <div className="flex items-center h-9 px-3 gap-1 text-sm font-medium">
+        {href ? (
+          <Link href={href} className="nav-link-slide">
+            {title}
+          </Link>
+        ) : (
+          <span>{title}</span>
+        )}
         <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-      </Button>
+      </div>
 
-      {isOpen && (
-        <div className="absolute left-1/2 z-50 mt-2 w-screen max-w-screen-sm transform -translate-x-1/2 px-4 sm:px-0">
-          <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">{children}</div>
-        </div>
-      )}
+      <div
+        className="absolute w-screen max-w-screen-sm px-4 sm:px-0"
+        style={{
+          left: "50%",
+          top: "calc(100% + 8px)",
+          zIndex: 50,
+          transform: `translateX(-50%) translateY(${isOpen ? "0px" : "-8px"})`,
+          opacity: isOpen ? 1 : 0,
+          pointerEvents: isOpen ? "auto" : "none",
+          transition: "opacity 0.2s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
+        <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">{children}</div>
+      </div>
     </div>
   )
 }

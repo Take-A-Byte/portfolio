@@ -11,62 +11,57 @@ const featuredProject = {
 
 export function ServicesMegaMenu() {
   return (
-    <DropdownMegaMenu title="Services">
+    <DropdownMegaMenu title="Services" href="/projects">
       <div className="bg-white p-6">
         <div className="grid gap-6 md:grid-cols-2">
           {/* Projects Section */}
-          <div className="group relative flex flex-col gap-2">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-2">
+            <Link href="/projects" className="group flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
                 <Code className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-medium text-gray-900">
-                <Link href="/projects" className="hover:text-primary transition-colors">
-                  Projects
-                </Link>
+              <h3 className="text-base font-medium text-gray-900 group-hover:text-primary transition-colors">
+                Projects
               </h3>
-            </div>
-            <p className="text-sm text-gray-500 pl-[52px]">
+            </Link>
+            <Link href="/projects" className="text-sm text-gray-500 pl-[52px] hover:text-primary transition-colors">
               Explore our portfolio of innovative solutions across various industries.
-            </p>
+            </Link>
             <div className="mt-2 pl-[52px]">
-              <div className="grid grid-cols-1 gap-3">
-                <div className="rounded-md border border-gray-200 p-3">
-                  <p className="text-sm font-medium text-gray-900">Featured Project</p>
-                  <p className="text-xs text-gray-500 mb-2">{featuredProject.name}</p>
-                  <p className="text-xs text-gray-500 line-clamp-2">
-                    {featuredProject.description}
-                  </p>
-                  <Link href={featuredProject.href} className="mt-2 inline-flex items-center text-xs font-medium text-primary">
-                    View project <ArrowRight className="ml-1 h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
+              <Link
+                href={featuredProject.href}
+                className="block rounded-md border border-gray-200 p-3 hover:border-primary hover:bg-gray-50 transition-colors"
+              >
+                <p className="text-sm font-medium text-gray-900">Featured Project</p>
+                <p className="text-xs text-gray-500 mb-2">{featuredProject.name}</p>
+                <p className="text-xs text-gray-500 line-clamp-2">{featuredProject.description}</p>
+                <span className="mt-2 inline-flex items-center text-xs font-medium text-primary">
+                  View project <ArrowRight className="ml-1 h-3 w-3" />
+                </span>
+              </Link>
             </div>
           </div>
 
           {/* Co-working Section */}
-          <div className="group relative flex flex-col gap-2">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-2">
+            <Link href="/coworking" className="group flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
                 <Coffee className="h-5 w-5" />
               </div>
-              <h3 className="text-base font-medium text-gray-900">
-                <Link href="/coworking" className="hover:text-primary transition-colors">
-                  Co-working
-                </Link>
+              <h3 className="text-base font-medium text-gray-900 group-hover:text-primary transition-colors">
+                Co-working
               </h3>
-            </div>
-            <p className="text-sm text-gray-500 pl-[52px]">
+            </Link>
+            <Link href="/coworking" className="text-sm text-gray-500 pl-[52px] hover:text-primary transition-colors">
               A productive environment designed for innovation and collaboration.
-            </p>
+            </Link>
             <div className="mt-2 pl-[52px]">
-              <div className="relative h-32 w-full overflow-hidden rounded-md">
+              <Link href="/coworking" className="relative block h-32 w-full overflow-hidden rounded-md">
                 <Image
-                  src="/images/office-1.jpeg?height=200&width=400"
+                  src="/images/office-1.jpeg"
                   alt="Co-working space"
                   fill
-                  className="object-cover"
+                  className="object-cover hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-3">
@@ -75,15 +70,12 @@ export function ServicesMegaMenu() {
                       <p className="text-white text-sm font-medium">Starting at</p>
                       <p className="text-white text-lg font-bold">₹400/day</p>
                     </div>
-                    <Link
-                      href="/coworking"
-                      className="text-xs font-medium text-white bg-primary/80 hover:bg-primary px-3 py-1.5 rounded-md"
-                    >
+                    <span className="text-xs font-medium text-white bg-primary/80 px-3 py-1.5 rounded-md">
                       View plans
-                    </Link>
+                    </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

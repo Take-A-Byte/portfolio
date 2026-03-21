@@ -277,31 +277,31 @@ export default function CoworkingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="aspect-square relative rounded-lg overflow-hidden">
                 <Image
-                  src="/images/office-1.jpeg?height=400&width=400"
+                  src="/images/office-1.jpeg"
                   alt="Open workspace area"
                   fill
                   className="object-cover"
                 />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/images/office-2.jpeg?height=400&width=400" alt="Meeting room" fill className="object-cover" />
+                <Image src="/images/office-2.jpeg" alt="Meeting room" fill className="object-cover" />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/images/office-3.jpeg?height=400&width=400" alt="Lounge area" fill className="object-cover" />
+                <Image src="/images/office-3.jpeg" alt="Lounge area" fill className="object-cover" />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/images/office-4.jpeg?height=400&width=400" alt="Private office" fill className="object-cover" />
+                <Image src="/images/office-4.jpeg" alt="Private office" fill className="object-cover" />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
                 <Image
-                  src="/images/office-5.jpeg?height=400&width=400"
+                  src="/images/office-5.jpeg"
                   alt="Kitchen and refreshment area"
                   fill
                   className="object-cover"
                 />
               </div>
               <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/images/office-6.jpeg?height=400&width=400" alt="Phone booth" fill className="object-cover" />
+                <Image src="/images/office-6.jpeg" alt="Phone booth" fill className="object-cover" />
               </div>
             </div>
           </div>

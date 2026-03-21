@@ -75,4 +75,95 @@
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4rem;
+  }
+}
+
+/* ── Dot grid background ── */
+.dot-grid-bg {
+  background-image: radial-gradient(circle, currentColor 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+}
+
+/* ── Subtle grid texture (for navy sections) ── */
+.grid-texture {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Fill-from-left hover (outline button) ── */
+.fill-from-left {
+  position: relative;
+  isolation: isolate;
+}
+.fill-from-left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+  z-index: -1;
+  border-radius: inherit;
+}
+.fill-from-left:hover::before {
+  transform: scaleX(1);
+}
+
+/* ── Sliding nav underline ── */
+.nav-link-slide {
+  position: relative;
+  text-decoration: none !important;
+}
+.nav-link-slide::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: hsl(var(--primary));
+  transition: width 0.25s ease;
+}
+.nav-link-slide:hover::after {
+  width: 100%;
+}
+
+/* ── Hero float animations ── */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes float-y-slow {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+@keyframes float-dot {
+  from { transform: translateY(0) scale(1);   opacity: 0.5; }
+  to   { transform: translateY(-8px) scale(1.2); opacity: 1; }
+}
+
+/* ── Ripple click animation ── */
+@keyframes ripple-expand {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ── Dropdown menu enter ── */
+@keyframes menu-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
