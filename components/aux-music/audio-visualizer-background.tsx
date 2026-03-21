@@ -272,6 +272,7 @@ class PhongAnimationMaterial extends THREE.ShaderMaterial {
       "uniform vec3 specular;",
       "uniform float shininess;",
       "uniform float opacity;",
+      "varying float vDistanceFade;",
       THREE.ShaderChunk["common"],
       THREE.ShaderChunk["packing"],
       THREE.ShaderChunk["dithering_pars_fragment"],
@@ -305,6 +306,8 @@ class PhongAnimationMaterial extends THREE.ShaderMaterial {
       THREE.ShaderChunk["logdepthbuf_fragment"],
       THREE.ShaderChunk["map_fragment"],
       THREE.ShaderChunk["color_fragment"],
+      "diffuseColor.a *= vDistanceFade;", // Apply distance-based fade
+      "if (diffuseColor.a < 0.01) discard;", // Discard fully transparent fragments for performance
       THREE.ShaderChunk["alphamap_fragment"],
       THREE.ShaderChunk["alphatest_fragment"],
       THREE.ShaderChunk["alphahash_fragment"],
@@ -451,17 +454,21 @@ export function AudioVisualizerBackground() {
 
   // Visual constants
   const SHADOW_COLOR = 0x13091b // Dark purple background color
-  const PARTICLE_COUNT = 250000 // Total number of particles to render
-  const PATH_LENGTH = 32 // Number of points defining the particle path
+  const PARTICLE_COUNT = 50000 // Total number of particles to render
+  const PATH_LENGTH = 32 // Number of points defining the particle path (must result in power-of-2 FFT size)
   const MAX_VOLUME = 0.05 // Audio volume (5%)
   const INITIAL_CAMERA_Z = 800 // Camera distance from origin
   const INITIAL_CAMERA_Y = 0 // Camera height
+  const MAX_RENDER_DISTANCE = 2000 // Maximum distance to render particles
+  const DISTANCE_FADE_START = 1500 // Distance where particles start fading
 
-  const targetCameraYRef = useRef(INITIAL_CAMERA_Y)
-  const targetCameraZRef = useRef(INITIAL_CAMERA_Z)
   const mouseXRef = useRef(0)
   const mouseYRef = useRef(0)
-  const lastScrollTimeRef = useRef(0)
+  const lastMouseMoveTimeRef = useRef(0)
+  const isActiveRef = useRef(true)
+  const fpsHistoryRef = useRef<number[]>([])
+  const lastFrameTimeRef = useRef(performance.now())
+  const currentRenderDistanceRef = useRef(MAX_RENDER_DISTANCE)
 
   const startAudio = useCallback(() => {
     if (audioStartedRef.current || !audioElementRef.current || !analyserRef.current) return
@@ -489,6 +496,10 @@ export function AudioVisualizerBackground() {
 
   useEffect(() => {
     if (!containerRef.current) return
+
+    // Reset flags for this mount
+    isActiveRef.current = true
+    audioStartedRef.current = false
 
     // Create audio element
     const audioElement = document.createElement("audio")
@@ -568,8 +579,8 @@ export function AudioVisualizerBackground() {
     controlsRef.current = controls
 
     // Initialize particle system
-    // Each particle is a small plane (4x4 units)
-    const prefabGeometry = new THREE.PlaneGeometry(4, 4)
+    // Each particle is a small plane (3x3 units)
+    const prefabGeometry = new THREE.PlaneGeometry(3, 3)
     const prefabVertexCount = prefabGeometry.getAttribute("position").count
     const bufferGeometry = new PrefabBufferGeometry(prefabGeometry, PARTICLE_COUNT)
 
@@ -582,7 +593,7 @@ export function AudioVisualizerBackground() {
     let i, j, offset
 
     // Animation timing parameters - create staggered wave effect
-    const prefabDelay = 0.00015 // Delay between each particle starting
+    const prefabDelay = 0.001 // Delay between each particle starting (increased for more spacing)
     const vertexDelay = 0.0175 // Delay between vertices of same particle
     const minDuration = 32.0 // Minimum animation loop duration (seconds)
     const maxDuration = 56.5 // Maximum animation loop duration (seconds)
@@ -675,7 +686,7 @@ export function AudioVisualizerBackground() {
         z = 0
       } else {
         // Middle points: random wandering creates organic flow
-        x = THREE.MathUtils.randFloatSpread(1000) 
+        x = THREE.MathUtils.randFloatSpread(800) 
         y = -300 + (800 / PATH_LENGTH) * i + THREE.MathUtils.randFloatSpread(50)
         z = THREE.MathUtils.randFloatSpread(1500) // Increased from 600 for wider path
       }
@@ -699,6 +710,9 @@ export function AudioVisualizerBackground() {
           uPath: { value: pathArray },
           uRadius: { value: radiusArray },
           uRoundness: { value: new THREE.Vector2(2, 2) },
+          uCameraPosition: { value: new THREE.Vector3() },
+          uMaxDistance: { value: MAX_RENDER_DISTANCE },
+          uFadeStart: { value: DISTANCE_FADE_START },
         },
         shaderFunctions: [
           BAS.ShaderChunk["quaternion_rotation"],
@@ -710,9 +724,13 @@ export function AudioVisualizerBackground() {
           "uniform vec3 uPath[PATH_LENGTH];",
           "uniform float uRadius[PATH_LENGTH];",
           "uniform vec2 uRoundness;",
+          "uniform vec3 uCameraPosition;",
+          "uniform float uMaxDistance;",
+          "uniform float uFadeStart;",
           "attribute vec2 aDelayDuration;",
           "attribute vec3 aPivot;",
           "attribute vec4 aAxisAngle;",
+          "varying float vDistanceFade;",
         ],
         shaderVertexInit: [
           // Calculate animation timing for this particle
@@ -744,6 +762,10 @@ export function AudioVisualizerBackground() {
           "transformed += aPivot * radius;", // Offset from center based on radius
           "transformed = rotateVector(tQuat, transformed);", // Apply rotation
           "transformed += catmullRom(p0, p1, p2, p3, uRoundness, tWeight);", // Move along path
+          // Calculate distance-based fade for culling
+          "vec3 worldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;",
+          "float distToCamera = distance(worldPos, uCameraPosition);",
+          "vDistanceFade = smoothstep(uMaxDistance, uFadeStart, distToCamera);",
         ],
       },
       {
@@ -755,29 +777,87 @@ export function AudioVisualizerBackground() {
     )
 
     const particleSystem = new THREE.Mesh(bufferGeometry, material)
-    particleSystem.frustumCulled = false
+    particleSystem.frustumCulled = true
+    // Enable transparency for distance fade
+    material.transparent = true
+    material.depthWrite = false // Disable depth write for transparent particles
+    // Assign to layer 0 (default visible layer)
+    particleSystem.layers.set(0)
+
+    // Compute bounding sphere for frustum culling optimization
+    bufferGeometry.computeBoundingSphere()
+    // Set a large bounding sphere that encompasses the entire particle path
+    const maxPathExtent = Math.max(
+      ...pathArray.map((_, i) => {
+        if (i % 3 === 0) {
+          const x = pathArray[i]
+          const y = pathArray[i + 1]
+          const z = pathArray[i + 2]
+          return Math.sqrt(x * x + y * y + z * z)
+        }
+        return 0
+      })
+    )
+    if (bufferGeometry.boundingSphere) {
+      bufferGeometry.boundingSphere.radius = maxPathExtent + 500 // Add margin for particle spread
+    }
+
     scene.add(particleSystem)
     particleSystemRef.current = particleSystem
 
+    // Configure camera to render layer 0 by default (can be adjusted dynamically)
+    camera.layers.enable(0)
+
     // Animation loop - runs every frame (~60fps)
     const tick = () => {
-      if (!controlsRef.current || !analyserRef.current || !particleSystemRef.current || !audioElementRef.current) {
+      // Stop animation if component is being unmounted
+      if (!isActiveRef.current) {
+        return
+      }
+
+      if (!controlsRef.current || !analyserRef.current || !particleSystemRef.current || !audioElementRef.current || !rendererRef.current || !sceneRef.current || !cameraRef.current) {
         animationFrameRef.current = requestAnimationFrame(tick)
         return
       }
 
+      // Performance monitoring: Calculate FPS
+      const now = performance.now()
+      const delta = now - lastFrameTimeRef.current
+      lastFrameTimeRef.current = now
+      const currentFPS = 1000 / delta
+
+      // Track FPS history (last 60 frames)
+      fpsHistoryRef.current.push(currentFPS)
+      if (fpsHistoryRef.current.length > 60) {
+        fpsHistoryRef.current.shift()
+      }
+
+      // Adjust render distance based on average FPS every 60 frames
+      if (fpsHistoryRef.current.length === 60) {
+        const avgFPS = fpsHistoryRef.current.reduce((a, b) => a + b, 0) / 60
+        const material = particleSystemRef.current.material as PhongAnimationMaterial
+
+        // If FPS drops below 45, reduce render distance
+        if (avgFPS < 45 && currentRenderDistanceRef.current > 1000) {
+          currentRenderDistanceRef.current = Math.max(1000, currentRenderDistanceRef.current - 200)
+          material.uniforms["uMaxDistance"].value = currentRenderDistanceRef.current
+          material.uniforms["uFadeStart"].value = currentRenderDistanceRef.current * 0.75
+        }
+        // If FPS is good (>55), gradually restore render distance
+        else if (avgFPS > 55 && currentRenderDistanceRef.current < MAX_RENDER_DISTANCE) {
+          currentRenderDistanceRef.current = Math.min(MAX_RENDER_DISTANCE, currentRenderDistanceRef.current + 100)
+          material.uniforms["uMaxDistance"].value = currentRenderDistanceRef.current
+          material.uniforms["uFadeStart"].value = currentRenderDistanceRef.current * 0.75
+        }
+
+        // Clear history for next measurement
+        fpsHistoryRef.current = []
+      }
+
       controlsRef.current.update()
 
-      // Smoothly interpolate camera to target position (parallax + mouse)
+      // Mouse-based look-at adjustment
       if (cameraRef.current) {
-        // Lerp factor - lower = smoother but slower, higher = faster but jerkier
-        const lerpFactor = 0.02 // Reduced for slower, smoother transitions
-
-        // Smooth camera movement toward target
-        cameraRef.current.position.y += (targetCameraYRef.current - cameraRef.current.position.y) * lerpFactor
-        cameraRef.current.position.z += (targetCameraZRef.current - cameraRef.current.position.z) * lerpFactor
-
-        // Subtle mouse-based look-at adjustment
         const mouseInfluence = 50
         const targetX = mouseXRef.current * mouseInfluence
         const targetY = mouseYRef.current * mouseInfluence
@@ -793,20 +873,25 @@ export function AudioVisualizerBackground() {
 
       // Mirror frequency data to create symmetrical effect
       // Pattern: forward, backward, forward, backward
-      const dataArray: number[] = []
-      const cap = data.length * 0.5
+      const cap = Math.floor(data.length * 0.5)
+      const dataArray = new Array(cap * 4)
+      let idx = 0
 
+      // Forward
       for (let i = 0; i < cap; i++) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
+      // Backward
       for (let i = cap - 1; i >= 0; i--) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
+      // Forward
       for (let i = 0; i < cap; i++) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
+      // Backward
       for (let i = cap - 1; i >= 0; i--) {
-        dataArray.push(data[i])
+        dataArray[idx++] = data[i]
       }
 
       // Convert frequency data to path radius
@@ -828,7 +913,7 @@ export function AudioVisualizerBackground() {
 
       // Update light intensity based on audio volume
       // Creates pulsing effect synchronized with music
-      const a1 = analyserRef.current.getAverageFloat() * 15
+      const a1 = analyserRef.current.getAverageFloat() * 20
       if (lightsRef.current) {
         lightsRef.current.light.intensity = Math.max(0.5, a1 * a1)
         lightsRef.current.light2.intensity = Math.max(0.5, a1 * a1 * a1 * 1)
@@ -837,6 +922,11 @@ export function AudioVisualizerBackground() {
 
       // Update animation time from audio playback position
       ;(particleSystemRef.current.material as PhongAnimationMaterial).uniforms["uTime"].value = audioElementRef.current.currentTime || 0
+
+      // Update camera position for distance-based culling
+      if (cameraRef.current) {
+        ;(particleSystemRef.current.material as PhongAnimationMaterial).uniforms["uCameraPosition"].value.copy(cameraRef.current.position)
+      }
 
       if (rendererRef.current && sceneRef.current && cameraRef.current) {
         rendererRef.current.render(sceneRef.current, cameraRef.current)
@@ -854,50 +944,38 @@ export function AudioVisualizerBackground() {
       rendererRef.current.setSize(window.innerWidth, window.innerHeight)
     }
 
-    // Throttled scroll handler for parallax effect
-    // Only updates camera target every 100ms to reduce performance impact
-    const handleScroll = () => {
-      const now = Date.now()
-      const throttleDelay = 100 // milliseconds - increased for less frequent computation
-
-      // Throttle: only update if enough time has passed
-      if (now - lastScrollTimeRef.current < throttleDelay) {
-        return
-      }
-      lastScrollTimeRef.current = now
-
-      const parallaxFactorY = 0.05 // Vertical movement sensitivity
-      const parallaxFactorZ = 0.5 // Zoom in/out sensitivity
-      const scrollY = window.scrollY
-
-      // Move camera up and zoom in as user scrolls down
-      targetCameraYRef.current = INITIAL_CAMERA_Y + scrollY * parallaxFactorY
-      targetCameraZRef.current = INITIAL_CAMERA_Z - scrollY * parallaxFactorZ
-
-      // Start audio on scroll interaction
-      startAudio()
-    }
+    // Scroll handler - starts audio on user scroll
+    // const handleScroll = () => {
+    //   startAudio()
+    // }
 
     // Mouse move handler for interactive camera rotation
     const handleMouseMove = (event: MouseEvent) => {
+      const now = Date.now()
+      const throttleDelay = 16 // ~60fps
+
+      // Throttle: only update if enough time has passed
+      if (now - lastMouseMoveTimeRef.current < throttleDelay) {
+        return
+      }
+      lastMouseMoveTimeRef.current = now
+
       // Normalize mouse position to -1 to 1 range
       mouseXRef.current = (event.clientX / window.innerWidth) * 2 - 1
       mouseYRef.current = -(event.clientY / window.innerHeight) * 2 + 1
     }
 
     // Audio context resume on user interaction
-    audioElement.addEventListener("canplay", () => {
-      if (analyserRef.current?.context) {
+    const handleCanPlay = () => {
+      if (analyserRef.current?.context && analyserRef.current.context.state === 'suspended') {
         analyserRef.current.context.resume()
       }
-      if (cameraRef.current) {
-        cameraRef.current.position.set(0, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z)
-      }
-    })
+    }
+    audioElement.addEventListener("canplay", handleCanPlay)
 
     // Event listeners
     window.addEventListener("resize", handleResize)
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    // window.addEventListener("scroll", handleScroll, { passive: true })
     window.addEventListener("mousemove", handleMouseMove, { passive: true })
     window.addEventListener("click", startAudio)
     window.addEventListener("touchstart", startAudio)
@@ -908,8 +986,12 @@ export function AudioVisualizerBackground() {
 
     // Cleanup
     return () => {
+      // Stop animation loop
+      isActiveRef.current = false
+
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
+        animationFrameRef.current = null
       }
 
       window.removeEventListener("resize", handleResize)
@@ -920,23 +1002,41 @@ export function AudioVisualizerBackground() {
       window.removeEventListener("keydown", startAudio)
 
       if (audioElementRef.current) {
+        audioElementRef.current.removeEventListener("canplay", handleCanPlay)
         audioElementRef.current.pause()
-        audioElementRef.current.remove()
+        audioElementRef.current.src = "" // Release media resources
+        if (audioElementRef.current.parentNode) {
+          audioElementRef.current.parentNode.removeChild(audioElementRef.current)
+        }
+        audioElementRef.current = null
       }
 
-      if (analyserRef.current?.context) {
-        analyserRef.current.context.close()
-      }
-
-      if (rendererRef.current) {
-        rendererRef.current.dispose()
-        containerRef.current?.removeChild(rendererRef.current.domElement)
+      if (analyserRef.current?.context && analyserRef.current.context.state !== 'closed') {
+        analyserRef.current.context.close().catch(() => {
+          // Context already closed, ignore
+        })
+        analyserRef.current = null
       }
 
       if (particleSystemRef.current) {
         particleSystemRef.current.geometry.dispose()
         ;(particleSystemRef.current.material as THREE.Material).dispose()
+        particleSystemRef.current = null
       }
+
+      if (rendererRef.current) {
+        rendererRef.current.dispose()
+        if (rendererRef.current.domElement && rendererRef.current.domElement.parentNode) {
+          rendererRef.current.domElement.parentNode.removeChild(rendererRef.current.domElement)
+        }
+        rendererRef.current = null
+      }
+
+      // Clear other refs
+      sceneRef.current = null
+      cameraRef.current = null
+      controlsRef.current = null
+      lightsRef.current = null
     }
   }, [startAudio])
 
