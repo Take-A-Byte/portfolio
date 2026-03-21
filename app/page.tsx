@@ -1,11 +1,27 @@
 import Image from "next/image"
 import Link from "next/link"
+import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Code, Globe, Laptop, Smartphone, Terminal, Database } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
+
+export const metadata: Metadata = {
+  title: "I² | Integrated Identities — Software Development & Consultancy",
+  description:
+    "1 identity, infinite solutions. Integrated Identities builds custom software across desktop, mobile, and web — development, testing, and IT consultancy from Pune, India.",
+  openGraph: {
+    title: "I² | Integrated Identities — Software Development & Consultancy",
+    description:
+      "Transforming ideas into powerful software solutions across desktop, mobile, and web platforms.",
+    url: "https://www.integratedidentities.in",
+  },
+  alternates: {
+    canonical: "https://www.integratedidentities.in",
+  },
+}
 
 export default function HomePage() {
   return (

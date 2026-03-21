@@ -5,3 +5,6 @@ Disallow: *.woff2
 Disallow: *.ttf
 Disallow: *.otf
 Disallow: *.eot
+Disallow: /wedding/
+
+# LLM-readable site info: /llms.txt

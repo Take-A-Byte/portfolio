@@ -1,0 +1,29 @@
+# I² | Integrated Identities
+
+> Software development, testing, and consultancy company specializing in app development across desktop, mobile, and web platforms. Motto: "1 identity, infinite solutions."
+
+I² (Integrated Identities) transforms ideas into powerful software solutions. We work across the full stack — desktop, mobile, web, and backend — and have shipped products used in enterprise, consumer, and industrial contexts. Based in Pune, India.
+
+## Services
+
+- [Home](/): Overview of software development, testing, and IT consultancy services
+- [Life at I²](/life-at-isquare): Company values, culture, and principles — "The Integrated Code"
+- [Co-working Space](/coworking): Flexible co-working space in Thergaon, Pune with day, flex, and monthly passes
+- [Contact](/contact): Reach the team at contactus@integratedidentities.in or +91 8624071741
+
+## Projects
+
+- [Aux Music](/aux-music): Collaborative music control app built with Flutter — one host, unlimited friends, one shared YouTube playlist. Scan a QR code to join a session. Open source on GitHub.
+- [Projects Portfolio](/projects): Full timeline of projects including Workflow Automation Mobile App, Avelyn (GenAI document tool), Nutrient MAUI SDK, PSPDFKit Windows SDK, Shapr3D for Windows, Linton (LiDAR 3D visualization), Micro Installation Wizard, DMIS Parser, and Utility Hub
+
+## Technical Blog
+
+- [Blog](/blog): Technical articles on Windows development (UWP, WebView2, WinUI3), C++ internals (auto_ptr, struct padding), C# LINQ, responsive design, and processes vs threads
+
+## Legal
+
+- [Privacy Policy](/privacy): Data collection, usage, and protection practices
+
+## Optional
+
+- [llms-full.txt](/llms-full.txt): Extended content with full page descriptions for deep crawling

@@ -1,9 +1,25 @@
 import Link from "next/link"
+import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Heart, HelpCircle, Lightbulb, MessageSquare } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
+
+export const metadata: Metadata = {
+  title: "Life at I² — The Integrated Code",
+  description:
+    "Discover the values and principles that guide Integrated Identities: ask freely, communicate clearly, work smart, and build a culture without egos. Learn how we work, learn, and grow together.",
+  openGraph: {
+    title: "Life at I² — The Integrated Code",
+    description:
+      "The values and principles that guide how we work, learn, and grow together at Integrated Identities.",
+    url: "https://www.integratedidentities.in/life-at-isquare",
+  },
+  alternates: {
+    canonical: "https://www.integratedidentities.in/life-at-isquare",
+  },
+}
 
 export default function LifeAtIsquarePage() {
   return (
