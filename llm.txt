@@ -1,0 +1,42 @@
+# I² | Integrated Identities
+
+> Software development, testing, and consultancy company specializing in app development across desktop, mobile, and web platforms. Motto: "1 identity, infinite solutions."
+
+## About
+
+I² (Integrated Identities) transforms ideas into powerful software solutions. We work across the full stack — desktop, mobile, web, and backend — and have shipped products used in enterprise, consumer, and industrial contexts.
+
+## Services
+
+- **Software Development**: Custom software solutions tailored to specific business requirements
+- **Testing & QA**: Comprehensive testing across all environments and platforms
+- **IT Consultancy**: Strategic technology guidance and digital infrastructure optimization
+- **App Development**: Desktop, mobile, web applications, and backend systems
+
+## Technologies
+
+React, Next.js, Angular, Vue.js, Node.js, Python, Java, Swift, Kotlin, Flutter, React Native, AWS, Azure, Docker, Kubernetes, CI/CD, GraphQL, MongoDB, PostgreSQL
+
+## Projects
+
+- **Aux Music**: Collaborative music control app — one host, unlimited friends, one shared playlist powered by YouTube
+- **Workflow Automation Mobile App**: Mobile companion for Nutrient's Workflow platform to view and approve requests on the go (iOS & Android)
+- **Avelyn**: GenAI document interaction tool — ask questions, make requests, and simplify document handling (avelyn.ai)
+- **Nutrient MAUI SDK**: Cross-platform document SDK for iOS, macOS, Android, and Windows
+- **PSPDFKit Windows SDK**: Developer APIs for adding document functionality to Windows applications
+- **Shapr3D for Windows**: 3D CAD design app for Windows — desktop, laptop, and tablet; mouse, touch, or pen
+- **Linton**: 3D visualization tool for navigating millions of points from Renishaw LiDAR scanner data
+- **Micro Installation Wizard**: XML-based language for building customizable installers with increased reusability
+- **DMIS Parser**: CMM program visualization, conversion, and rectification tool for Renishaw format
+- **Utility Hub**: Developer-experience hub for Renishaw developers to access tools and resources centrally
+
+## Pages
+
+- [Home](/)
+- [Projects](/projects)
+- [Co-working](/coworking)
+- [Life at I²](/life-at-isquare)
+- [Aux Music](/aux-music)
+- [Blog](/blog)
+- [Contact](/contact)
+- [Privacy Policy](/privacy)

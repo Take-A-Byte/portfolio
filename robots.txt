@@ -5,3 +5,5 @@ Disallow: *.woff2
 Disallow: *.ttf
 Disallow: *.otf
 Disallow: *.eot
+
+# LLM-readable site info: /llm.txt
