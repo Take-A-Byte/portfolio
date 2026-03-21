@@ -1,10 +1,26 @@
 import Image from "next/image"
 import Link from "next/link"
+import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Check, Coffee, Wifi, Zap, Monitor, Users, Clock, MapPin } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
+
+export const metadata: Metadata = {
+  title: "Co-working Space in Pune",
+  description:
+    "Modern co-working space for professionals in Thergaon, Pune. Day pass ₹400, Flex pass ₹5,000/15 days, Monthly pass ₹9,000. High-speed internet, meeting rooms, and refreshments included.",
+  openGraph: {
+    title: "Co-working Space for Professionals | I² Integrated Identities",
+    description:
+      "A productive environment designed for innovation, collaboration, and growth in Thergaon, Pune. Flexible plans from ₹400/day.",
+    url: "https://www.integratedidentities.in/coworking",
+  },
+  alternates: {
+    canonical: "https://www.integratedidentities.in/coworking",
+  },
+}
 
 export default function CoworkingPage() {
   // Pricing plans

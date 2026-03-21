@@ -1,8 +1,24 @@
 import Link from "next/link"
+import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "Privacy policy for Integrated Identities — how we collect, use, and protect your personal information when you use our website and services.",
+  openGraph: {
+    title: "Privacy Policy | I² Integrated Identities",
+    description:
+      "How Integrated Identities collects, uses, and protects your information.",
+    url: "https://www.integratedidentities.in/privacy",
+  },
+  alternates: {
+    canonical: "https://www.integratedidentities.in/privacy",
+  },
+}
 
 export default function PrivacyPage() {
   return (
