@@ -162,7 +162,7 @@ export function AppDevSection() {
                   transition: "clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s",
                 }}
               >
-                App Development Specialists
+                App Development <span className="text-secondary">Specialists</span>
               </h2>
               <p
                 className="md:text-xl/relaxed"

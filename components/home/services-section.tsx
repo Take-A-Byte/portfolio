@@ -54,7 +54,7 @@ const SERVICES = [
     Icon: Code,
     title: "Software Development",
     description:
-      "Custom software solutions designed to meet your specific business requirements and challenges. From architecture to deployment, we own the full lifecycle.",
+      "Custom software solutions designed to meet your specific business requirements and challenges. From architecture to deployment, we own the full lifecycle. We love innovation — whether that means adopting cutting-edge technology or rethinking how a problem should be solved.",
     featured: true,
   },
   {
@@ -144,7 +144,7 @@ export function ServicesSection() {
                   <div className="space-y-4">
                     <div
                       ref={(el) => { iconRefs.current[i] = el }}
-                      className="w-10 h-10 flex items-center justify-center bg-secondary/20 rounded-full transition-transform duration-500"
+                      className="w-10 h-10 flex items-center justify-center border-2 border-secondary bg-primary rounded-full transition-transform duration-500"
                       style={{ opacity: isVisible ? 1 : 0.4 }}
                     >
                       <Icon className="h-5 w-5 text-secondary" />
@@ -155,7 +155,7 @@ export function ServicesSection() {
 
                   {featured && (
                     <div className="pt-4">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-secondary bg-secondary/10 px-3 py-1.5 rounded-full">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-secondary bg-primary px-3 py-1.5 rounded-full">
                         Core Service
                       </span>
                     </div>
