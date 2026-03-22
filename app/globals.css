@@ -167,3 +167,12 @@
     transform: translateX(-50%) translateY(0);
   }
 }
+
+@media (max-width: 768px) {
+  .eraser-slide-top {
+    transform: translateY(calc(8px * var(--eraser-progress, 0))) !important;
+  }
+  .eraser-slide-bottom {
+    transform: translateY(calc(50px * (1 - var(--eraser-progress, 0)))) !important;
+  }
+}

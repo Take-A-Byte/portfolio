@@ -4,6 +4,8 @@ import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/home/hero-section"
 import { ServicesSection } from "@/components/home/services-section"
 import { AppDevSection } from "@/components/home/app-dev-section"
+import { AISolutionsSection } from "@/components/home/ai-solutions-section"
+import { SectionEraser } from "@/components/home/section-eraser"
 import { TechSection } from "@/components/home/tech-section"
 import { CTASection } from "@/components/home/cta-section"
 
@@ -29,7 +31,15 @@ export default function HomePage() {
       <main className="flex-1 w-full">
         <HeroSection />
         <ServicesSection />
-        <AppDevSection />
+        <div className="bg-primary grid-texture">
+          <div className="eraser-slide-top" style={{ transform: "translateY(calc(20px * var(--eraser-progress, 0)))" }}>
+            <AppDevSection />
+          </div>
+          <SectionEraser />
+          <div className="eraser-slide-bottom" style={{ transform: "translateY(calc(80px * (1 - var(--eraser-progress, 0))))" }}>
+            <AISolutionsSection />
+          </div>
+        </div>
         <TechSection />
         <CTASection />
       </main>

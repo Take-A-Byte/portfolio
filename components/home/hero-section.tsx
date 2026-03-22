@@ -118,7 +118,7 @@ export function HeroSection() {
           {/* Text column */}
           <div className="flex flex-col justify-center space-y-6">
             <div className="space-y-3">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-5xl lg:text-6xl">
                 {/* Line 1 */}
                 <span className="block overflow-hidden">
                   <span
@@ -158,7 +158,7 @@ export function HeroSection() {
 
               <div style={{ overflow: "hidden" }}>
                 <p
-                  className="text-xl max-w-[600px] text-primary-foreground/80"
+                  className="text-sm md:text-xl max-w-[600px] text-primary-foreground/80"
                   style={{
                     transform: revealed ? "translateY(0)" : "translateY(28px)",
                     opacity: revealed ? 1 : 0,
@@ -205,7 +205,7 @@ export function HeroSection() {
           </div>
 
           {/* Hero image */}
-          <div className="flex justify-center"
+          <div className="flex justify-center mt-10 lg:mt-0"
             style={{
               opacity: revealed ? 1 : 0,
               transform: revealed ? "translateY(0)" : "translateY(20px)",
