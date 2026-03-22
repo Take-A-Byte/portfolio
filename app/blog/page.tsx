@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
 import { ExternalLink, Filter, ArrowRight, Calendar, Clock } from "lucide-react"
+import { ctaButtonGroup } from "@/lib/styles"
 
 // Define the BlogCard type
 interface BlogCard {
@@ -424,7 +425,7 @@ export default function BlogPage() {
                   Let's collaborate on your next software development challenge.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row pt-4">
+              <div className={ctaButtonGroup}>
                 <Button asChild size="lg" variant="secondary">
                   <Link href="/contact">Get in Touch</Link>
                 </Button>

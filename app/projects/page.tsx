@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
 import { Project } from "@/lib/types/project"
+import { ctaButtonGroup } from "@/lib/styles"
 
 
 export default function ProjectsPage() {
@@ -315,7 +316,7 @@ export default function ProjectsPage() {
                   Let's discuss how we can help bring your ideas to life with our expertise in software development.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row pt-4">
+              <div className={ctaButtonGroup}>
                 <Button asChild size="lg" variant="secondary">
                   <Link href="/contact">Contact Us Today</Link>
                 </Button>

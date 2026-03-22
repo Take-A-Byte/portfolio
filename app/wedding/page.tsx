@@ -419,7 +419,7 @@ export default function WeddingInvitation() {
               <div className="border border-slate-800">
                 <div className="flex">
                   {/* Left column with vertical label */}
-                  <div className="border-r border-slate-800 bg-slate-900 text-white flex items-center justify-center" style={{ width: '32px' }}>
+                  <div className="border-r border-slate-800 bg-slate-900 text-white flex items-center justify-center w-8">
                     <p className="text-[10px] tracking-[0.2em] font-medium transform -rotate-180 whitespace-nowrap" style={{ writingMode: 'vertical-rl' }}>
                       JOURNEY
                     </p>

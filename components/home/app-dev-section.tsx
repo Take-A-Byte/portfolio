@@ -59,8 +59,7 @@ function FeatureRow({
     >
       <div
         ref={iconRef}
-        className="transition-all duration-200 ease-out"
-        style={{ color: "hsl(var(--secondary))" }}
+        className="transition-all duration-200 ease-out text-secondary"
       >
         <Icon className="h-5 w-5" />
       </div>
