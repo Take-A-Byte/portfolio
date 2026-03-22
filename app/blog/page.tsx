@@ -28,6 +28,29 @@ export default function BlogPage() {
   // All blog cards data
   const cards: BlogCard[] = [
     {
+      title: "From curiosity to PLG (and AI): My journey to understanding product-led growth",
+      shortContent: (
+        <div>
+          <p>
+            Product-led growth (PLG) has quietly reshaped how software companies acquire and retain users — but what
+            does it actually mean, and how is AI accelerating it? In this article, I trace the evolution of PLG from
+            the 1990s to today, contrasting it with traditional sales-led approaches.
+          </p>
+          <br />
+          <p>
+            Using Nutrient as a case study, I explore how AI-powered features — contextual help, proactive onboarding
+            nudges, and intelligent defaults — can dramatically cut time-to-value and reduce friction in the user
+            journey, making PLG strategies more effective than ever.
+          </p>
+        </div>
+      ),
+      discription: "How AI is supercharging product-led growth strategies and reshaping the way software acquires users.",
+      image: "/images/plg-and-ai.gif",
+      color: "bg-purple-100",
+      tags: ["AI", "PLG", "SaaS", "Product Strategy"],
+      url: "https://www.nutrient.io/blog/plg-and-ai/",
+    },
+    {
       title: "Sharing Buffers from UWP to WebView2",
       shortContent: (
         <span>

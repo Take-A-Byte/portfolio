@@ -19,7 +19,7 @@ I² (Integrated Identities) transforms ideas into powerful software solutions. W
 
 ## Technical Blog
 
-- [Blog](/blog): Technical articles on Windows development (UWP, WebView2, WinUI3), C++ internals (auto_ptr, struct padding), C# LINQ, responsive design, and processes vs threads
+- [Blog](/blog): Technical articles on AI and product-led growth, Windows development (UWP, WebView2, WinUI3), C++ internals (auto_ptr, struct padding), C# LINQ, responsive design, and processes vs threads
 
 ## Legal
 
