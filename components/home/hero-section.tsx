@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -35,9 +35,7 @@ export function HeroSection() {
   const [wordIndex, setWordIndex] = useState(0)
   const [wordVisible, setWordVisible] = useState(true)
   const [revealed, setRevealed] = useState(false)
-  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
   const [scrollY, setScrollY] = useState(0)
-  const heroRef = useRef<HTMLElement>(null)
 
   // Trigger reveal on mount
   useEffect(() => {
@@ -55,21 +53,6 @@ export function HeroSection() {
       }, 280)
     }, 2200)
     return () => clearInterval(id)
-  }, [])
-
-  // Mouse parallax for background orb
-  useEffect(() => {
-    const hero = heroRef.current
-    if (!hero) return
-    const onMove = (e: MouseEvent) => {
-      const rect = hero.getBoundingClientRect()
-      setMousePos({
-        x: (e.clientX - rect.left) / rect.width,
-        y: (e.clientY - rect.top) / rect.height,
-      })
-    }
-    window.addEventListener("mousemove", onMove)
-    return () => window.removeEventListener("mousemove", onMove)
   }, [])
 
   // Scroll to fade out the scroll indicator
@@ -90,28 +73,12 @@ export function HeroSection() {
     e.currentTarget.style.transform = ""
   }
 
-  const orbX = (mousePos.x - 0.5) * 60
-  const orbY = (mousePos.y - 0.5) * 40
-
   return (
     <section
-      ref={heroRef}
       className="relative py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground w-full overflow-hidden grid-texture"
     >
       {/* Dot grid overlay */}
       <div className="absolute inset-0 dot-grid-bg text-white/10 pointer-events-none" />
-
-      {/* Moving gold orb */}
-      <div
-        className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, hsl(45 100% 65% / 0.10) 0%, transparent 65%)",
-          top: "-10%",
-          right: "5%",
-          transform: `translate(${orbX}px, ${orbY}px)`,
-          transition: "transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-        }}
-      />
 
       <div className="container px-4 md:px-6 mx-auto relative z-10">
         <div className="grid gap-6 lg:grid-cols-[1fr_420px] lg:gap-12 xl:grid-cols-[1fr_460px]">

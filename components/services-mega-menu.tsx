@@ -2,12 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Code, Coffee } from "lucide-react"
 import { DropdownMegaMenu } from "./dropdown-mega-menu"
-
-const featuredProject = {
-  name: "Aux Music",
-  description: "A collaborative music control app that lets everyone at the party add songs to the queue.",
-  href: "/aux-music",
-}
+import { featuredProject } from "@/lib/data/projects"
 
 export function ServicesMegaMenu() {
   return (
@@ -29,11 +24,11 @@ export function ServicesMegaMenu() {
             </Link>
             <div className="mt-2 pl-[52px]">
               <Link
-                href={featuredProject.href}
+                href={featuredProject.links![0].link}
                 className="block rounded-md border border-gray-200 p-3 hover:border-primary hover:bg-gray-50 transition-colors"
               >
                 <p className="text-sm font-medium text-gray-900">Featured Project</p>
-                <p className="text-xs text-gray-500 mb-2">{featuredProject.name}</p>
+                <p className="text-xs text-gray-500 mb-2">{featuredProject.title}</p>
                 <p className="text-xs text-gray-500 line-clamp-2">{featuredProject.description}</p>
                 <span className="mt-2 inline-flex items-center text-xs font-medium text-primary">
                   View project <ArrowRight className="ml-1 h-3 w-3" />
