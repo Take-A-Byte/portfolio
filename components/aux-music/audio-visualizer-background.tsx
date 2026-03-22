@@ -995,7 +995,6 @@ export function AudioVisualizerBackground() {
       }
 
       window.removeEventListener("resize", handleResize)
-      window.removeEventListener("scroll", handleScroll)
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("click", startAudio)
       window.removeEventListener("touchstart", startAudio)
@@ -1041,7 +1040,7 @@ export function AudioVisualizerBackground() {
   }, [startAudio])
 
   return (
-    <div className="w-full h-full" style={{ backgroundColor: "#13091B" }}>
+    <div className="w-full h-full bg-[#13091B]">
       <div ref={containerRef} className="w-full h-full" />
       {/* Dark tint overlay */}
       <div className="absolute inset-0 bg-black/40 pointer-events-none" />

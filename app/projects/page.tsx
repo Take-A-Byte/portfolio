@@ -1,132 +1,44 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { MainNav } from "@/components/main-nav"
 import { Footer } from "@/components/footer"
-import { Project } from "@/lib/types/project"
+import { ctaButtonGroup } from "@/lib/styles"
+import { projects } from "@/lib/data/projects"
+
 
 export default function ProjectsPage() {
-  const [isHovered, setIsHovered] = useState(false)
-  const [isEvenProjectHovered, setIsEvenProjectHovered] = useState<boolean | undefined>(undefined)
-  const handleHover = (isHovered: boolean, isEvenHovered: boolean | undefined = undefined) => {
-    setIsHovered(isHovered)
-    setIsEvenProjectHovered(isEvenHovered)
-  }
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([])
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
-  const projects : Project[] = [
-    {
-      title: "Aux Music",
-      description:
-        "A collaborative music control app that lets everyone at the party add songs to the queue. One host, unlimited friends, one shared playlist powered by YouTube.",
-      links: [
-        {
-          title: "Learn more",
-          link: "/aux-music"
-        },
-        {
-          title: "GitHub",
-          link: "https://github.com/Take-A-Byte/AuxMusic"
-        }
-      ],
-    },
-    {
-      title: "Workflow Automation Mobile App",
-      description:
-        "Mobile companion app for Nutrient's Workflow platform to view and approve your requests on the go.",
-      links: [
-        {
-          title: "iOS app",
-          link: "https://apps.apple.com/pl/app/nutrient-workflow-automation/id6742332469"
-        },
-        {
-          title: "Android app",
-          link: "https://play.google.com/store/apps/details?id=io.nutrient.workflow"
-        }
-      ],
-    },
-    {
-      title: "Avelyn",
-      description:
-        "A genAI tool which allows user to interact with their document with conversational interactions. Ask questions, make requests, and simplify your document handling.",
-      links: [
-        { 
-          title: "avelyn.ai",
-          link: "https://avelyn.ai"
-        },
-      ],
-    },
-    {
-      title: "Nutrient MAUI SDK",
-      description:
-        "One SDK to deploy document functionalities on cross-platform apps on iOS, MacOS, Android, and Windows.",
-      links: [
-        { 
-          title: "SDK",
-          link: "https://www.nuget.org/packages/Nutrient.MAUI.SDK"
-        },
-        { 
-          title: "Documentation",
-          link: "https://www.nutrient.io/guides/maui/"
-        }
-      ],
-    },
-    {
-      title: "PSPDFKit Windows SDK",
-      description:
-        "SDK offering developers powerful APIs for quickly adding document functionalities to a windows application.",
-      links: [
-        { 
-          title: "SDK",
-          link: "https://www.nuget.org/packages/PSPDFKitUWP"
-        },
-        { 
-          title: "Documentation",
-          link: "https://www.nutrient.io/guides/windows/"
-        },
-      ],
-    },
-    {
-      title: "Shapr3D for Windows",
-      description:
-        "Design your 3D models on Windows machine - be it on a desktop, laptop, or tablet; with mouse, touch or pen.",
-      links: [
-        { 
-          title: "Windows store",
-          link: "https://apps.microsoft.com/detail/9n4k9qfv4xfc?referrer=appbadge&source=www.shapr3d.com"
-        },
-      ],
-    },
-    {
-      title: "Linton",
-      description:
-        "Seamlessly navigate and interact with millions of points from Renishaw scanner data, presented in a visually appealing 3D environment.",
-      links: [
-        {
-          title: "LiDAR Scanning Software",
-          link: "https://www.renishaw.com/en/optical-encoders-and-lidar-scanning--39244?srsltid=AfmBOoorPZVompTqQZj4slmuqp4qi8yLOSnjsCF7gWCtHzvEcKowmPkK"
-        },
-      ],
-    },
-    {
-      title: "Micro Installation Wizard",
-      description:
-        "An XML based language developed to allow engineers to create a customizable installer with increased reusability and reduced efforts.",
-      links: null,
-    },
-    {
-      title: "DMIS Parser",
-      description:
-        "A parser that helps application engineers to visualize, convert and rectify CMM programs to Renishaw format.",
-      links: null,
-    },
-    {
-      title: "Utility Hub",
-      description: "A dev-ex hub for Renishaw developers to access tools, utilities, and resources centrally.",
-      links: null,
-    },
-  ]
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+
+
+  useEffect(() => {
+    const handleFocus = () => {
+      const center = window.innerHeight / 2
+      let closestIdx = 0
+      let closestDist = Infinity
+      itemsRef.current.forEach((item, i) => {
+        if (!item) return
+        const rect = item.getBoundingClientRect()
+        const dist = Math.abs((rect.top + rect.bottom) / 2 - center)
+        if (dist < closestDist) { closestDist = dist; closestIdx = i }
+      })
+      setActiveIndex(closestIdx)
+    }
+    window.addEventListener("scroll", handleFocus, { passive: true })
+    handleFocus()
+    return () => window.removeEventListener("scroll", handleFocus)
+  }, [])
 
   return (
     <div className="flex flex-col min-h-screen w-full">
@@ -150,35 +62,44 @@ export default function ProjectsPage() {
         </section>
 
         {/* Projects Timeline Section */}
-        <section className="py-12 md:py-24 lg:py-32 w-full">
-          <div className="container relative flex w-full items-center justify-center">
+        <section className="py-12 md:py-24 lg:py-32 w-full overflow-x-hidden">
+          <div className="container relative flex w-full items-center justify-center px-4 md:px-6">
             <div className="relative w-full max-w-3xl">
-              {/* Vertical guiding line - positioned left on mobile, center on desktop */}
+              {/* Vertical guiding line */}
               <div className="absolute left-8 md:left-1/2 h-full w-1 md:-translate-x-1/2 transform bg-primary py-12"></div>
-              
-                {projects.map((project, index) => (
-                  <div
-                    key={index}
-                    className={`group relative mb-12 flex items-center flex-row ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
-                    onMouseEnter={() => handleHover(true, index % 2 === 0)}
-                    onMouseLeave={() => handleHover(false)}
-                  >
+
+              {projects.map((project, index) => (
+                <div
+                  key={index}
+                  ref={(el) => { itemsRef.current[index] = el }}
+                  className={`relative mb-12 flex items-center flex-row ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                >
                   {/* Project details */}
                   <div
-                    className={`group-hover:scale-110 
-                      ${index % 2 === 0 
-                        ? 'pl-[80px] text-left md:w-1/2 md:pl-0 md:pr-12 md:text-right md:group-hover:-translate-x-6 group-hover:translate-x-6' 
-                        : 'pl-[80px] text-left md:w-1/2 md:pl-12 md:text-left md:group-hover:translate-x-6 group-hover:translate-x-6'}`
-                    }
+                    className={`project-details ${
+                      index % 2 === 0
+                        ? 'pl-[80px] pr-12 text-left md:w-1/2 md:pl-0 md:pr-12 md:text-right'
+                        : 'pl-[80px] pr-12 text-left md:w-1/2 md:pl-12 md:pr-0 md:text-left'
+                    }`}
+                    style={(() => {
+                      const isOnRight = isMobile || index % 2 !== 0
+                      return {
+                        opacity: index === activeIndex ? 1 : 0.35,
+                        transform: index === activeIndex
+                          ? `scale(1.1) translateX(${isOnRight ? '1.5rem' : '-1.5rem'})`
+                          : undefined,
+                        transition: 'opacity 500ms, transform 500ms',
+                      }
+                    })()}
                   >
                     <h3 className="text-lg font-bold text-primary">{project.title}</h3>
                     <p className="text-sm text-gray-600">{project.description}</p>
-                    
+
                     {project.links && (
                       <div
                         className={`mt-2 flex flex-wrap gap-2 ${
                           index % 2 === 0
-                            ? 'justify-end md:justify-end'
+                            ? 'justify-start md:justify-end'
                             : 'justify-start md:justify-start'
                         }`}
                       >
@@ -188,7 +109,7 @@ export default function ProjectsPage() {
                               href={link.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-block text-sm underline transition-colors text-primary hover:text-yellow-400"
+                              className="inline-block text-sm underline transition-colors text-yellow-500 hover:text-yellow-500"
                             >
                               {link.title}
                             </Link>
@@ -200,29 +121,32 @@ export default function ProjectsPage() {
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Circle Connector */}
                   <div
-                    className={`absolute left-8 md:left-1/2 z-10 flex h-28 w-20 -translate-x-1/2 transform items-center 
-                      justify-center rounded-full group-hover:w-24 
-                      ${index % 2 === 0 
-                        ? 'border-r-8 md:border-l-8 md:border-r-0' 
-                        : 'border-r-8 md:border-r-8 md:border-l-0'} 
-                      border-secondary`
-                    }
+                    className={`project-connector absolute left-8 md:left-1/2 z-10 flex h-28 -translate-x-1/2 transform items-center
+                      justify-center rounded-full
+                      ${index % 2 === 0
+                        ? 'border-r-8 md:border-l-8 md:border-r-0'
+                        : 'border-r-8 md:border-r-8 md:border-l-0'}
+                      border-secondary`}
+                    style={{
+                      width: index === activeIndex ? '6rem' : '5rem',
+                      transition: 'width 500ms',
+                    }}
                   ></div>
-                  
+
                   {/* Circle */}
-                  <div className="absolute left-8 md:left-1/2 z-10 flex h-12 w-8 -translate-x-1/2 transform items-center justify-center rounded-full border-4 border-primary bg-white"></div>
-                  
-                  {/* Line Connector (only for non-last elements) */}
+                  <div className="project-circle absolute left-8 md:left-1/2 z-10 flex h-12 w-8 -translate-x-1/2 transform items-center justify-center rounded-full border-4 border-primary bg-white"></div>
+
+                  {/* Line Connector */}
                   {index !== projects.length - 1 && (
-                    <div className="absolute left-8 md:left-1/2 h-36 w-1 -translate-y-6 md:-translate-x-1/2 transform  bg-primary"></div>
+                    <div className="absolute left-8 md:left-1/2 h-36 w-1 -translate-y-6 md:-translate-x-1/2 transform bg-primary"></div>
                   )}
                 </div>
               ))}
-              </div>
             </div>
+          </div>
         </section>
 
         {/* CTA Section */}
@@ -235,7 +159,7 @@ export default function ProjectsPage() {
                   Let's discuss how we can help bring your ideas to life with our expertise in software development.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row pt-4">
+              <div className={ctaButtonGroup}>
                 <Button asChild size="lg" variant="secondary">
                   <Link href="/contact">Contact Us Today</Link>
                 </Button>

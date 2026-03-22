@@ -9,7 +9,8 @@ I² (Integrated Identities) transforms ideas into powerful software solutions. W
 - [Home](/): Overview of software development, testing, and IT consultancy services
 - [Life at I²](/life-at-isquare): Company values, culture, and principles — "The Integrated Code"
 - [Co-working Space](/coworking): Flexible co-working space in Thergaon, Pune with day, flex, and monthly passes
-- [Contact](/contact): Reach the team at contactus@integratedidentities.in or +91 8624071741
+- [Contact](/contact): Reach the team at contactus@integratedidentities.in
+- [Careers](/careers): Open positions at I² — join a team that values growth, collaboration, and smart work
 
 ## Projects
 
@@ -18,7 +19,7 @@ I² (Integrated Identities) transforms ideas into powerful software solutions. W
 
 ## Technical Blog
 
-- [Blog](/blog): Technical articles on Windows development (UWP, WebView2, WinUI3), C++ internals (auto_ptr, struct padding), C# LINQ, responsive design, and processes vs threads
+- [Blog](/blog): Technical articles on AI and product-led growth, Windows development (UWP, WebView2, WinUI3), C++ internals (auto_ptr, struct padding), C# LINQ, responsive design, and processes vs threads
 
 ## Legal
 

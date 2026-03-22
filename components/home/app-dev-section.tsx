@@ -59,8 +59,7 @@ function FeatureRow({
     >
       <div
         ref={iconRef}
-        className="transition-all duration-200 ease-out"
-        style={{ color: "hsl(var(--secondary))" }}
+        className="transition-all duration-200 ease-out text-secondary"
       >
         <Icon className="h-5 w-5" />
       </div>
@@ -145,10 +144,10 @@ export function AppDevSection() {
   return (
     <section
       ref={sectionRef}
-      className="py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground w-full overflow-hidden grid-texture"
+      className="py-12 md:py-24 lg:py-32 text-primary-foreground w-full overflow-hidden"
     >
       <div className="container px-4 md:px-6 mx-auto">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16 items-center">
+        <div className="grid gap-20 lg:grid-cols-2 lg:gap-16 items-center">
           {/* Text column */}
           <div
             ref={textColRef as React.RefObject<HTMLDivElement>}
@@ -162,7 +161,7 @@ export function AppDevSection() {
                   transition: "clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s",
                 }}
               >
-                App Development Specialists
+                App Development <span className="text-secondary">Specialists</span>
               </h2>
               <p
                 className="md:text-xl/relaxed"

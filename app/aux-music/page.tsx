@@ -24,6 +24,11 @@ import { AudioVisualizerBackground } from "@/components/aux-music/audio-visualiz
 export const metadata: Metadata = {
   title: "Aux Music | Collaborative Music Control App",
   description: "A collaborative music control app that lets everyone at the party add songs to the queue. One host, unlimited friends, one shared playlist.",
+  openGraph: {
+    title: "Aux Music | Collaborative Music Control App",
+    description: "A collaborative music control app that lets everyone at the party add songs to the queue. One host, unlimited friends, one shared playlist.",
+    url: "https://www.integratedidentities.in/aux-music",
+  },
   other: {
     "audio-visualizer-credit": "THREE.BAS Audio Visualizer by Nicolas Zaslavsky (zadvorsky) - https://github.com/zadvorsky/three.bas",
     "background-music-credit": "Carol of the Bells - Composed by Mykola Leontovych, based on Ukrainian folk chant Shchedryk, English lyrics by Peter Wilhousky",

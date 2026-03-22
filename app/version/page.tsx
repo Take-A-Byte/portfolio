@@ -1,4 +1,9 @@
+import type { Metadata } from "next"
 import { readFileSync } from 'fs'
+
+export const metadata: Metadata = {
+  robots: { index: false },
+}
 import path from 'path'
 
 function getNextVersion() {
@@ -21,7 +26,7 @@ export default function VersionPage() {
   }
 
   return (
-    <pre style={{ padding: '2rem', fontFamily: 'monospace', lineHeight: '1.8' }}>
+    <pre className="p-8 font-mono leading-[1.8]">
       {Object.entries(info).map(([k, v]) => `${k.padEnd(15)}: ${v}`).join('\n')}
     </pre>
   )

@@ -1,9 +1,10 @@
 import type React from "react"
-import { Inter } from "next/font/google"
+import { Inter, Plus_Jakarta_Sans } from "next/font/google"
 import "./globals.css"
 import type { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
+const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-plus-jakarta" })
 
 const baseUrl = "https://www.integratedidentities.in"
 
@@ -86,7 +87,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} ${plusJakarta.variable}`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
