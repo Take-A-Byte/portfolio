@@ -1,4 +1,9 @@
+import type { Metadata } from "next"
 import { readFileSync } from 'fs'
+
+export const metadata: Metadata = {
+  robots: { index: false },
+}
 import path from 'path'
 
 function getNextVersion() {

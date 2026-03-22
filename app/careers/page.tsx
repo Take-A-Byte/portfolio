@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "Join the Integrated Identities team. Explore open positions and become part of a culture that values growth, collaboration, and smart work.",
   openGraph: {
     title: "Careers — Integrated Identities",
-    description: "Explore open positions at Integrated Identities.",
+    description: "Join the Integrated Identities team. Explore open positions and become part of a culture that values growth, collaboration, and smart work.",
     url: "https://www.integratedidentities.in/careers",
   },
   alternates: {
