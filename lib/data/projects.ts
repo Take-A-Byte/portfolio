@@ -2,6 +2,21 @@ import { Project } from "@/lib/types/project"
 
 export const projects: Project[] = [
   {
+    title: "Nutrient Workflow AI Agents",
+    description:
+      "Optimised the AI agents powering Workflow's AI Form Generator, AI Data Extraction, and other features. Reduced token consumption and built evaluation pipelines so that lower-end models consistently achieve ≥ 98% accuracy.",
+    links: [
+      {
+        title: "AI Form Generator",
+        link: "https://www.nutrient.io/guides/workflow-automation/admin-guide/forms/using-ai-form-generator/"
+      },
+      {
+        title: "AI Data Extraction",
+        link: "https://www.nutrient.io/guides/workflow-automation/admin-guide/processes/tasks/integration-task/integration-task-ai-data-extraction/"
+      }
+    ],
+  },
+  {
     title: "AMPX Technologies",
     description:
       "Website featuring a 3D product showcase. Acquired and compressed a 3D model, then animated it with JavaScript so clients can explore products in depth.",
