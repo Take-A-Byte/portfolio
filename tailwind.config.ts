@@ -23,6 +23,12 @@ const config = {
         'xxs': '375px',
         'xs': '480px',
       },
+      fontFamily: {
+        geist: ["var(--font-geist-sans)", "sans-serif"],
+        cormorant: ["var(--font-cormorant)", "serif"],
+        nunito: ["var(--font-nunito)", "sans-serif"],
+        playfair: ["var(--font-playfair)", "serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

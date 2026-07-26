@@ -6,5 +6,6 @@ Disallow: *.ttf
 Disallow: *.otf
 Disallow: *.eot
 Disallow: /wedding/
+Disallow: /wedding-ananthajith-architha/
 
 # LLM-readable site info: /llms.txt

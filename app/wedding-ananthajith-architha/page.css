@@ -1,0 +1,95 @@
+/* Ported from https://codepen.io/MarvinRudolph/pen/VNMXWO (Flower Loader) */
+.flower {
+  position: relative;
+  transform: translate3d(0, 0, 0);
+}
+
+.flower .flower__center {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 2rem;
+  background: var(--flower-center, #ffbb00);
+  position: relative;
+  z-index: 10;
+  will-change: transform;
+}
+
+.flower .flower__leaves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.flower .flower__leaf {
+  width: 70%;
+  transform-origin: center bottom;
+  position: absolute;
+  will-change: transform;
+}
+
+.flower .flower__leaf .flower__leaf-inner {
+  transform-origin: center bottom;
+  transform: scale(0);
+  will-change: transform;
+}
+
+.flower .flower__leaf svg path {
+  fill: var(--flower-petal, #fff);
+  stroke: var(--flower-petal-border, transparent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Text-swipe cloud transition — applied per-cloud-layer (see TextCloud.tsx),
+   translateX in percent of THAT layer's own size so bigger/smaller puffs
+   travel different actual distances, and each layer's animation-duration
+   varies (its "pace") so the whole cluster doesn't move as one rigid
+   block. --layer-opacity is set inline per layer so each keeps its own
+   designed peak opacity rather than all snapping to fully opaque. Named
+   after which edge the cloud enters from, matching the swipe that
+   triggered it. */
+@keyframes cloud-enter-right {
+  0% {
+    transform: translateX(400%);
+    opacity: 0;
+  }
+  6% {
+    opacity: var(--layer-opacity, 1);
+  }
+  50% {
+    transform: translateX(0%);
+    opacity: var(--layer-opacity, 1);
+  }
+  94% {
+    opacity: var(--layer-opacity, 1);
+  }
+  100% {
+    transform: translateX(-400%);
+    opacity: 0;
+  }
+}
+
+@keyframes cloud-enter-left {
+  0% {
+    transform: translateX(-400%);
+    opacity: 0;
+  }
+  6% {
+    opacity: var(--layer-opacity, 1);
+  }
+  50% {
+    transform: translateX(0%);
+    opacity: var(--layer-opacity, 1);
+  }
+  94% {
+    opacity: var(--layer-opacity, 1);
+  }
+  100% {
+    transform: translateX(400%);
+    opacity: 0;
+  }
+}
