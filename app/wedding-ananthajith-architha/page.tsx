@@ -33,7 +33,7 @@ export default function WeddingTempleInvitation() {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-orange-50 px-4 pb-6 pt-8 font-geist dark:bg-zinc-950 sm:px-8">
+      <div className="flex h-dvh flex-col overflow-hidden bg-orange-50 px-4 pb-6 pt-8 font-geist dark:bg-zinc-950 sm:px-8">
         <audio ref={audioRef} src="/wedding-temple/theme-song.mp3" loop preload="auto" />
 
         <main className="mx-auto flex w-full max-w-2xl flex-1">
